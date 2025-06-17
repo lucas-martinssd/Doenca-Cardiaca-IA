@@ -46,7 +46,7 @@ class AdalineLogistico:
             self.custos.append(custo)
         return self
     
-    def predicProba(self, X):
+    def predictProba(self, X):
         """ Retorna as probabilidades previstas para cada amostra. """
         entradaLiquida = np.dot(X, self.pesos) + self.bias
         return self.sigmoid(entradaLiquida)

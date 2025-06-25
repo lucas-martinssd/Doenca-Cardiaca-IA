@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 # Cria visualizações e gráficos com os dados
 import matplotlib.pyplot as plt
-from AdalineLogistico import AdalineLogistico
+from AdalineLogistica import AdalineLogistica
 
 def meuTrainTestSplit(X, y, testeSize=0.3, randomState=42):
     X = X.reset_index(drop=True)
@@ -53,18 +53,23 @@ scaler = MeuStandardScaler()
 XTrainScaled = scaler.fit_transform(XTrain.values)
 XTestScaled = scaler.transform(XTest.values)
 # Treinar o modelo Adaline Logístico
-adaline = AdalineLogistico(taxaAprendizado=0.01, nEpocas=100)
+adaline = AdalineLogistica(taxaAprendizado=0.01, nEpocas=100)
 adaline.fit(XTrainScaled, yTrain.values)
 # Fazer previsões e mostrar resultados
 probabilidades = adaline.predictProba(XTestScaled)
 yPred = adaline.predict(XTestScaled)
 acuracia = np.mean(yPred == yTest.values) * 100
+# Acurácia do modelo indica a porcentagem entre todos os pacientes no grupo de teste, para quantos deles
+# o modelo acertou o diagnóstico
 print(f"Acurácia do modelo Adaline Logístico: {acuracia:.2f}%")
 
 # Criar DataFrame de resultados para visualização
 df_resultados = pd.DataFrame({
+    # Número da linha no banco de dados, que indica qual é o paciente
     'ID_do_Paciente_no_Teste': yTest.index,
+    # Indica se o paciente tem ou não doença cardíaca, dado já existente no banco original heart
     'Realidade_Observada': yTest.values,
+    # Porcentagem indicada pelo modelo de chance de ter doença cardíaca
     'Chance_de_Doenca_Cardiaca_%': (probabilidades * 100).round(2)
 })
 print("\nVisualização das previsões:")

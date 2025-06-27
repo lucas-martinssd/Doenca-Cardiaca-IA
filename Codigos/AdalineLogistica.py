@@ -1,3 +1,4 @@
+#Biblioteca para realizart calculos matemáticos.
 import numpy as np
 
 class AdalineLogistica:
@@ -6,7 +7,7 @@ class AdalineLogistica:
     usando o Gradiente Descendente.
     """
     
-    #Construtor da classe que configura os iniciais parâmetros do modelo
+    """ __init__: Construtor da classe que configura os iniciais parâmetros do modelo """
     def __init__(self, taxaAprendizado=0.01, nEpocas=100, estagioAleatorio=42):
         #taxaAprendizado: Valor que representa o tamanho do passo que vai ser dado a cada aprendizado.
         #valor de 0.01 é um valor intermediario bom para não dar passos muito grandes e nem muito curtos.
@@ -25,7 +26,7 @@ class AdalineLogistica:
         #a prova de que o modelo está aprendendo.
         self.custos = []
     
-    #Inicializa os pesos e o bias, dando um ponto de partida para o aprendizado.    
+    """ inicializarParametros: Inicializa os pesos e o bias, dando um ponto de partida para o aprendizado."""
     def inicializarParametros(self, nCaracteristicas):
         #Gerador de números aleatórios baseados no estagioAleatorio para manter a reprodutibilidade.
         geradorAleatorio = np.random.RandomState(self.estagioAleatorio)
@@ -36,41 +37,55 @@ class AdalineLogistica:
         #Inicializa o bias com zero, por ser uma prática padrão, segura e eficiente.
         self.bias = 0.0
     
-    #Implementa a função sigmoide, que transforma a saída linear do modelo em uma probabilidade, um valor entre 0 e 1.
+    """ sigmoid: Implementa a função sigmoide, que transforma a saída linear do modelo em uma probabilidade, um valor entre 0 e 1."""
     def sigmoid(self, z):
         #Formula sigmoide, com np.clip para evitar overflow e underflow numérico, garantindo que os valores não sejam muito grandes ou muito pequenos.
         #e com np.exp para calcular a exponencial de z, que é a base da função sigmoide.
         return 1.0 / (1.0 + np.exp(-np.clip(z, -250, 250)))
     
-    
+    """ fit: Método que implementa o algoritmo de aprendizado do modelo Gradiente Descendente, ajustando os pesos e o bias com base nos dados de treinamento.
+        É o coração do modelo, onde o aprendizado realmente acontece. Método de treinamento."""
     def fit(self, X, y):
-        """ Ajusta os pesos e o bias (desvio) aos dados de treinamento. """
+        #Conta o número de características (colunas) em X.
         nFaetures = X.shape[1]
+        #Chama o método para inicializar os parâmetros do modelo.
         self.inicializarParametros(nFaetures)
         
+        #Inicializa o loop de treinamento que repetirá pelo número de épocas definido.
         for i in range(self.nEpocas):
-            # Calcula a entrada líquida e a ativação (probabilidade)
+            #Calcula a soma ponderada das entradas (X) com os pesos e adiciona o bias.
+            #Isso gera a entrada líquida do modelo, que é a base para calcular a ativação.
+            #np.dot é usado para multiplicar a matriz X pelos pesos.
             entradaLiquida = np.dot(X, self.pesos) + self.bias
+            #Pega a entradaLiquida e passa pela função sigmoide para obter as probabilidades previstas.
             ativacao = self.sigmoid(entradaLiquida)
-            # Calcula o erro
+            #Calcula o erro, fazendo a diferença entre as saídas reais (y, coluna Doença Cardíaca) e as previstas (ativacao).
             erro = y - ativacao
-            # Calula os gradientes (derivadas)
+            #Calcula o gradiante dos pesos, ou seja. calcula a culpa de cada peso no erro total.
             gradientesPesos = -X.T.dot(erro)
+            #Calcula o gradiente do bias, ele mede a tendência geral de erro do modelo.
             gradientesBias = -np.sum(erro)
-            # Atualiza os pesos e o bias
+            #Linha principal do loop, aonde o aprendizado acontece, pois é quando o peso de cada característica é alterado de acordo
+            #com os aprendizados feitos até agora.
             self.pesos -= self.taxaAprendizado * gradientesPesos
+            #Atualiza o bias com a mesma lógica dos pesos.
             self.bias -= self.taxaAprendizado * gradientesBias
-            # Calcula e armazena o custo (log loss)
+            #Calcula o custo total para está época, medindo o quão errado o modelo está.
             custo = -np.sum(y * np.log(ativacao) + (1 - y) * np.log(1 - ativacao))
+            #Armazena o custo na lista, para permitir a visualização do progresso.
             self.custos.append(custo)
+        #Retorna o próprio objeto para permitir encadeamento de métodos.
         return self
     
+    """ predictProba: Método que retorna as probabilidades previstas para cada paciente. """
     def predictProba(self, X):
-        """ Retorna as probabilidades previstas para cada amostra. """
+        #Repete o cálculo linear, mas agora com os pesos finais otimizados.
         entradaLiquida = np.dot(X, self.pesos) + self.bias
+        #Retorna a probabilidade final.
         return self.sigmoid(entradaLiquida)
     
+    """ predict: Faz a classificação final (0 ou 1) com base em um limiar. Se for maior ou igual a 0.5, classifica como 1 (doença cardíaca presente),"""
     def predict(self, X, limiar=0.5):
-        """ Faz a classificação final (0 ou 1) com base em um limiar. """
+        #Retorna 1 se a probabilidade prevista for maior ou igual ao limiar, caso contrário retorna 0.
         return np.where(self.predictProba(X) >= limiar, 1, 0)
     

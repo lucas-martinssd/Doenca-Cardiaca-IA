@@ -1,6 +1,5 @@
 #Biblioteca para manipular os arquivos csv
 import pandas as pd
-import numpy as np
 
 # Carregar o banco de dados original
 caminhoDadosHeart = r'C:/Users/Lucas/Documents/TCC - Previsao Insuficiencia Cardiaca/workspace/open-heart-api/.git/DadosBrutos/heart.csv'

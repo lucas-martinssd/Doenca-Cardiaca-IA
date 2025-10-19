@@ -61,7 +61,7 @@ y = bancoCompleto['Doença Cardíaca']
 XTreinoVal, XTeste, yTreinoVal, yTeste = meuTrainTestSplit(X, y, testeSize=0.3, randomState=42)
 XTreino, XVal, yTreino, yVal = train_test_split(XTreinoVal, yTreinoVal, test_size=0.2, random_state=42, stratify=yTreinoVal)
 # Treinar o modelo Adaline Logístico usando a classe AdalineLogistica que é o neurônio da nossa rede neural.
-adaline = AdalineLogistica(taxaAprendizado=0.0001, nEpocas=300000, estagioAleatorio=42)
+adaline = AdalineLogistica(taxaAprendizado=0.0001, nEpocas=30000, estagioAleatorio=42)
 # Executa o treinamento
 adaline.fit(XTreino.values, yTreino.values, XVal.values, yVal.values)
 # Fazer previsões e mostrar resultados após o treinamento
@@ -86,7 +86,7 @@ print("\nVisualização das previsões:")
 print(df_resultados.head())
 print("\nGerando gráficos de análise...")
 # Gráfico 1: Curva de Custo
-GraficosAdalineLogistica.plotarCurvaCusto(adaline)
+GraficosAdalineLogistica.plotarCurvaErro(adaline)
 # Gráfico 2: Matriz de Confusão
 GraficosAdalineLogistica.plotarMatrizConfusao(yTeste.values, yPred, classes=['Não Doente', 'Doente'])
 # Gráfico 3: Curvas de Aprendizado

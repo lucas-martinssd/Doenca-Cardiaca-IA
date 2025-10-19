@@ -37,7 +37,7 @@ class ExecutorMulticamadas:
             nOculta=nOculta,
             nSaida=nSaida,
             taxaAprendizado=0.0001,
-            nEpocas=300000
+            nEpocas=30000
         )
         mlp.fit(xTreino.values, yTreino.values, xVal.values, yVal.values)
         # Avalia o modelo no conjunto de teste final
@@ -46,6 +46,6 @@ class ExecutorMulticamadas:
         print(f"Acurácia do modelo Multicamadas: {acuracia:.2f}%")
         # Gera e exibe os gráficos de análise
         print("Gerando gráficos de análise para o modelo Multicamadas...")
-        GraficosAdalineLogistica.plotarCurvaCusto(mlp)
+        GraficosAdalineLogistica.plotarCurvaErro(mlp)
         GraficosAdalineLogistica.plotarMatrizConfusao(self.yTeste.values, yPred, classes=['Não Doente', 'Doente'])
         GraficosAdalineLogistica.plotarCurvasAprendizado(mlp)

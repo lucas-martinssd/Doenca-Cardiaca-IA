@@ -20,9 +20,9 @@ class AdalineLogistica:
         self.pesos = None
         #bias: Valor que representa o deslocamento da função de ativação, ajustando a linha de decisão.
         self.bias = None
-        #custos: Lista que armazena o custo a cada época, para monitorar o aprendizado, se o custo for diminuindo é
+        #erros: Lista que armazena o erro a cada época, para monitorar o aprendizado, se o erro for diminuindo é
         #a prova de que o modelo está aprendendo.
-        self.custos = []
+        self.erros = []
         #Atributos para as curvas de aprendizado
         self.historicoAcuraciaTreino = []
         self.historicoAcuraciaVal = []
@@ -78,10 +78,9 @@ class AdalineLogistica:
             self.pesos -= self.taxaAprendizado * gradientesPesos
             #Atualiza o bias com a mesma lógica dos pesos.
             self.bias -= self.taxaAprendizado * gradientesBias
-            #Calcula o custo total para está época, medindo o quão errado o modelo está.
-            custo = -np.sum(y * np.log(ativacao) + (1 - y) * np.log(1 - ativacao))
-            #Armazena o custo na lista, para permitir a visualização do progresso.
-            self.custos.append(custo)
+            #Calculando o Erro Quadrático Médio (MSE)
+            erroQuadraticoMedio = np.mean(erro ** 2)
+            self.erros.append(erroQuadraticoMedio)
             #Lógica para salvar a acurácia a cada época
             self.historicoAcuraciaTreino.append(self.acuracia(y, X))
             if XVal is not None and yVal is not None:

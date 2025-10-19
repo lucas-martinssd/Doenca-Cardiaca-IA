@@ -16,7 +16,7 @@ class Multicamadas:
         self.nEpocas = nEpocas
         self.estagioAleatorio = estagioAleatorio
         # Atributos para análise, compatíveis com a classe de visualização
-        self.custos = []
+        self.erros = []
         self.historicoAcuraciaTreino = []
         self.historicoAcuraciaVal = []
         # Inicialização dos pesos e bias
@@ -62,15 +62,13 @@ class Multicamadas:
             # Camada oculta para camada de saída
             entradaSaida = np.dot(ativacaoOculta, self.pesosSaida) + self.biasSaida
             ativacaoSaida = self.sigmoid(entradaSaida)
-            # --- 2. CÁLCULO DO ERRO E CUSTO ---
-            # Cáculo do custo (Log loss com masrgem de segurança)
-            apsilon = 1e-5
-            ativacaoSegura = np.clip(ativacaoSaida, apsilon, 1 - apsilon)
-            custo = -np.mean(y * np.log(ativacaoSegura) + (1 - y) * np.log(1 - ativacaoSegura))
-            self.custos.append(custo)
+            # --- 2. CÁLCULO DO ERRO ---
+            erroVetor = ativacaoSaida - y
+            erroQuadraticoMedio = np.mean(erroVetor ** 2)
+            self.erros.append(erroQuadraticoMedio)
             # --- 3. BACKPROPAGATION ---
             # Gradiente da camada de saída
-            dSaida = (ativacaoSaida - y)
+            dSaida = erroVetor * self.sigmoid_derivada(ativacaoSaida)
             # Gradiente da camada oculta
             dOculta = np.dot(dSaida, self.pesosSaida.T) * self.relu_derivada(entradaOculta)
             # --- 4. ATUALIZAÇÃO DOS PESOS E BIAS ---

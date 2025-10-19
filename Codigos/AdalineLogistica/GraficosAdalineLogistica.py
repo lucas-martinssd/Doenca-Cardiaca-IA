@@ -6,13 +6,18 @@ from sklearn.model_selection import train_test_split
 
 class GraficosAdalineLogistica:
     @staticmethod
-    def plotarCurvaCusto(modelo):
-        """Plota a evolução do custo do modelo a cada época."""
+    def plotarCurvaErro(modelo):
+        """
+        Plota a evolução do Erro Quadrático Médio do modelo a cada época.
+        """
+        if not hasattr(modelo, 'erros') or not modelo.erros:
+            print("Aviso: O modelo não possui dados de erro para plotar.")
+            return
         plt.figure(figsize=(10, 6))
-        plt.plot(range(1, len(modelo.custos) + 1), modelo.custos, marker='o', color='#0000FF', linestyle='-')
-        plt.title('Evolução do Custo por Época', fontsize=16, fontweight='bold')
+        plt.plot(range(1, len(modelo.erros) + 1), modelo.erros, marker='o', color='#0000FF', linestyle='-')
+        plt.title('Evolução do Erro por Época', fontsize=16, fontweight='bold')
         plt.xlabel('Épocas', fontsize=12)
-        plt.ylabel('Custo', fontsize=12)
+        plt.ylabel('Erro', fontsize=12)
         plt.grid(True, linestyle='--', alpha=0.6)
         plt.show()
 

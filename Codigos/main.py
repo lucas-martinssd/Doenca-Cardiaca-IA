@@ -1,121 +1,116 @@
 #Biblioteca usada para trabalhar com dados em tabelas.
 import pandas as pd
-import numpy as np
-from AdalineLogistica.AdalineLogistica import AdalineLogistica
 from sklearn.model_selection import train_test_split
-from AdalineLogistica.GraficosAdalineLogistica import GraficosAdalineLogistica
-
+from AdalineLogistica.ExecutorAdalineLogistica import ExecutorAdalineLogistica
 from Multicamadas.ExecutorMulticamadas import ExecutorMulticamadas
+from MulticamadasBiblioteca.ExecutorMulticamadasBibliotecas import ExecutorMulticamadasBibliotecas
+from AdalineLogisticaBibliotecas.ExecutorAdalineLogisticaBibliotecas import ExecutorAdalineLogisticaBibliotecas
 
-""" Classe que vai usar as ferramentas feitas na AdalineLogistica para executar a tarefa do início ao fim. """
-""" meuTrainTestSplit: Tem a função de dividir o conjunto de dados em dois grupos, um para treinar o modelo e o 
-    outro completamente separado, para testá-lo. """
-#Essa divisão é feita de forma estratificada, ou seja, deixando a proporção de pacientes com doença cardíaca e sem doença cardíaca 
-# sempre a mesma. Recebe como parâmetros os features X, o alvo y, o tamanho do grupo de teste testeSize 0.3, ou seja, 30% por ser um 
-# valor padrão e a semente aleatória para garantir a reprodutibilidade.
-def meuTrainTestSplit(X, y, testeSize=0.3, randomState=42):
-    #Linhas que garantem que os índices estejam limpos e de forma sequencial como (1, 2, 3).
-    X = X.reset_index(drop=True)
-    y = y.reset_index(drop=True)
-    #Cria um array de números de 0 até o total de pacientes, para representar cada um.
-    indices = np.arange(len(y))
-    #Vai pegar todo o array de cada paciente e retornar apenas [0, 1].
-    classes = np.unique(y)
-    #Arrays que vão armazenar os índices dos pacientes de teste e treino.
-    indicesTreino, indicesTeste = [], []
-    #Lógica que vai ser usada para o embaralhamento de forma controlada usando o 42.
-    rgen = np.random.RandomState(randomState)
-    """ Loop que vai realizar a divisão dos pacientes de forma igual, ou seja, contendo o mesmo número de pacientes saudáveis e doentes, 
-        para treino e para teste. O loop vai ocorrer uma vez para a classe 0 saudáveis e uma para a classe 1 doentes. """
-    for cls in classes:
-        #Essa linha vai selecionar os índices dos pacientes que pertencem a classe do loop atual, 0 saudável ou 1 doente.
-        indicesClasse = indices[y == cls]
-        #Embaralha aleatoriamente os índices dentro daquela classe do loop.
-        rgen.shuffle(indicesClasse)
-        #Calcula a porcentagem de pacientes que vão ser usados para o treino com base no testeSize que já está definido 30%, 
-        # ou seja o treino é 70%;
-        pontoCorte = int(len(indicesClasse) * (1 - testeSize))
-        #Divide a lista de índices embaralhados da classe atual. indicesTreino tem 70% dos pacientes e indicesTeste tem 30%.
-        indicesTreino.extend(indicesClasse[:pontoCorte])
-        indicesTeste.extend(indicesClasse[pontoCorte:])
-    #Realiza o embaralhamento controlado dos pacientes dentro do treino e do teste.
-    rgen.shuffle(indicesTreino)
-    rgen.shuffle(indicesTeste)
-    #Pega os arrays já prontos e embaralhados e coloca cada um em seu respectivo lugar do banco X ou y.
-    XTrain = X.iloc[indicesTreino]
-    XTest = X.iloc[indicesTeste]
-    yTrain = y.iloc[indicesTreino]
-    yTest = y.iloc[indicesTeste]
-    #Retorna os quatro conjuntos de dados.
-    return XTrain, XTest, yTrain, yTest
 
-""" Parte do código que usa os dados já tratados e os utiliza para treinar, testar e avaliar o modelo Adaline Logístico."""
-print("Iniciando o treinamento do modelo Adaline Logístico...")
-# Carregar os dados do banco completo
-caminhoBancoCompleto = r'C:/Users/Lucas/Documents/TCC - Previsao Insuficiencia Cardiaca/workspace/open-heart-api/.git/DadosCompletos/BancoCompleto.csv'
-bancoCompleto = pd.read_csv(caminhoBancoCompleto)
-# Separar Features X e Alvo y
-X = bancoCompleto.drop('Doença Cardíaca', axis=1)
-y = bancoCompleto['Doença Cardíaca']
-# Dividir e escalar os dados usando a função meuTrainTestSplit
-XTreinoVal, XTeste, yTreinoVal, yTeste = meuTrainTestSplit(X, y, testeSize=0.3, randomState=42)
-XTreino, XVal, yTreino, yVal = train_test_split(XTreinoVal, yTreinoVal, test_size=0.2, random_state=42, stratify=yTreinoVal)
-# Treinar o modelo Adaline Logístico usando a classe AdalineLogistica que é o neurônio da nossa rede neural.
-adaline = AdalineLogistica(taxaAprendizado=0.0001, nEpocas=30000, estagioAleatorio=42)
-# Executa o treinamento
-adaline.fit(XTreino.values, yTreino.values, XVal.values, yVal.values)
-# Fazer previsões e mostrar resultados após o treinamento
-probabilidades = adaline.predictProba(XTeste.values)
-# Faz a classificação final, retornando 0 ou 1, se o paciente tem ou não doença cardíaca.
-yPred = adaline.predict(XTeste.values)
-# Calcula a acurácia do modelo, que é a porcentagem de acertos entre os pacientes do grupo de teste.
-# Ou seja, acurácia do modelo indica a porcentagem entre todos os pacientes no grupo de teste, para quantos deles
-# o modelo acertou o diagnóstico
-acuracia = np.mean(yPred == yTeste.values) * 100
-print(f"Acurácia do modelo Adaline Logístico: {acuracia:.2f}%")
-# Criar DataFrame de resultados para visualização
-df_resultados = pd.DataFrame({
-    # Número da linha no banco de dados, que indica qual é o paciente
-    'ID_do_Paciente_no_Teste': yTeste.index,
-    # Indica se o paciente tem ou não doença cardíaca, dado já existente no banco original heart
-    'Realidade_Observada': yTeste.values,
-    # Porcentagem indicada pelo modelo de chance de ter doença cardíaca
-    'Chance_de_Doenca_Cardiaca_%': (probabilidades * 100).round(2)
-})
-print("\nVisualização das previsões:")
-print(df_resultados.head())
-print("\nGerando gráficos de análise...")
-# Gráfico 1: Curva de Custo
-GraficosAdalineLogistica.plotarCurvaErro(adaline)
-# Gráfico 2: Matriz de Confusão
-GraficosAdalineLogistica.plotarMatrizConfusao(yTeste.values, yPred, classes=['Não Doente', 'Doente'])
-# Gráfico 3: Curvas de Aprendizado
-GraficosAdalineLogistica.plotarCurvasAprendizado(adaline)
-
-"""
-    Carrega o dataset, separa as features (X) do alvo (y) e divide os dados
-    em um conjunto para treino/validação (80%) e um conjunto para teste final (20%).
+# Função para Multicamadas NumPy (se ExecutorMulticamadas não carregar/dividir)
+def carregar_e_dividir_dados_numpy(caminho_arquivo):
     """
-def carregar_e_dividir_dados(caminho_arquivo):
-    # Carregar os dados do arquivo CSV
+    Carrega o dataset, separa as features (X) do alvo (y) e divide os dados
+    para o ExecutorMulticamadas NumPy (ex: 80% treino/val, 20% teste).
+    Adapte conforme a necessidade do ExecutorMulticamadas.
+    """
     bancoCompleto = pd.read_csv(caminho_arquivo)
-    # Separar Features X e Alvo y
     X = bancoCompleto.drop('Doença Cardíaca', axis=1)
     y = bancoCompleto['Doença Cardíaca']
-    # Dividir os dados, mantendo a proporção de classes (stratify)
-    xTreinoVal, yTreinoVal, xTeste, yTeste = train_test_split(
+    # Usando a divisão 80/20 que parecia ser usada no bloco original do Multicamadas
+    xTreinoVal, xTeste, yTreinoVal, yTeste = train_test_split(
         X, y, test_size=0.2, random_state=42, stratify=y
     )
+    # Retorna DataFrames/Series Pandas, pois o Executor NumPy provavelmente espera isso
     return xTreinoVal, yTreinoVal, xTeste, yTeste
 
-""""Bloco principal de Execução"""
+# --- Funções de Execução para Cada Modelo ---
+
+def executar_adaline_numpy():
+    """Executa o modelo Adaline Logístico implementado com NumPy."""
+    print("--- Iniciando Execução: Adaline Logístico (NumPy) ---")
+    caminhoBancoCompleto = r'C:\Users\Lucas\Documents\TCC - Previsao Insuficiencia Cardiaca\Doenca-Cardiaca-IA\Dados\DadosCompletos\BancoCompleto.csv'
+    try:
+        executor_adaline_np = ExecutorAdalineLogistica(
+            caminho_arquivo=caminhoBancoCompleto
+        )
+        executor_adaline_np.rodar(
+            n_epocas=30000,
+            taxa_aprendizado=0.0001
+        )
+    except Exception as e:
+        print(f"Erro durante a execução do Adaline NumPy: {e}")
+    finally:
+        print("--- Fim da Execução: Adaline Logístico (NumPy) ---\n")
+
+def executar_multicamadas_numpy():
+    """Executa o modelo Multicamadas implementado com NumPy."""
+    print("--- Iniciando Execução: Multicamadas (NumPy) ---")
+    caminhoBanco = r'C:\Users\Lucas\Documents\TCC - Previsao Insuficiencia Cardiaca\Doenca-Cardiaca-IA\Dados\DadosCompletos\BancoCompleto.csv'
+    try:
+        # Carregar/dividir dados como ExecutorMulticamadas espera
+        xTreinoVal, yTreinoVal, xTeste, yTeste = carregar_e_dividir_dados_numpy(caminhoBanco)
+
+        executorMlp = ExecutorMulticamadas(xTreinoVal, yTreinoVal, xTeste, yTeste)
+        executorMlp.rodar() # Certifique-se que os hiperparâmetros desejados estão definidos aqui ou dentro de ExecutorMulticamadas
+    except Exception as e:
+        print(f"Erro durante a execução do Multicamadas NumPy: {e}")
+    finally:
+        print("--- Fim da Execução: Multicamadas (NumPy) ---\n")
+
+def executar_multicamadas_keras(n_epocas=30000, taxa_aprendizado=0.0001):
+    """Executa o modelo Multicamadas usando Keras/TensorFlow."""
+    print("--- Iniciando Execução: Multicamadas (Keras) ---")
+    caminhoBanco = r'C:\Users\Lucas\Documents\TCC - Previsao Insuficiencia Cardiaca\Doenca-Cardiaca-IA\Dados\DadosCompletos\BancoCompleto.csv'
+    try:
+        executor_keras_mlp = ExecutorMulticamadasBibliotecas(
+            caminho_arquivo=caminhoBanco,
+            n_oculta=10
+        )
+        executor_keras_mlp.rodar(
+            n_epocas=n_epocas,
+            taxa_aprendizado=taxa_aprendizado
+        )
+    except Exception as e:
+        print(f"Erro durante a execução do Multicamadas Keras: {e}")
+    finally:
+        print("--- Fim da Execução: Multicamadas (Keras) ---\n")
+
+def executar_adaline_keras(n_epocas=30000, taxa_aprendizado=0.0001):
+    """Executa o modelo Adaline Logístico usando Keras/TensorFlow."""
+    print("--- Iniciando Execução: Adaline Logístico (Keras) ---")
+    caminhoBanco = r'C:\Users\Lucas\Documents\TCC - Previsao Insuficiencia Cardiaca\Doenca-Cardiaca-IA\Dados\DadosCompletos\BancoCompleto.csv'
+    try:
+        executor_adaline_keras = ExecutorAdalineLogisticaBibliotecas(
+            caminho_arquivo=caminhoBanco
+        )
+        executor_adaline_keras.rodar(
+            n_epocas=n_epocas,
+            taxa_aprendizado=taxa_aprendizado
+        )
+    except Exception as e:
+        print(f"Erro durante a execução do Adaline Keras: {e}")
+    finally:
+        print("--- Fim da Execução: Adaline Keras ---\n")
+        
+# --- Bloco Principal ÚNICO ---
 if __name__ == "__main__":
-    # Define o caminho do seu arquivo de dados e carrega os dados
-    caminhoBanco = r'C:/Users/Lucas/Documents/TCC - Previsao Insuficiencia Cardiaca/workspace/open-heart-api/.git/DadosCompletos/BancoCompleto.csv'
-    xTreinoVal, xTeste, yTreinoVal, yTeste = carregar_e_dividir_dados(caminhoBanco)
-    # Cria uma instancia (um objeto) da classe ExecutorMulticamadas e passa os conjuntos
-    #   de dados para o contrutor dela
-    executorMlp = ExecutorMulticamadas(xTreinoVal, yTreinoVal, xTeste, yTeste)
-    # Executa todo o processo de treino, avaliação e visualização
-    executorMlp.rodar()
-    print("--- Fim da Execução ---")
+
+    # CONFERIR SE O OS GRÁFICOS ESTÁO COMPATIVEIS
+
+    # --- ESCOLHA QUAL(IS) MODELO(S) EXECUTAR ---
+    # Descomente a(s) linha(s) do(s) modelo(s) que você quer rodar.
+
+    # 1. Adaline Logístico (Implementação NumPy)
+    executar_adaline_numpy()
+    
+    # 4. Adaline Logístico (Usando Keras/TensorFlow)
+    executar_adaline_keras() # Exemplo: rodando Adaline Keras com MSE
+
+    # 2. Multicamadas (Implementação NumPy)
+    executar_multicamadas_numpy()
+
+    # 3. Multicamadas (Usando Keras/TensorFlow)
+    executar_multicamadas_keras() # Exemplo com BCE e outros hiperparâmetros
+
+    

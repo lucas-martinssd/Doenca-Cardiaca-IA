@@ -1,8 +1,8 @@
 # Biblioteca usada somente para separar os dados em treino e teste.
 from sklearn.model_selection import train_test_split
 from Multicamadas.Multicamadas import Multicamadas
-from AdalineLogistica.GraficosAdalineLogistica import GraficosAdalineLogistica
-import numpy as np
+from Graficos.GraficosAdalineLogistica import GraficosAdalineLogistica
+from sklearn.metrics import accuracy_score
 
 class ExecutorMulticamadas:
     """
@@ -42,8 +42,11 @@ class ExecutorMulticamadas:
         mlp.fit(xTreino.values, yTreino.values, xVal.values, yVal.values)
         # Avalia o modelo no conjunto de teste final
         yPred = mlp.predict(self.xTeste.values)
-        acuracia = mlp.acuracia(self.xTeste.values, self.yTeste.values) * 100
-        print(f"Acurácia do modelo Multicamadas: {acuracia:.2f}%")
+        acuracia_propria = mlp.acuracia(self.xTeste.values, self.yTeste.values) * 100
+        print(f"Acurácia (implementação própria): {acuracia_propria:.2f}%")
+        # Implementação de referência do Scikit-learn
+        acuracia_sklearn = accuracy_score(self.yTeste.values, yPred) * 100
+        print(f"Acurácia (referência Scikit-learn): {acuracia_sklearn:.2f}%")
         # Gera e exibe os gráficos de análise
         print("Gerando gráficos de análise para o modelo Multicamadas...")
         GraficosAdalineLogistica.plotarCurvaErro(mlp)

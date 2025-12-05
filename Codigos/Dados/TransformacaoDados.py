@@ -144,5 +144,5 @@ for dadosIndividual in listaDadosTransformados:
 bancoCompleto = pd.concat(listaDadosProcessados, axis=1)
 bancoCompleto['Doença Cardíaca'] = dadosDoencaCardiaca['Doença Cardíaca']
 #Salvar o banco completo
-caminhoBancoCOmpleto = r'C:/Users/Lucas/Documents/TCC - Previsao Insuficiencia Cardiaca/workspace/open-heart-api/.git/DadosCompletos/BancoCompleto.csv'
+caminhoBancoCOmpleto = r'C:\Users\Lucas\Documents\TCC - Previsao Insuficiencia Cardiaca\Doenca-Cardiaca-IA\Dados\DadosCompletos\BancoCompleto.csv'
 bancoCompleto.to_csv(caminhoBancoCOmpleto, index=False)

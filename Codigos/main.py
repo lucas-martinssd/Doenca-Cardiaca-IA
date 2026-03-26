@@ -7,6 +7,11 @@ from MulticamadasBiblioteca.ExecutorMulticamadasBibliotecas import ExecutorMulti
 from AdalineLogisticaBibliotecas.ExecutorAdalineLogisticaBibliotecas import ExecutorAdalineLogisticaBibliotecas
 
 
+#Caminhos Bancos
+caminho_base = r'C:\Users\Lucas\Documents\TCC - Previsao Insuficiencia Cardiaca\Doenca-Cardiaca-IA\Dados\DadosCompletos'
+BANCO_1 = f'{caminho_base}\BancoCompleto1.csv'
+BANCO_2 = f'{caminho_base}\BancoCompleto2.csv'
+
 # Função para Multicamadas NumPy (se ExecutorMulticamadas não carregar/dividir)
 def carregar_e_dividir_dados_numpy(caminho_arquivo):
     """
@@ -26,72 +31,60 @@ def carregar_e_dividir_dados_numpy(caminho_arquivo):
 
 # --- Funções de Execução para Cada Modelo ---
 
-def executar_adaline_numpy():
+def executar_adaline_numpy(caminho_csv, nome_banco):
     """Executa o modelo Adaline Logístico implementado com NumPy."""
-    print("--- Iniciando Execução: Adaline Logístico (NumPy) ---")
-    caminhoBancoCompleto = r'C:\Users\Lucas\Documents\TCC - Previsao Insuficiencia Cardiaca\Doenca-Cardiaca-IA\Dados\DadosCompletos\BancoCompleto.csv'
+    print(f"--- Iniciando Execução: Adaline Logístico (NumPy) | {nome_banco} ---")
     try:
-        executor_adaline_np = ExecutorAdalineLogistica(
-            caminho_arquivo=caminhoBancoCompleto
-        )
+        executor_adaline_np = ExecutorAdalineLogistica(caminho_arquivo=caminho_csv)
         executor_adaline_np.rodar(
-            n_epocas=30000,
+            n_epocas=3000,
             taxa_aprendizado=0.0001
         )
     except Exception as e:
-        print(f"Erro durante a execução do Adaline NumPy: {e}")
+        print(f"Erro durante a execução do Adaline NumPy: ({nome_banco}): {e}")
     finally:
-        print("--- Fim da Execução: Adaline Logístico (NumPy) ---\n")
+        print(f"--- Fim da Execução: Adaline Logístico (NumPy) | {nome_banco} ---\n")
 
-def executar_multicamadas_numpy():
+def executar_multicamadas_numpy(caminho_csv, nome_banco):
     """Executa o modelo Multicamadas implementado com NumPy."""
-    print("--- Iniciando Execução: Multicamadas (NumPy) ---")
-    caminhoBanco = r'C:\Users\Lucas\Documents\TCC - Previsao Insuficiencia Cardiaca\Doenca-Cardiaca-IA\Dados\DadosCompletos\BancoCompleto.csv'
+    print(f"--- Iniciando Execução: Multicamadas (NumPy) | {nome_banco} ---")
     try:
         # Carregar/dividir dados como ExecutorMulticamadas espera
-        xTreinoVal, yTreinoVal, xTeste, yTeste = carregar_e_dividir_dados_numpy(caminhoBanco)
-
+        xTreinoVal, yTreinoVal, xTeste, yTeste = carregar_e_dividir_dados_numpy(caminho_csv)
         executorMlp = ExecutorMulticamadas(xTreinoVal, yTreinoVal, xTeste, yTeste)
         executorMlp.rodar() # Certifique-se que os hiperparâmetros desejados estão definidos aqui ou dentro de ExecutorMulticamadas
     except Exception as e:
-        print(f"Erro durante a execução do Multicamadas NumPy: {e}")
+        print(f"Erro durante a execução do Multicamadas NumPy: ({nome_banco}): {e}")
     finally:
-        print("--- Fim da Execução: Multicamadas (NumPy) ---\n")
+        print(f"--- Fim da Execução: Multicamadas (NumPy) | {nome_banco} ---\n")
 
-def executar_multicamadas_keras(n_epocas=30000, taxa_aprendizado=0.0001):
+def executar_multicamadas_keras(caminho_csv, nome_banco, n_epocas=3000, taxa_aprendizado=0.0001):
     """Executa o modelo Multicamadas usando Keras/TensorFlow."""
-    print("--- Iniciando Execução: Multicamadas (Keras) ---")
-    caminhoBanco = r'C:\Users\Lucas\Documents\TCC - Previsao Insuficiencia Cardiaca\Doenca-Cardiaca-IA\Dados\DadosCompletos\BancoCompleto.csv'
+    print(f"--- Iniciando Execução: Multicamadas (Keras) | {nome_banco} ---")
     try:
-        executor_keras_mlp = ExecutorMulticamadasBibliotecas(
-            caminho_arquivo=caminhoBanco,
-            n_oculta=10
-        )
+        executor_keras_mlp = ExecutorMulticamadasBibliotecas(caminho_arquivo=caminho_csv, n_oculta=10)
         executor_keras_mlp.rodar(
             n_epocas=n_epocas,
             taxa_aprendizado=taxa_aprendizado
         )
     except Exception as e:
-        print(f"Erro durante a execução do Multicamadas Keras: {e}")
+        print(f"Erro durante a execução do Multicamadas Keras: ({nome_banco}): {e}")
     finally:
-        print("--- Fim da Execução: Multicamadas (Keras) ---\n")
+        print(f"--- Fim da Execução: Multicamadas (Keras) | {nome_banco} ---\n")
 
-def executar_adaline_keras(n_epocas=30000, taxa_aprendizado=0.0001):
+def executar_adaline_keras(caminho_csv, nome_banco, n_epocas=3000, taxa_aprendizado=0.0001):
     """Executa o modelo Adaline Logístico usando Keras/TensorFlow."""
-    print("--- Iniciando Execução: Adaline Logístico (Keras) ---")
-    caminhoBanco = r'C:\Users\Lucas\Documents\TCC - Previsao Insuficiencia Cardiaca\Doenca-Cardiaca-IA\Dados\DadosCompletos\BancoCompleto.csv'
+    print(f"--- Iniciando Execução: Adaline Logístico (Keras) | {nome_banco} ---")
     try:
-        executor_adaline_keras = ExecutorAdalineLogisticaBibliotecas(
-            caminho_arquivo=caminhoBanco
-        )
+        executor_adaline_keras = ExecutorAdalineLogisticaBibliotecas(caminho_arquivo=caminho_csv)
         executor_adaline_keras.rodar(
             n_epocas=n_epocas,
             taxa_aprendizado=taxa_aprendizado
         )
     except Exception as e:
-        print(f"Erro durante a execução do Adaline Keras: {e}")
+        print(f"Erro durante a execução do Adaline Keras: ({nome_banco}): {e}")
     finally:
-        print("--- Fim da Execução: Adaline Keras ---\n")
+        print(f"--- Fim da Execução: Adaline Keras | {nome_banco} ---\n")
         
 # --- Bloco Principal ÚNICO ---
 if __name__ == "__main__":
@@ -101,16 +94,29 @@ if __name__ == "__main__":
     # --- ESCOLHA QUAL(IS) MODELO(S) EXECUTAR ---
     # Descomente a(s) linha(s) do(s) modelo(s) que você quer rodar.
 
-    # 1. Adaline Logístico (Implementação NumPy)
-    executar_adaline_numpy()
+    # --- EXECUÇÃO BANCO 1 (UCI Heart) ---
+    print("==========================================")
+    print("    EXECUTANDO EXPERIMENTOS NO BANCO 1")
+    print("==========================================\n")
     
-    # 4. Adaline Logístico (Usando Keras/TensorFlow)
-    executar_adaline_keras() # Exemplo: rodando Adaline Keras com MSE
+    #Sem Biblioteca
+    executar_adaline_keras(BANCO_1, "Banco 1")
+    executar_multicamadas_keras(BANCO_1, "Banco 1")
+    
+    # Com Biblioteca
+    executar_adaline_numpy(BANCO_1, "Banco 1")
+    executar_multicamadas_numpy(BANCO_1, "Banco 1")
 
-    # 2. Multicamadas (Implementação NumPy)
-    executar_multicamadas_numpy()
-
-    # 3. Multicamadas (Usando Keras/TensorFlow)
-    executar_multicamadas_keras() # Exemplo com BCE e outros hiperparâmetros
-
+    # --- EXECUÇÃO BANCO 2 (Heart Failure Clinical) ---
+    print("==========================================")
+    print("    EXECUTANDO EXPERIMENTOS NO BANCO 2")
+    print("==========================================\n")
+    
+    #Sem Biblioteca
+    executar_adaline_keras(BANCO_2, "Banco 2")
+    executar_multicamadas_keras(BANCO_2, "Banco 2")
+    
+    # Com Biblioteca
+    executar_adaline_numpy(BANCO_2, "Banco 2")
+    executar_multicamadas_numpy(BANCO_2, "Banco 2")
     

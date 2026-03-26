@@ -37,7 +37,7 @@ class ExecutorMulticamadas:
             nOculta=nOculta,
             nSaida=nSaida,
             taxaAprendizado=0.0001,
-            nEpocas=30000
+            nEpocas=3000
         )
         mlp.fit(xTreino.values, yTreino.values, xVal.values, yVal.values)
         # Avalia o modelo no conjunto de teste final

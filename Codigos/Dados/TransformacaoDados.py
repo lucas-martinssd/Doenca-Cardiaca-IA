@@ -263,8 +263,8 @@ for dadosIndividual in listaDadosTransformados2:
 # Concatenar todos os DataFrames em um único BancoCompleto2.csv
 bancoCompleto2 = pd.concat(listaDadosProcessados2, axis=1)
 
-# Adicionar a variável alvo (Morte) no final
-bancoCompleto2['Morte'] = dados2['DEATH_EVENT']
+# Adicionar a variável alvo (Doença Cardíaca) no final
+bancoCompleto2['Doença Cardíaca'] = dados2['DEATH_EVENT']
 
 # Salvar o arquivo final
 bancoCompleto2.to_csv(caminhoDadosCompleto2, index=False)

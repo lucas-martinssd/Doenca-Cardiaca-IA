@@ -1,0 +1,365 @@
+\chapter{Conceitos e Modelos de Redes Neurais}
+\label{cap:fundamentacao}
+
+Este capítulo apresenta os conceitos teóricos que fundamentam as duas arquiteturas comparadas neste trabalho, o ADALINE Logístico e o Perceptron Multicamadas, com suas formulações matemáticas e aplicações no diagnóstico cardíaco.
+
+\section{Fundamentação Teórica das Redes Neurais Artificiais}
+\label{sec:fundamentacao_redes}
+
+As Redes Neurais Artificiais constituem um paradigma de computação distribuída e paralela, fundamentado na simulação simplificada do sistema nervoso humano \cite{abdi1994}. São compostas por neurônios artificiais que, por meio de conexões sinápticas ponderadas por pesos, extraem padrões complexos a partir de dados observacionais \cite{silva2016}. Os modelos apresentados neste capítulo compartilham o paradigma de aprendizado por correção de erro, proposto por Widrow e Hoff (1960), segundo o qual o conhecimento é adquirido por modificação iterativa dos pesos sinápticos em função do desvio entre a resposta produzida e a resposta desejada \cite{braga2007}.
+
+\section{Os Elementos Adaptativos e Arquiteturas Preditivas}
+
+Diferentemente de modelos que operam apenas por associação e recuperação de padrões, as arquiteturas preditivas, foco central deste trabalho, ajustam iterativamente seus parâmetros com base no erro em relação à resposta desejada: o ADALINE Logístico e o Perceptron Multicamadas.
+
+Cabe destacar que, embora ADALINE e MLP sejam formalmente modelos de classificação binária, modelos de classificação supervisionada podem ser diretamente empregados em tarefas de predição clínica: ao estimar a probabilidade de pertinência a uma classe (doente ou não doente, sobrevivente ou não), o modelo produz uma predição sobre o estado ou o desfecho do paciente antes da confirmação diagnóstica definitiva \cite{braga2007}. Essa dualidade é explícita nos dois conjuntos de dados utilizados neste trabalho: o Banco 1 aplica os modelos ao diagnóstico de doença coronariana em pacientes sem confirmação prévia, enquanto o Banco 2 os aplica ao prognóstico de mortalidade em pacientes já diagnosticados com insuficiência cardíaca, demonstrando que a mesma arquitetura de classificação serve a ambos os contextos clínicos.
+
+\subsection{ADALINE (\textit{Adaptive Linear Neuron})}
+
+O modelo ADALINE (\textit{Adaptive Linear Neuron}), concebido por Bernard Widrow e Marcian Hoff em 1960, representa uma das mais prolíficas arquiteturas baseadas no processamento linear e na correção de erro \cite{silva2016}. O ADALINE é considerado uma das primeiras redes neurais artificiais do tipo classificador, sendo contemporâneo do Perceptron de Rosenblatt (1957) e compartilhando com ele a mesma unidade computacional básica: o neurônio de McCulloch \& Pitts (1943) \cite{abdi2006}. A distinção fundamental entre os dois modelos reside na regra de aprendizado: enquanto o Perceptron ajusta os pesos com base no erro de classificação (função degrau), o ADALINE clássico minimiza o erro quadrático sobre a ativação linear via regra delta; nessa formulação, a função de custo é estritamente convexa e a convergência ao mínimo global é analiticamente garantida \cite{abdi2006}. Na variante logística adotada neste trabalho, a introdução da sigmoide na saída quebra a convexidade estrita, mas a função de custo permanece bem comportada na região operacional relevante para classificação binária, sem mínimos locais significativos \cite{braga2007}.
+
+\subsubsection{O Neurônio de McCulloch e Pitts e a Arquitetura Básica}
+
+A unidade computacional fundamental do ADALINE herda diretamente o modelo formal do neurônio proposto por Warren McCulloch e Walter Pitts em 1943. Este neurônio calcula sua ativação $a$ como a soma ponderada das suas entradas:
+\begin{equation}
+a = \sum_{i=1}^{I} w_i x_i = w_1 x_1 + w_2 x_2 + \ldots + w_I x_I
+\end{equation}
+
+onde $x_i$ representa o estado de ativação do $i$-ésimo neurônio de entrada e $w_i$ representa a intensidade da conexão entre o $i$-ésimo neurônio de entrada e o neurônio de McCulloch \& Pitts. A resposta final $h(a)$ é determinada por uma função de ativação de limiar:
+\begin{equation}
+h(a) = \begin{cases} 0, & \text{para } a \leq \vartheta \\ 1, & \text{para } a > \vartheta \end{cases}
+\end{equation}
+
+onde $\vartheta$ é o limiar de ativação. Quando múltiplos neurônios de saída são utilizados, a arquitetura forma uma rede com $I$ unidades de entrada e $J$ unidades de saída, conectadas por uma matriz de pesos $W$ de dimensão $I \times J$. O vetor de saída $o_k$ é calculado aplicando-se a função de ativação elemento a elemento à ativação $a_k = W^T x_k$.
+
+Do ponto de vista formal, para cada vetor de entrada $x_k$ composto de $I$ elementos, associa-se a resposta do ADALINE $o_k$ obtida multiplicando a ativação das células de entrada pelo vetor de conexões $w$. A resposta teórica (binária) é $t_k$, a resposta efetiva é $o_k = a_k = w^T x_k$. O erro para a resposta $k$ é a diferença entre a resposta teórica e a resposta efetiva:
+\begin{equation}
+e_k = t_k - o_k = t_k - a_k = t_k - w^T x_k
+\end{equation}
+
+\subsubsection{Combinadores Lineares e o Erro Quadrático}
+
+O processamento interno do ADALINE difere de modelos antecessores, como o Perceptron simples, pela natureza do sinal que é utilizado para o treinamento. De acordo com \citeonline{braga2007}, enquanto o Perceptron quantiza sua saída antes de calcular o erro, o ADALINE calcula seu erro diretamente a partir da saída de seu combinador linear pré-ativação, o que torna a função de custo diferenciável.
+
+Opta-se pelo uso do quadrado do erro como medida de performance, visando usar recursos do cálculo diferencial. O erro ao quadrado se calcula assim:
+\begin{equation}
+e_k^2 = (t_k - a_k)^2 = t_k^2 + a_k^2 - 2a_k t_k = t_k^2 + x_k^T w w^T x_k - 2t_k w^T x_k
+\end{equation}
+
+O gradiente de $e_k^2$ em relação ao vetor de pesos $w$ é obtido pela diferenciação:
+\begin{equation}
+\frac{\partial e_k^2}{\partial w} = \nabla_{e_k^2} = 2(w^T x_k) x_k - 2t_k x_k = -2(t_k - w^T x_k) x_k
+\end{equation}
+
+A inovação central teórica do ADALINE, conhecida como Algoritmo LMS (\textit{Least Mean Squares}), baseia-se na formulação da função de custo como o Erro Quadrático Médio. A função objetivo $J(w)$ a ser minimizada é estritamente convexa:
+\begin{equation}
+J(w) = E\left[(d - v)^2\right]
+\end{equation}
+
+sendo $d$ o rótulo verdadeiro ou sinal desejado \cite{abdi2006}. Por se tratar de uma função cujas derivadas parciais formam um hiperparaboloide, a descida do gradiente encontra claramente um único mínimo global.
+
+\subsubsection{Regra Delta e o Algoritmo de Descida do Gradiente}
+
+O método do gradiente consiste em diminuir os parâmetros de uma função no sentido inverso do gradiente desta função. O gradiente dá a direção do maior aumento; sua inversa dá a direção da maior diminuição. Como se procura minimizar $e_k^2$, modificam-se os parâmetros do vetor $w$ no sentido inverso do gradiente. Assim, o incremento $\Delta w$ na apresentação do estímulo $k$ é:
+\begin{equation}
+\Delta w = -\eta \, \nabla_{e_k^2} = \eta(t_k - w^T x_k) x_k
+\end{equation}
+
+Esta é a denominada Regra Delta do ADALINE, onde $\eta$ é a taxa de aprendizado, um hiperparâmetro positivo que controla o tamanho do passo na direção do gradiente descendente \cite{braga2007}. A atualização dos pesos é então:
+\begin{equation}
+w_{[n+1]} = w_{[n]} + \Delta w_{[n]}
+\end{equation}
+
+Para uma aprendizagem por pacote (\textit{batch learning}), onde todos os $K$ padrões são apresentados conjuntamente a cada época, a regra delta para ADALINE pode ser escrita na forma matricial compacta:
+\begin{equation}
+\Delta W = \eta (E X^T)^T = \eta X E^T
+\end{equation}
+
+onde $E = T - O$ é a matriz de erros, $T$ é a matriz das respostas esperadas e $O = W^T X$ é a matriz das respostas efetivas da rede. A atualização da matriz de pesos é então:
+\begin{equation}
+W_{[n+1]} = W_{[n]} + \Delta W_{[n]}
+\end{equation}
+
+\citeonline{silva2016} apontam que esta característica garante estabilidade absoluta durante o treinamento, uma vez que, sob uma taxa de aprendizagem $\eta$ adequadamente pequena, a rede jamais divergirá do ponto de erro mínimo.
+
+\subsubsection{Exemplo Numérico: Categorização de Alimentos}
+
+Para ilustrar o funcionamento do ADALINE em um problema de hetero-associação, considere o problema de classificar 9 produtos alimentares em três categorias de textura/som à mordida: \textit{croustillant}, \textit{craquant} e \textit{croquant}. Cada alimento é descrito por 6 características binárias (3 de textura: duro, quebradiço, aerado; e 3 de som: agudo, grave, intenso), formando a matriz de entrada $X$ de dimensão $6 \times 9$. As três categorias de saída formam a matriz alvo $T$ de dimensão $3 \times 9$ \cite{abdi1994}.
+
+O processo de aprendizagem se inicia com a matriz de pesos $W$ inicializada com valores aleatórios no intervalo $[-0{,}6;\ +0{,}6]$. A cada iteração (época), calcula-se a resposta $O = W^T X$, o erro $E = T - O$, a correção $\Delta W = \eta X E^T$ (com $\eta = 0{,}01$), e atualiza-se $W$. O erro global na iteração 0 é $e = 15{,}483$, na iteração 1 é $e = 13{,}887$, na iteração 2 é $e = 12{,}599$, e assim sucessivamente. Após mais de 300 iterações, o erro converge para $e \approx 3{,}525$, e a matriz de resposta $O^T$ é bem próxima da matriz alvo $T^T$, conforme demonstrado por \citeonline{abdi1994}.
+
+Este resultado ilustra que o ADALINE clássico, ainda que consiga aproximar as saídas de forma razoável, mantém erros residuais não negligenciáveis em problemas de classificação binária, pois suas saídas lineares não estão naturalmente confinadas ao intervalo $[0, 1]$. Esta limitação motiva diretamente a introdução da função de ativação logística, discutida a seguir.
+
+\subsection{ADALINE Logística e a Classificação Probabilística}
+
+O desempenho do ADALINE clássico pode ser melhorado usando modelos não-lineares. A formulação clássica do ADALINE opera eficientemente na previsão contínua, mas apresenta limitações na interpretação dos resultados de problemas estritamente classificatórios. Ao abordar o prognóstico médico, como a detecção de doenças cardíacas, respostas probabilísticas oferecem um grau de confiabilidade e interpretabilidade muito superior às classificações determinísticas binárias rígidas \cite{braga2007}. Surge assim o ADALINE Logístico, ou Regressão Logística formulada via processamento neural, que substitui a ativação linear pela função logística sigmoide.
+
+\subsubsection{A Função Logística e Suas Propriedades}
+
+A evolução metodológica reside na inserção de uma função de ativação não-linear sigmoidal na saída do combinador linear do ADALINE. A função logística (ou sigmoide) é definida por:
+\begin{equation}
+f(x) = \frac{1}{1 + e^{-x}}
+\end{equation}
+
+Esta função apresenta um conjunto de propriedades matemáticas fundamentais para o treinamento de redes neurais. Em primeiro lugar, o seu contradomínio está estritamente contido no intervalo $(0, 1)$, o que permite a interpretação de sua saída como uma probabilidade condicional \cite{abdi2006}. Em segundo lugar, a função é contínua e diferenciável em todo o seu domínio, propriedade indispensável para a aplicação do cálculo diferencial durante o treinamento por descida do gradiente.
+
+Uma das propriedades mais elegantes da função logística é a compacidade da expressão de sua derivada. Derivando $f(x) = (1 + e^{-x})^{-1}$ em relação a $x$:
+\begin{equation}
+f'(x) = \frac{df}{dx} = \frac{e^{-x}}{(1 + e^{-x})^2} = f(x)[1 - f(x)]
+\end{equation}
+
+Esta identidade demonstra que a derivada da sigmoide pode ser expressa unicamente em termos de seu próprio valor de saída, uma propriedade que simplifica enormemente os cálculos de gradiente durante o treinamento \cite{silva2016}.
+
+Outra função sigmoide relevante na literatura é a tangente hiperbólica $\tanh(x) = (e^x - e^{-x})/(e^x + e^{-x})$, com contradomínio $(-1, 1)$, frequentemente preferida em camadas intermediárias por produzir dados centrados em zero e gradientes mais fortes do que a logística \cite{braga2007}. Neste trabalho, adota-se exclusivamente a função logística.
+
+\subsubsection{Regra de Aprendizagem da ADALINE Logística}
+
+Para o ADALINE logístico, a saída do neurônio para o estímulo $k$ é:
+\begin{equation}
+o_k = f(w^T x_k) = \frac{1}{1 + e^{-w^T x_k}}
+\end{equation}
+
+O erro é definido como no ADALINE clássico, $e_k = t_k - o_k$. O erro ao quadrado torna-se:
+\begin{equation}
+e_k^2 = (t_k - o_k)^2 = (t_k - f(a_k))^2
+\end{equation}
+
+O gradiente de $e_k^2$ em relação ao vetor de pesos $w$ é obtido pela regra da cadeia:
+\begin{equation}
+\frac{\partial e_k^2}{\partial w} = \frac{\partial e_k^2}{\partial (W^T x)} \cdot \frac{\partial f(W^T x)}{\partial W^T x} \cdot \frac{\partial W^T x}{\partial w}
+\end{equation}
+
+Expandindo cada termo, sabendo que $\partial e_k^2 / \partial o_k = -2(t_k - o_k)$ e que $\partial o_k / \partial a_k = f'(a_k) = o_k(1 - o_k)$:
+\begin{equation}
+\frac{\partial e_k^2}{\partial w} = -2[t_k - f(w^T x)] f'(w^T x) x = -2(t_k - o_k) \, o_k (1 - o_k) \, x
+\end{equation}
+
+Como se procura minimizar $e_k^2$, modifica-se $w$ no sentido inverso do gradiente. O incremento $\Delta w$ é:
+\begin{equation}
+\Delta w = -\eta \, \nabla_{e_k^2} = \eta (t_k - o_k) \, o_k (1 - o_k) \, x_k
+\end{equation}
+
+Este resultado é a Regra Delta para a ADALINE logística. Comparando com a regra delta clássica ($\Delta w = \eta (t_k - w^T x_k) x_k$), a diferença essencial é o fator multiplicativo $o_k(1 - o_k)$, que corresponde exatamente à derivada da função sigmoide. Este fator modula o tamanho da atualização: para saídas muito próximas de 0 ou 1, a derivada tende a zero e as atualizações ficam pequenas, evitando oscilações \cite{silva2016}.
+
+Para uma aprendizagem por pacote, a regra de atualização do ADALINE logístico torna-se:
+\begin{equation}
+\Delta W = \eta X \cdot \{[E \odot O \odot (1 - O)]^T\}
+\end{equation}
+
+onde $\odot$ denota o produto de Hadamard (elemento a elemento), $E = T - O$ é a matriz de erros, e $O = f(W^T X)$ é a matriz de saídas logísticas.
+
+\medskip
+\noindent\textbf{Nota de implementação:} A implementação manual apresentada no Capítulo~\ref{cap:metodologia} (Seção~\ref{sec:adaline_numpy}) adota a formulação simplificada da regra de Widrow-Hoff, sem o fator $o_k(1-o_k)$ da derivada da sigmoide. Nessa versão, os pesos são atualizados diretamente pelo erro de saída: $\Delta w = \eta(t_k - \hat{y}_k)x_k$. Cabe observar que o gradiente do MSE com saída sigmoide incluiria o fator $\hat{y}_k(1-\hat{y}_k)$; ao omiti-lo, a regra de atualização torna-se equivalente, conforme demonstrado na Seção seguinte, ao gradiente da \textbf{entropia cruzada} com saída sigmoide, não do MSE. Portanto, a função efetivamente minimizada pela implementação NumPy é a entropia cruzada, embora os valores de MSE sejam registrados a cada época para monitoramento da convergência. Essa escolha foi adotada por sua estabilidade de convergência e consistência com a regra de Widrow-Hoff original.
+
+\subsubsection{A Entropia Cruzada Binária (\textit{Log-Loss})}
+
+Para treinar eficientemente o ADALINE Logístico, o Erro Quadrático Médio pode ser preterido em favor da função de custo de Entropia Cruzada Binária. Fundamentada no Princípio da Máxima Verossimilhança da teoria estatística, esta função penaliza logaritmicamente predições incorretas que apresentam alta confiança \cite{braga2007}. A função de entropia cruzada para um conjunto de treinamento é dada por:
+\begin{equation}
+J(w) = - \frac{1}{N} \sum_{i=1}^{N} \left[ d_i \log(y_i) + (1 - d_i) \log(1 - y_i) \right]
+\end{equation}
+
+Quando o algoritmo do gradiente descendente é aplicado à entropia cruzada, a regra de atualização dos pesos alcança uma elegância matemática notável. A derivada parcial do custo de entropia cruzada em relação aos pesos resulta em:
+\begin{equation}
+\frac{\partial J}{\partial w} = \frac{1}{N} \sum_{i=1}^{N} (y_i - d_i) x_i
+\end{equation}
+
+Conforme documentado por \citeonline{dsa2022}, a derivada da entropia cruzada combinada com a sigmoide anula os termos exponenciais da derivada sigmoidal, resultando em uma equação de atualização estruturalmente semelhante à Regra Delta clássica: $\Delta w = \eta (d - y) x$. No entanto, a semântica da atualização é completamente transformada: a rede ajusta seus pesos na exata proporção do desvio de probabilidade entre sua crença preditiva e a certeza absoluta do rótulo clínico real.
+
+\subsubsection{Convergência e Vantagens do Modelo Logístico}
+
+A vantagem do ADALINE logístico em relação ao ADALINE clássico é concretamente demonstrada pelo experimento de categorização de alimentos. Para o problema de 9 produtos com 6 características de entrada e 3 categorias de saída, o ADALINE clássico converge para um erro residual de $e = 3{,}5251$ após 300 iterações. Em contrapartida, o ADALINE logístico, treinado por um número muito maior de iterações (30.000), atinge um erro de $e = 0{,}2201$, conforme nossos dados de implementação, confirmando o relatado por \citeonline{abdi1994}.
+
+Esta diferença numérica expressiva, erro reduzido em mais de 93\%, exemplifica de forma clara a vantagem dos modelos não-lineares sobre os lineares em problemas de classificação binária. A função logística, ao comprimir as saídas para o intervalo $(0, 1)$, permite que o modelo produza respostas muito mais próximas dos rótulos binários $\{0, 1\}$ esperados, resultando em menor erro residual e maior acurácia de classificação \cite{abdi2006}.
+
+Uma consideração prática importante na implementação da função sigmoide é a estabilidade numérica. Para valores de ativação $z$ com módulo muito alto ($|z| \gg 0$), a operação $e^{-z}$ pode provocar estouro numérico (\textit{overflow}) ou \textit{underflow} no hardware computacional. Uma estratégia adotada neste trabalho, seguindo boas práticas de programação científica, é o truncamento da ativação a um intervalo seguro como $[-250, 250]$ antes da aplicação da exponencial, garantindo estabilidade numérica sem afetar a precisão dos resultados \cite{dsa2022}.
+
+\section{Múltiplas Camadas e o Espaço Não Linear}
+
+A limitação fundamental dos modelos de camada única é sua incapacidade de resolver problemas que não são linearmente separáveis no espaço de entrada original. Esta seção demonstra essa restrição por meio do problema lógico XOR e apresenta como a incorporação de camadas ocultas com ativações não lineares supera essa barreira, culminando na arquitetura do Perceptron Multicamadas e no Teorema da Aproximação Universal.
+
+\subsection{Perceptron, Funções Lógicas e o Problema XOR}
+
+O Perceptron de Frank Rosenblatt (1957), fundamentado no neurônio de McCulloch \& Pitts, aprendia de forma iterativa por tentativas e erros \cite{abdi1994}. Obteve sucesso ao resolver funções lógicas lineares, como AND e OR, mas revelou uma limitação estrutural severa ao ser confrontado com problemas não linearmente separáveis.
+
+\subsubsection{Funções Lógicas e Separabilidade Linear}
+
+A Tabela~\ref{tab:logicas} apresenta a tabela verdade dos principais conectivos lógicos binários:
+
+\begin{table}[H]
+\centering
+\caption{Tabela verdade das funções lógicas binárias fundamentais.}
+\label{tab:logicas}
+\begin{tabular}{cc|cccc}
+\hline
+$a$ & $b$ & $a$ OU $b$ & $a$ E $b$ & NÃO $a$ & $a$ XOU $b$ \\
+\hline
+1  & 1  & 1 & 1 & 0 & 0 \\
+1  & 0  & 1 & 0 & 0 & 1 \\
+0  & 1  & 1 & 0 & 1 & 1 \\
+0  & 0  & 0 & 0 & 1 & 0 \\
+\hline
+\end{tabular}
+\fonte{Elaborado pelo autor.}
+\end{table}
+
+As funções AND e OR são linearmente separáveis: existe um hiperplano (no caso bidimensional, uma reta) que separa corretamente os pontos de saída 1 dos de saída 0. Para AND, isola-se o ponto $(1,1)$; para OR, isola-se o ponto $(0,0)$. Em ambos os casos, uma reta resolve o problema \cite{rand2006}.
+
+\subsubsection{A Restrição da Separabilidade Linear e o Problema XOR}
+
+O Teorema de Convergência do Perceptron garante que a rede sempre encontra uma solução de classificação perfeita, mas apenas quando os dados são linearmente separáveis \cite{braga2007}. Minsky e Papert demonstraram que uma rede sem camadas ocultas é incapaz de resolver o XOR: os pontos de saída 1 são $(1,0)$ e $(0,1)$, e os de saída 0 são $(1,1)$ e $(0,0)$, classes em vértices diagonalmente opostos de um quadrado, sem reta capaz de separá-las \cite{abdi2006}.
+
+Para verificar esta impossibilidade, pode-se aplicar o ADALINE logístico ao problema XOR com codificação bipolar: $X = [[+1,+1,-1,-1]; [+1,-1,+1,-1]]^T$ e $T = [+1,+1,+1,-1]$ (para OU) ou $T = [+1,-1,-1,-1]$ (para E). Para a função XOU, cujo vetor alvo bipolar é $T_{\text{XOU}} = [-1,+1,+1,-1]^T$, os pesos continuam oscilando indefinidamente, sem convergirem para uma solução estável. A representação visual deste problema demonstra que ``não existe essa linha que classifica corretamente as entradas'' \cite{rand2006}. A solução para esta limitação topológica apenas surgiu com o desenvolvimento das camadas ocultas não-lineares, ou seja, com o Perceptron Multicamadas.
+
+\subsection{Perceptron Multicamadas (MLP) e Funções Lógicas}
+
+O Perceptron Multicamadas (\textit{Multilayer Perceptron} - MLP) superou as limitações dos modelos de camada única ao incorporar camadas ocultas de neurônios não-lineares entre a entrada e a saída. Com isso, o MLP consegue modelar fronteiras de decisão irregulares e não-lineares, superando o problema do XOR e abrindo caminho para o \textit{Deep Learning} \cite{silva2016}. O aprendizado é supervisionado: os pesos são atualizados no sentido inverso do sinal de erro, propagando o gradiente da camada de saída até as camadas intermediárias (retropropagação). Cabe notar que, para funções binárias, os alvos são valores aproximativos como 0,1 e 0,9, não 0 e 1 exatos, pois esses últimos são assíntotas da sigmoide e exigiriam pesos de magnitude infinita \cite{braga2007}.
+
+\subsubsection{Arquitetura e Notação Matricial}
+
+A arquitetura de um MLP com uma camada intermediária é definida por três conjuntos de unidades e dois conjuntos de matrizes de conexão. Formalmente, define-se a seguinte notação, baseada na formalização de \citeonline{abdi1994}:
+
+\begin{itemize}
+    \item $x_k$: vetor de $I$ elementos representando o estímulo $k$. $X$ é a matriz $I \times K$ de todos os estímulos;
+    \item $h_k$: vetor de $L$ elementos representando a resposta das células intermediárias (camada oculta) ao estímulo $k$;
+    \item $o_k$: vetor de $J$ elementos representando a resposta das células de saída ao estímulo $k$;
+    \item $t_k$: vetor de $J$ elementos representando a resposta desejada das células de saída ao estímulo $k$. $T$ é a matriz $J \times K$ de respostas desejadas;
+    \item $W$: matriz de pesos $L \times I$ das conexões entre as células da camada de entrada e as da camada intermediária ($w_{l,i}$);
+    \item $Z$: matriz $J \times L$ dos valores de conexões entre as células da camada intermediária e as da camada de saída ($z_{j,l}$).
+\end{itemize}
+
+As sinapses $w_{l,i}$ e $z_{j,l}$ são modificáveis por retropropagação do erro. A função que transforma a ativação em resposta deve ser não-linear (por exemplo, uma função logística).
+
+\subsubsection{Funções de Ativação}
+
+A escolha da função de ativação é um componente crítico do design de uma MLP. Cada neurônio oculto aplica uma função de ativação estritamente não-linear à sua soma ponderada de entradas. Sem não-linearidade, múltiplas camadas de pesos poderiam ser algebricamente reduzidas a uma única matriz linear equivalente, impedindo o ganho real de expressividade \cite{rand2006}.
+
+\textbf{Função Logística (Sigmoide)}: Define-se como $f(x) = 1/(1 + e^{-x})$, com derivada $f'(x) = f(x)[1 - f(x)]$. É especialmente adequada para a camada de saída em problemas de classificação binária, pois seus valores estão no intervalo $(0, 1)$, interpretáveis como probabilidades.
+
+\textbf{Função \textit{ReLU} (\textit{Rectified Linear Unit})}: Definida por $f(x) = \max(0, x)$. Sua derivada é:
+\begin{equation}
+f'(x) = \begin{cases} 0, & \text{se } x < 0 \\ 1, & \text{se } x > 0 \end{cases}
+\end{equation}
+
+A ReLU não é diferenciável em $x = 0$; na prática, adota-se a convenção $f'(0) = 0$ (subgradiente), que mantém a consistência do algoritmo de retropropagação sem prejuízo observável ao treinamento \cite{braga2007}. A função ReLU apresenta vantagens significativas em camadas intermediárias: ao contrário da sigmoide, cujas derivadas se aproximam de zero para entradas de grande magnitude (problema do gradiente evanescente), a ReLU mantém gradiente constante igual a 1 para toda ativação positiva, acelerando a convergência do treinamento. Além disso, a ReLU é computacionalmente simples e introduz esparsidade na rede, com neurônios que não disparam (saída zero) para ativações negativas, o que reduz a complexidade efetiva do modelo \cite{dsa2022}.
+
+Neste trabalho, adotou-se a função ReLU na camada oculta e a função sigmoide na camada de saída, combinação que equilibra a expressividade não-linear das camadas intermediárias com a interpretação probabilística da camada de saída.
+
+\subsubsection{Passagem Adiante (\textit{Forward Pass})}
+
+Durante a passagem adiante, o estímulo é propagado da camada de entrada até a camada de saída, gerando as ativações intermediárias e a resposta final. O processo compreende quatro etapas sequenciais:
+
+\textbf{Etapa 1, Ativação da camada intermediária}:
+\begin{equation}
+b_k = W x_k
+\end{equation}
+
+\textbf{Etapa 2, Resposta da camada intermediária}:
+\begin{equation}
+h_k = f(b_k)
+\end{equation}
+
+\textbf{Etapa 3, Ativação da camada de saída}:
+\begin{equation}
+a_k = Z h_k
+\end{equation}
+
+\textbf{Etapa 4, Resposta da camada de saída}:
+\begin{equation}
+o_k = f(a_k)
+\end{equation}
+
+onde $f(\cdot)$ denota a função de ativação aplicada elemento a elemento ao vetor argumento \cite{abdi1994}. O erro do supervisor é então calculado como $e_k = t_k - o_k$. Este ciclo de propagação adiante produz a estimativa atual da rede para cada entrada, e o erro resultante é utilizado para atualizar os pesos via retropropagação.
+
+\subsubsection{O Algoritmo de Retropropagação (\textit{Backpropagation})}
+
+A arquitetura multicamadas exigiu o desenvolvimento de um método capaz de treinar neurônios escondidos no meio da rede, os quais não possuem acesso direto ao erro observado na camada de saída. A solução para esse desafio é o algoritmo de \textit{Backpropagation} (Retropropagação do Erro), responsável por propagar as derivadas de erro pelo interior da topologia profunda \cite{silva2016}.
+
+O algoritmo opera em dois sentidos: primeiramente no sentido normal (\textit{feedforward}), e depois no sentido inverso (\textit{backpropagation}). Para cada camada, a estimativa do sinal de erro difere.
+
+\textbf{Para as células da camada de saída}: o erro $e_k = t_k - o_k$ é diretamente observável. O sinal do erro (\textit{delta}) da camada de saída é obtido multiplicando o erro pela derivada da função de ativação avaliada na ativação da saída:
+\begin{equation}
+\delta_{\text{saída},k} = f'(Zh_k) \odot e_k = o_k \odot (1 - o_k) \odot (t_k - o_k)
+\end{equation}
+
+A correção da matriz de conexões $Z$ na etapa $t+1$ é:
+\begin{equation}
+Z_{[t+1]} = Z_{[t]} + \eta \, \delta_{\text{saída},k} \, h_k^T = Z_{[t]} + \Delta Z_t
+\end{equation}
+
+\textbf{Para as células da camada intermediária}: o sinal de erro não é comparado diretamente com um valor ideal. Ele é estimado a partir da retropropagação do sinal de erro da camada de saída, ponderada pela intensidade das conexões $Z$:
+\begin{equation}
+\delta_{\text{interm},k} = f'_{\text{ReLU}}(b_k) \odot \left(Z_{[t]}^T \delta_{\text{saída},k}\right), \quad \text{onde } b_k = Wx_k
+\end{equation}
+
+Como a camada oculta utiliza a função ReLU (conforme adotado neste trabalho), a derivada é $f'_{\text{ReLU}}(b_k) = \mathbf{1}[b_k > 0]$, ou seja, 1 para ativações positivas e 0 caso contrário, diferentemente da sigmoide, cuja derivada seria $h_k \odot (1 - h_k)$.
+
+A correção da matriz de conexões $W$ é então:
+\begin{equation}
+W_{[t+1]} = W_{[t]} + \eta \, \delta_{\text{interm},k} \, x_k^T = W_{[t]} + \Delta W_t
+\end{equation}
+
+O ciclo completo de um passo de aprendizagem do MLP pode ser sumarizado como:
+\begin{equation}
+b = Wx; \quad h = f(b); \quad a = Zh; \quad o = f(a); \quad e = t - o
+\end{equation}
+\begin{equation}
+\delta_{\text{saída}} = o \odot (1-o) \odot e; \quad Z_{[t+1]} = Z_{[t]} + \eta \delta_{\text{saída}} h^T
+\end{equation}
+\begin{equation}
+\delta_{\text{interm}} = f'_{\text{ReLU}}(b) \odot (Z_{[t]}^T \delta_{\text{saída}}); \quad W_{[t+1]} = W_{[t]} + \eta \delta_{\text{interm}} x^T
+\end{equation}
+
+Conforme abordado por \citeonline{dsa2022}, o Backpropagation opera baseando-se na Regra da Cadeia do cálculo multivariável diferencial. Durante a fase adiante, o sinal é alimentado da entrada para a saída, gerando o erro de predição. Em seguida, na fase retrospectiva, o erro final da camada de saída $L$ é multiplicado pela derivada da função de ativação dos neurônios de saída, gerando um vetor de gradiente local $\delta^{(L)}$. Este gradiente delta é então retroalimentado para a camada anterior, e assim sucessivamente.
+
+\subsubsection{Inicialização de Xavier}
+
+A inicialização dos pesos sinápticos é um fator crítico para a eficiência e estabilidade do treinamento de redes neurais profundas. A inicialização com zero não é adequada, pois todos os neurônios da camada oculta produziriam a mesma saída e receberiam o mesmo gradiente, impossibilitando a diferenciação de padrões. A inicialização com valores aleatórios muito grandes pode levar à saturação das funções de ativação, enquanto valores muito pequenos resultam em gradientes próximos de zero.
+
+A inicialização de Xavier (também conhecida como inicialização de Glorot) foi proposta por \citeonline{glorot2010} para garantir que a variância dos sinais seja mantida constante ao longo das camadas durante a passagem adiante e durante a retropropagação. Para uma camada que conecta $n_{\text{entrada}}$ neurônios de entrada a $n_{\text{saída}}$ neurônios de saída, os pesos são inicializados com uma distribuição uniforme simétrica:
+\begin{equation}
+w_{ij} \sim \mathcal{U}\left(-\text{limite},\ +\text{limite}\right), \quad \text{onde} \quad \text{limite} = \sqrt{\frac{6}{n_{\text{entrada}} + n_{\text{saída}}}}
+\end{equation}
+
+Esta fórmula assegura que, em média, a variância dos gradientes seja preservada independentemente da profundidade da camada \cite{dsa2022}. Na implementação do modelo Multicamadas utilizado neste trabalho, os pesos de cada camada são inicializados segundo esta estratégia de Xavier, com o limite calculado de forma independente para cada camada: aplica-se a fórmula acima substituindo $n_{\text{entrada}}$ e $n_{\text{saída}}$ pelas dimensões da própria camada, número de neurônios na sua entrada e na sua saída.
+
+A inicialização de Xavier foi originalmente derivada para funções de ativação simétricas como a sigmoide e a tangente hiperbólica. Para a função ReLU, a inicialização de He seria tecnicamente mais adequada, pois leva em conta que metade dos neurônios permanece inativa (saída zero) para ativações negativas, o que dobra a variância efetiva. Neste trabalho, optou-se pela inicialização de Xavier por sua simplicidade de implementação e por produzir resultados estáveis nas configurações testadas, sem divergência ou colapso dos gradientes nas épocas iniciais.
+
+\subsubsection{O Teorema da Aproximação Universal}
+
+A potência das camadas ocultas é formalizada pelo Teorema da Aproximação Universal \cite{cybenko1989,hornik1991,braga2007}, que postula que um MLP com apenas uma camada intermediária finita, dotada de ativação não-linear, possui capacidade matemática teórica para aproximar com precisão arbitrária qualquer função contínua em domínios compactos. Assim, o MLP não tenta traçar uma linha reta através do problema XOR; ele, em vez disso, deforma matematicamente o espaço topológico de entrada, remapeando os pontos no espaço latente da camada oculta, no qual os padrões finalmente tornam-se linearmente separáveis para o neurônio da camada de saída \cite{dsa2022}.
+
+Este teorema possui implicações profundas para a modelagem de fenômenos complexos: qualquer relação não-linear entre variáveis clínicas (pressão arterial, colesterol, frequência cardíaca, entre outras) pode, em princípio, ser capturada por um MLP suficientemente expressivo. No entanto, o teorema não especifica quantos neurônios ocultos são necessários nem como treinar a rede eficientemente; ele apenas garante a existência de uma solução. A determinação do número adequado de unidades ocultas e da taxa de aprendizado ótima permanece um processo empírico, guiado pela validação cruzada e pela análise do desempenho em dados de teste \cite{silva2016}.
+
+O sucesso do algoritmo de retropropagação ao lidar com funções lógicas não-lineares como o XOR, problema que destruiu as expectativas da primeira geração de redes neurais, demonstra concretamente a validade prática deste teorema. Ao adicionar apenas duas células intermediárias a uma rede perceptron de camada única, o MLP resolve o XOR com mínimo erro, transformando os Perceptrons Multicamadas nas ferramentas de inteligência artificial mais adaptáveis do mundo moderno.
+
+\section{Redes Neurais Aplicadas na Área da Saúde}
+
+A intersecção entre inteligência computacional e medicina clínica tem crescido substancialmente, impulsionada pela complexidade do diagnóstico cardiovascular. As RNAs identificam padrões sutis e não-lineares onde as diretrizes clínicas tradicionais encontram limites ao processar dezenas de covariáveis simultâneas \cite{silva2016,braga2007}.
+
+O ADALINE logístico destaca-se pela interpretabilidade: cada peso $w_i$ corresponde diretamente à influência da variável $x_i$ na saída probabilística, equivalendo estatisticamente aos coeficientes da regressão logística \cite{silva2016}. A saída $P(\text{doença} = 1 | x)$ permite ajustar limiares de decisão conforme o contexto: um limiar baixo (ex.: $P > 0{,}3$) aumenta a sensibilidade (triagem), enquanto um limiar alto (ex.: $P > 0{,}7$) aumenta a especificidade (confirmação). O MLP, por sua vez, é indicado quando interações entre variáveis obscurecem padrões univariados: suas camadas ocultas capturam relações de ordem superior entre variáveis como pressão arterial, frequência cardíaca e saturação de oxigênio \cite{braga2007}. No presente trabalho, os modelos foram avaliados sobre o Banco 1 (UCI Heart Disease, 918 pacientes) e o Banco 2 (Heart Failure Clinical Records, 299 pacientes); resultados e análises são apresentados nos Capítulos~\ref{cap:resultados} e~\ref{cap:discussao}.
+
+\subsection{Métricas de Avaliação}
+\label{sec:metricas}
+
+A avaliação do desempenho vai além da acurácia. A Matriz de Confusão organiza as predições em quatro categorias: Verdadeiros Positivos (VP), Verdadeiros Negativos (VN), Falsos Positivos (FP) e Falsos Negativos (FN). As métricas derivadas são:
+\begin{itemize}
+    \item \textbf{Acurácia}: $(VP + VN) / (VP + VN + FP + FN)$;
+    \item \textbf{Precisão}: $VP / (VP + FP)$;
+    \item \textbf{Sensibilidade (Recall)}: $VP / (VP + FN)$;
+    \item \textbf{Especificidade}: $VN / (VN + FP)$.
+\end{itemize}
+
+Em diagnóstico clínico, alta sensibilidade é desejada para triagem, enquanto alta especificidade é preferida quando o custo do falso positivo é elevado \cite{braga2007}. Os sistemas de suporte ao diagnóstico fornecem triagem algorítmica precoce, auxiliando o médico sem substituí-lo \cite{rand2006}. A implementação dos modelos ADALINE Logístico e MLP segue diretamente essa base teórica, explorada pelos métodos do Capítulo~\ref{cap:metodologia}.
+
+\subsection{Aplicações em Diagnóstico Cardíaco}
+\label{sec:aplicacoes_cardiacas}
+
+Modelos de classificação binária, como o ADALINE Logístico e o Perceptron Multicamadas, têm sido aplicados ao diagnóstico de doenças cardiovasculares por sua capacidade de processar múltiplas variáveis clínicas simultaneamente e produzir estimativas de risco interpretáveis. Ao receber como entrada variáveis como pressão arterial, colesterol sérico e resultados eletrocardiográficos, esses modelos estimam a probabilidade de presença de doença cardíaca, auxiliando o clínico na triagem de pacientes de risco elevado. A interpretabilidade é requisito essencial para a adoção de ferramentas de apoio à decisão clínica, e modelos neurais de baixa complexidade, como o ADALINE Logístico, oferecem coeficientes diretamente associados à influência de cada variável sobre o resultado preditivo \cite{mesquita2020}.
+
+Conjuntos de dados com variáveis de triagem diagnóstica, pressão arterial em repouso, colesterol sérico, eletrocardiograma de repouso e frequência cardíaca máxima atingida em esforço, têm sido amplamente utilizados na construção de modelos preditivos para apoio ao diagnóstico em ambientes de atenção primária. O UCI Heart Disease Dataset \cite{fedesoriano2021}, composto por 918 pacientes e 11 variáveis preditoras oriundas de múltiplas instituições hospitalares, constitui um dos conjuntos de referência mais utilizados nessa categoria. Seu objetivo preditivo, determinar a presença ou ausência de doença cardíaca a partir de dados coletados em uma consulta de rotina, alinha-se à demanda clínica real de apoio à decisão em contextos com acesso limitado a exames complementares invasivos, como a cineangiocoronariografia \cite{fedesoriano2021}.
+
+Quando o objetivo não é identificar a presença da doença, mas prever sua evolução em pacientes já diagnosticados, o problema preditivo assume natureza distinta, pois os dados de entrada incluem biomarcadores laboratoriais que refletem o estado funcional de múltiplos órgãos. O Heart Failure Clinical Records Dataset \cite{chicco2020}, composto por 299 pacientes com diagnóstico prévio de insuficiência cardíaca diagnosticada, contém variáveis como fração de ejeção do ventrículo esquerdo, creatinina sérica e sódio sérico, cujos desvios dos valores de referência indicam comprometimento cardíaco, renal e eletrolítico. O objetivo preditivo desse conjunto, estimar o risco de óbito durante o período de acompanhamento, caracteriza uma tarefa clinicamente mais complexa do que a triagem diagnóstica, uma vez que a mortalidade depende de interações entre múltiplos sistemas orgânicos nem sempre capturados integralmente por dados tabulares \cite{chicco2020}.
+
+Em aplicações clínicas, a métrica de avaliação mais relevante não é necessariamente a acurácia global, mas o número de Falsos Negativos, ou seja, pacientes portadores de doença classificados como saudáveis pelo modelo. Esse tipo de erro possui consequências clínicas mais graves do que o Falso Positivo, pois implica a ausência de diagnóstico e de tratamento em um indivíduo de risco, com potencial impacto sobre a progressão da doença, as complicações cardiovasculares e a mortalidade. Assim, um modelo com acurácia global ligeiramente inferior, porém com menor número de Falsos Negativos, pode ser clinicamente superior, desde que a redução nos erros de omissão diagnóstica justifique a diferença de desempenho global \cite{braga2007}.
+
+Este trabalho aplica precisamente essa perspectiva, comparando o ADALINE Logístico e o Perceptron Multicamadas sobre dois conjuntos de dados com perfis clínicos distintos e avaliando não apenas a acurácia global, mas o número de Falsos Negativos como critério clínico prioritário \cite{silva2016,mesquita2020}. A escolha de dois bancos de dados, um de triagem diagnóstica e outro de prognóstico de mortalidade, permite identificar em que contextos cada arquitetura oferece vantagens concretas, contribuindo para a discussão sobre qual modelo é mais adequado a cada tipo de problema cardiovascular, conforme detalhado nos Capítulos~\ref{cap:resultados} e~\ref{cap:discussao}.

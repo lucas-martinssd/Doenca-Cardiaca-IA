@@ -1,0 +1,26 @@
+\babel@toc {brazil}{}\relax 
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {Tabela\nobreakspace 2.1}{\ignorespaces Tabela verdade das funções lógicas binárias fundamentais.} }{14}{}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {Tabela\nobreakspace 3.1}{\ignorespaces Comparativo dos trabalhos relacionados com o presente estudo.} }{33}{}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {Tabela\nobreakspace 4.1}{\ignorespaces Variáveis originais do Banco 1 (UCI Heart Disease Dataset).} }{36}{}%
+\contentsline {table}{\numberline {Tabela\nobreakspace 4.2}{\ignorespaces Variáveis originais do Banco 2 (Heart Failure Clinical Records Dataset).} }{38}{}%
+\contentsline {table}{\numberline {Tabela\nobreakspace 4.3}{\ignorespaces Resumo das transformações e dimensionalidade final após o pré-processamento.} }{42}{}%
+\contentsline {table}{\numberline {Tabela\nobreakspace 4.4}{\ignorespaces Partições dos conjuntos de dados após divisão estratificada.} }{44}{}%
+\contentsline {table}{\numberline {Tabela\nobreakspace 4.5}{\ignorespaces Parâmetros fixos dos modelos implementados.} }{57}{}%
+\contentsline {table}{\numberline {Tabela\nobreakspace 4.6}{\ignorespaces Configurações de treinamento avaliadas nos experimentos.} }{58}{}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {Tabela\nobreakspace 5.1}{\ignorespaces Acurácia (\%) dos modelos no Banco 1 por configuração de treinamento.} }{61}{}%
+\contentsline {table}{\numberline {Tabela\nobreakspace 5.2}{\ignorespaces Falsos Negativos dos modelos no Banco 1 por configuração} }{63}{}%
+\contentsline {table}{\numberline {Tabela\nobreakspace 5.3}{\ignorespaces Métricas de avaliação dos modelos no Banco 1, configuração C3. Conjunto de teste: 276 pacientes.} }{66}{}%
+\contentsline {table}{\numberline {Tabela\nobreakspace 5.4}{\ignorespaces Acurácia (\%) dos modelos no Banco 2 por configuração de treinamento.} }{69}{}%
+\contentsline {table}{\numberline {Tabela\nobreakspace 5.5}{\ignorespaces Falsos Negativos dos modelos no Banco 2 por configuração} }{71}{}%
+\contentsline {table}{\numberline {Tabela\nobreakspace 5.6}{\ignorespaces Métricas de avaliação dos modelos no Banco 2, configuração C1. Conjunto de teste: 90 pacientes (29 óbitos / 61 sobreviventes).} }{72}{}%
+\contentsline {table}{\numberline {Tabela\nobreakspace 5.7}{\ignorespaces Métricas de avaliação dos modelos no Banco 2, configuração C3. Conjunto de teste: 90 pacientes.} }{73}{}%
+\contentsline {table}{\numberline {Tabela\nobreakspace 5.8}{\ignorespaces Síntese dos melhores resultados por critério e banco de dados.} }{77}{}%
+\contentsline {table}{\numberline {Tabela\nobreakspace 5.9}{\ignorespaces Acurácia (\%) e Falsos Negativos (FN), Banco 1, dados brutos. Conjunto de teste: 276 pacientes.} }{79}{}%
+\contentsline {table}{\numberline {Tabela\nobreakspace 5.10}{\ignorespaces Acurácia (\%) e Falsos Negativos (FN), Banco 2, dados brutos. Conjunto de teste: 90 pacientes (29 óbitos / 61 sobreviventes).} }{79}{}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }

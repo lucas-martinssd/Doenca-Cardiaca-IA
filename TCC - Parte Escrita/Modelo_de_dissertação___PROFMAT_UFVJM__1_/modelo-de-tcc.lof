@@ -1,0 +1,20 @@
+\babel@toc {brazil}{}\relax 
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {Figura\nobreakspace 5.1}{\ignorespaces Curvas de aprendizado (acurácia de treino e validação) dos quatro modelos no Banco 1 para as três configurações de treinamento.} }{62}{}%
+\contentsline {figure}{\numberline {Figura\nobreakspace 5.2}{\ignorespaces Matrizes de confusão dos modelos, Banco 1, configuração C3.} }{65}{}%
+\contentsline {figure}{\numberline {Figura\nobreakspace 5.3}{\ignorespaces Convergência do Erro Quadrático Médio (MSE) por época nos quatro modelos, Banco 1.} }{67}{}%
+\contentsline {figure}{\numberline {Figura\nobreakspace 5.4}{\ignorespaces Curvas de aprendizado (acurácia de treino e validação) dos quatro modelos no Banco 2 para as três configurações de treinamento.} }{70}{}%
+\contentsline {figure}{\numberline {Figura\nobreakspace 5.5}{\ignorespaces Matrizes de confusão dos modelos, Banco 2, configuração C3.} }{73}{}%
+\contentsline {figure}{\numberline {Figura\nobreakspace 5.6}{\ignorespaces Convergência do Erro Quadrático Médio (MSE) por época nos quatro modelos, Banco 2.} }{74}{}%
+\contentsline {figure}{\numberline {Figura\nobreakspace 5.7}{\ignorespaces Comparativo de acurácia dos quatro modelos nas três configurações, para os dois bancos de dados.} }{76}{}%
+\contentsline {figure}{\numberline {Figura\nobreakspace 5.8}{\ignorespaces Comparativo de Falsos Negativos dos quatro modelos nas três configurações, para os dois bancos de dados.} }{76}{}%
+\contentsline {figure}{\numberline {Figura\nobreakspace 5.9}{\ignorespaces Painel resumo comparativo da configuração C3 (3.000 épocas, $\eta $ = 0,0001) para os dois bancos de dados: acurácia (superior) e Falsos Negativos (inferior).} }{77}{}%
+\contentsline {figure}{\numberline {Figura\nobreakspace 5.10}{\ignorespaces Comparativo binarizado vs.\ bruto, configuração C3.} }{81}{}%
+\contentsline {figure}{\numberline {Figura\nobreakspace 5.11}{\ignorespaces Acurácia dos quatro modelos nas três configurações de treinamento, com dados brutos e StandardScaler.} }{81}{}%
+\contentsline {figure}{\numberline {Figura\nobreakspace 5.12}{\ignorespaces Falsos Negativos dos quatro modelos nas três configurações de treinamento, com dados brutos e StandardScaler.} }{82}{}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }

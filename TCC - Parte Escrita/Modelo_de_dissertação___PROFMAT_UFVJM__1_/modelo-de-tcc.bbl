@@ -1,0 +1,149 @@
+\providecommand{\abntreprintinfo}[1]{%
+ \citeonline{#1}}
+\setlength{\labelsep}{0pt}\begin{thebibliography}{}
+\providecommand{\abntrefinfo}[3]{}
+\providecommand{\abntbstabout}[1]{}
+\abntbstabout{v-1.9.2 }
+
+\bibitem[Abdi 1994]{abdi1994}
+\abntrefinfo{Abdi}{ABDI}{1994}
+{ABDI, H. \textbf{Les r\'eseaux de neurones}. Grenoble: Presses universitaires
+  de Grenoble, 1994.}
+
+\bibitem[Abdi e Valentin 2006]{abdi2006}
+\abntrefinfo{Abdi e Valentin}{ABDI; VALENTIN}{2006}
+{ABDI, H.; VALENTIN, D. \textbf{Math{\'e}matiques pour les sciences cognitives:
+  avec des applications aux r{\'e}seaux de neurones, au traitement do signal,
+  {\`a} l'imagerie c{\'e}r{\'e}brale et {\`a} la statistique}. Grenoble:
+  Presses Universitaires de Grenoble, 2006.}
+
+\bibitem[ao et al. 2025]{brandao2025}
+\abntrefinfo{ao et al.}{AO et al.}{2025}
+{AO, A. A.~B. et al. Diretriz brasileira de hipertens\~ao arterial -- 2025.
+\textbf{Arquivos Brasileiros de Cardiologia}, v.~122, n.~9, p. e20250624,
+  2025.}
+
+\bibitem[Braga, Carvalho e Ludermir 2007]{braga2007}
+\abntrefinfo{Braga, Carvalho e Ludermir}{BRAGA; CARVALHO; LUDERMIR}{2007}
+{BRAGA, A.~P.; CARVALHO, A. C. P. L.~F.; LUDERMIR, T.~B. \textbf{Redes neurais
+  artificiais: teoria e aplica\c c\~oes}. 2. ed. Rio de Janeiro: LTC, 2007.}
+
+\bibitem[{BRASIL} 2003]{brasil2003}
+\abntrefinfo{{BRASIL}}{{BRASIL}}{2003}
+{{BRASIL}. \textbf{Lei n.~10.741, de 1\textordmasculine~de outubro de 2003 ---
+  Estatuto do Idoso}. 2003.
+Dispon{\'\i}vel em:
+  \url{http://www.planalto.gov.br/ccivil\_03/leis/2003/l10.741.htm}. Acesso em:
+  10 mai. 2026.}
+
+\bibitem[Camarozano et al. 2026]{camarozano2026}
+\abntrefinfo{Camarozano et al.}{CAMAROZANO et al.}{2026}
+{CAMAROZANO, A.~C. et al. Diretriz sobre ecocardiografia de estresse -- 2026.
+\textbf{Arquivos Brasileiros de Cardiologia}, v.~123, n.~4, p. e20260223,
+  2026.}
+
+\bibitem[Chicco e Jurman 2020]{chicco2020}
+\abntrefinfo{Chicco e Jurman}{CHICCO; JURMAN}{2020}
+{CHICCO, D.; JURMAN, G. Machine learning can predict survival of patients with
+  heart failure from serum creatinine and ejection fraction alone.
+\textbf{BMC Medical Informatics and Decision Making}, v.~20, n.~1, p. 1--16,
+  2020.}
+
+\bibitem[Cybenko 1989]{cybenko1989}
+\abntrefinfo{Cybenko}{CYBENKO}{1989}
+{CYBENKO, G. Approximation by superpositions of a sigmoidal function.
+\textbf{Mathematics of Control, Signals and Systems}, v.~2, n.~4, p. 303--314,
+  1989.}
+
+\bibitem[{DATA SCIENCE ACADEMY} 2022]{dsa2022}
+\abntrefinfo{{DATA SCIENCE ACADEMY}}{{DATA SCIENCE ACADEMY}}{2022}
+{{DATA SCIENCE ACADEMY}. \textbf{Deep Learning Book}. 2022.
+Dispon{\'\i}vel em: \url{http://www.deeplearningbook.com.br/}. Acesso em: 09
+  jun. 2023.}
+
+\bibitem[Fedesoriano 2021]{fedesoriano2021}
+\abntrefinfo{Fedesoriano}{FEDESORIANO}{2021}
+{FEDESORIANO. \textbf{Heart Disease Prediction Dataset}. 2021.
+Dispon{\'\i}vel em:
+  \url{https://www.kaggle.com/datasets/fedesoriano/heart-failure-prediction}.
+  Acesso em: 10 mar. 2025.}
+
+\bibitem[Filho et al. 2020]{mesquita2020}
+\abntrefinfo{Filho et al.}{FILHO et al.}{2020}
+{FILHO, E. M.~S. et al. Intelig\^encia artificial em cardiologia: Conceitos,
+  ferramentas e desafios.
+\textbf{Arquivos Brasileiros de Cardiologia}, v.~114, n.~4, p. 718--725, 2020.}
+
+\bibitem[Glorot e Bengio 2010]{glorot2010}
+\abntrefinfo{Glorot e Bengio}{GLOROT; BENGIO}{2010}
+{GLOROT, X.; BENGIO, Y. Understanding the difficulty of training deep
+  feedforward neural networks. In:  \textbf{Proceedings of the 13th
+  International Conference on Artificial Intelligence and Statistics
+  (AISTATS)}. Sardinia: [s.n.], 2010. p. 249--256.}
+
+\bibitem[Hornik 1991]{hornik1991}
+\abntrefinfo{Hornik}{HORNIK}{1991}
+{HORNIK, K. Approximation capabilities of multilayer feedforward networks.
+\textbf{Neural Networks}, v.~4, n.~2, p. 251--257, 1991.}
+
+\bibitem[Pedregosa et al. 2011]{pedregosa2011}
+\abntrefinfo{Pedregosa et al.}{PEDREGOSA et al.}{2011}
+{PEDREGOSA, F. et al. Scikit-learn: Machine learning in python.
+\textbf{Journal of Machine Learning Research}, v.~12, p. 2825--2830, 2011.}
+
+\bibitem[Porto e Porto 2019]{porto2019}
+\abntrefinfo{Porto e Porto}{PORTO; PORTO}{2019}
+{PORTO, C.~C.; PORTO, A.~L. \textbf{Semiologia M\'edica}. 8. ed. Rio de
+  Janeiro: Guanabara Koogan, 2019.}
+
+\bibitem[Rached et al. 2025]{rached2025}
+\abntrefinfo{Rached et al.}{RACHED et al.}{2025}
+{RACHED, F.~H. et al. Diretriz brasileira de dislipidemias e preven\c c\~ao da
+  aterosclerose -- 2025.
+\textbf{Arquivos Brasileiros de Cardiologia}, v.~122, n.~9, p. e20250640,
+  2025.}
+
+\bibitem[Rand e Wilensky 2006]{rand2006}
+\abntrefinfo{Rand e Wilensky}{RAND; WILENSKY}{2006}
+{RAND, W.; WILENSKY, U. \textbf{NetLogo Artificial Neural Net - Multilayer
+  model}. Evanston, IL: Center for Connected Learning and Computer-Based
+  Modeling, Northwestern University, 2006.
+Dispon{\'\i}vel em:
+  \url{http://ccl.northwestern.edu/netlogo/models/ArtificialNeuralNet-Multilayer}.}
+
+\bibitem[Ravani 2024]{ravani2024}
+\abntrefinfo{Ravani}{RAVANI}{2024}
+{RAVANI, D.~C.
+\textbf{Machine Learning: uma compara\c c\~ao de algoritmos para predi\c c\~ao
+  de doen\c cas card\'iacas}.
+Disserta\c{c}\~{a}o (Trabalho de Conclus\~ao de Curso --- Bacharelado em
+  Sistemas de Informa\c c\~ao) --- Instituto Federal do Esp\'irito Santo,
+  Campus Cachoeiro de Itapemirim, Cachoeiro de Itapemirim, 2024.
+Dispon{\'\i}vel em:
+  \url{https://repositorio.ifes.edu.br/handle/123456789/5515}. Acesso em: 19
+  mai. 2026.}
+
+\bibitem[Rohde et al. 2018]{rohde2018}
+\abntrefinfo{Rohde et al.}{ROHDE et al.}{2018}
+{ROHDE, L. E.~P. et al. Diretriz brasileira de insufici\^encia card\'iaca
+  cr\^onica e aguda.
+\textbf{Arquivos Brasileiros de Cardiologia}, v.~111, n.~3, p. 436--539, 2018.}
+
+\bibitem[Santos 2023]{santos2023}
+\abntrefinfo{Santos}{SANTOS}{2023}
+{SANTOS, S.~R.
+\textbf{O uso de aprendizado profundo para predi\c c\~ao de diagn\'osticos de
+  doen\c cas cardiovasculares}.
+Disserta\c{c}\~{a}o (Trabalho de Conclus\~ao de Curso --- Bacharelado em
+  Engenharia de Computa\c c\~ao) --- Universidade Federal do Cear\'a, Campus de
+  Quixad\'a, Quixad\'a, 2023.
+Dispon{\'\i}vel em: \url{https://repositorio.ufc.br/handle/riufc/75923}. Acesso
+  em: 19 mai. 2026.}
+
+\bibitem[Silva, Spatti e Flauzino 2016]{silva2016}
+\abntrefinfo{Silva, Spatti e Flauzino}{SILVA; SPATTI; FLAUZINO}{2016}
+{SILVA, I.~N.; SPATTI, D.~H.; FLAUZINO, R.~A. \textbf{Redes neurais artificiais
+  para engenharia e ci\^encias aplicadas: curso pr\'atico}. 2. ed. S\~ao Paulo:
+  Artliber, 2016.}
+
+\end{thebibliography}

@@ -1,0 +1,765 @@
+%% TCC -- Apresentação de Defesa
+%% Previsão de Insuficiência Cardíaca com Redes Neurais Artificiais
+%% Lucas | UFVJM | Orientador: Prof. Dr. Leonardo Lana de Carvalho
+%% Compilar com: pdflatex apresentacao.tex
+
+\documentclass[aspectratio=169,11pt,brazil]{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{mathptmx}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usepackage{amsmath}
+\usepackage{array}
+\usepackage{colortbl}
+
+% -----------------------------------------------------------------------
+% Identidade visual — azul claro UFVJM
+% -----------------------------------------------------------------------
+\definecolor{ufvjmblue}{RGB}{0,100,180}
+\definecolor{ufvjmbluedark}{RGB}{0,70,130}
+\definecolor{ufvjmbluelight}{RGB}{200,225,245}
+\definecolor{ufvjmgray}{RGB}{90,90,90}
+
+% Cores dos modelos nos gráficos
+\definecolor{cAdalineNP}{RGB}{0,100,180}
+\definecolor{cAdalineSK}{RGB}{80,170,230}
+\definecolor{cMlpNP}{RGB}{210,70,30}
+\definecolor{cMlpSK}{RGB}{255,165,30}
+\definecolor{cBin}{RGB}{0,100,180}
+\definecolor{cCont}{RGB}{255,165,30}
+
+\usetheme{Madrid}
+\usecolortheme[named=ufvjmblue]{structure}
+\setbeamercolor{palette primary}{bg=ufvjmblue,fg=white}
+\setbeamercolor{palette secondary}{bg=ufvjmblue!80,fg=white}
+\setbeamercolor{palette tertiary}{bg=ufvjmblue!60,fg=white}
+\setbeamercolor{title}{bg=ufvjmblue,fg=white}
+\setbeamercolor{subtitle}{fg=white}
+\setbeamercolor{frametitle}{bg=ufvjmblue,fg=white}
+\setbeamercolor{block title}{bg=ufvjmblue,fg=white}
+\setbeamercolor{block body}{bg=ufvjmbluelight,fg=black}
+\setbeamercolor{alerted text}{fg=ufvjmbluedark}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{caption}{\insertcaption}
+\setbeamerfont{frametitle}{series=\bfseries}
+
+% -----------------------------------------------------------------------
+% Metadados
+% -----------------------------------------------------------------------
+\title[Uso de Redes Neurais para Diagnóstico Cardíaco]{Uso de Redes Neurais Artificiais para\\Diagnóstico de Doenças Cardíacas}
+\author[Lucas dos Santos Martins]{Lucas dos Santos Martins}
+\institute[UFVJM]{%
+  Orientador: Prof.\ Dr.\ Leonardo Lana de Carvalho\\[0.2em]
+  Banca: Prof.\ André Luiz Covre \quad Prof.\ Áthila Rocha Trindade\\[0.4em]
+  Universidade Federal dos Vales do Jequitinhonha e Mucuri}
+\date{2026}
+
+\begin{document}
+
+% =======================================================================
+% SLIDE 1 — CAPA
+% =======================================================================
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+
+% =======================================================================
+% SLIDE 2 — CONTEXTUALIZAÇÃO
+% =======================================================================
+\section{Contextualização}
+
+\begin{frame}{Contextualização}
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      \begin{itemize}
+        \item Doenças cardiovasculares: \textbf{principal causa de morte no mundo}
+        \item Diagnóstico precoce é fundamental, mas \textbf{nem sempre disponível a tempo}
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.45\textwidth}
+      \begin{block}{Papel das Redes Neurais}
+        Auxiliar o médico, não substituir o julgamento clínico, oferecendo de forma rápida e a qualquer momento uma \textbf{análise baseada nos dados do paciente}.
+      \end{block}
+      \vspace{0.4em}
+      \begin{alertblock}{Impacto prático}
+        Com base no resultado, o médico pode \textbf{priorizar investigações} e ficar mais atento a casos de risco.
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =======================================================================
+% SLIDE 3 — OBJETIVO
+% =======================================================================
+\section{Objetivo}
+
+\begin{frame}{Objetivo}
+  \begin{block}{Objetivo Geral}
+    Desenvolver e comparar modelos de \textbf{redes neurais artificiais} para a previsão de doenças cardíacas em dois contextos clínicos distintos.
+  \end{block}
+  \vspace{0.4em}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{Modelos implementados:}
+      \begin{itemize}
+        \item \textbf{ADALINE Logística}: neurônio único
+        \item \textbf{Perceptron Multicamadas (MLP)}: rede multicamadas
+      \end{itemize}
+      \smallskip
+      Cada modelo em \textbf{duas versões}:\\
+      \quad implementação manual\\
+      \quad \textit{vs} biblioteca (Scikit-learn)
+    \end{column}
+    \begin{column}{0.52\textwidth}
+      \textbf{Questões respondidas:}
+      \begin{itemize}
+        \item A complexidade extra do Multicamadas traz \textbf{ganho real}?
+        \item As implementações manuais \textbf{reproduzem} os resultados da biblioteca?
+        \item Qual modelo é mais \textbf{clinicamente seguro} (menos falsos negativos)?
+        \item A \textbf{binarização prévia} dos dados traz ganhos para os modelos ou não?
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =======================================================================
+% SLIDE 4 — BANCOS DE DADOS
+% =======================================================================
+\section{Dados e Métodos}
+
+\begin{frame}{Bancos de Dados}
+  \begin{columns}[T]
+    \begin{column}{0.50\textwidth}
+      \begin{block}{Banco 1 — Heart Disease Dataset}
+        \begin{itemize}
+          \item \textbf{918 pacientes} — 11 variáveis clínicas\\
+                (508 doentes | 410 saudáveis)
+          \item Idade, pressão arterial, colesterol, tipo de dor torácica, eletrocardiograma (ECG)\ldots
+          \item \textbf{Alvo:} presença de doença cardíaca (0/1)
+          \item Divisão \textbf{70/30}:\\
+                642 treino | 276 teste
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.50\textwidth}
+      \begin{block}{Banco 2 — Heart Failure Clinical Records}
+        \begin{itemize}
+          \item \textbf{299 pacientes} — 12 variáveis\\
+                (96 óbitos | 203 sobreviventes)
+          \item Idade, tempo de acompanhamento, anemia, diabetes, hipertensão\ldots
+          \item \textbf{Alvo:} óbito durante acompanhamento (0/1)
+          \item Divisão \textbf{70/30}:\\
+                209 treino | 90 teste
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+  \vfill
+  \centering\small
+  Contextos distintos: \textbf{diagnóstico de doença cardíaca} \textit{vs} \textbf{prognóstico de insuficiência cardíaca}
+\end{frame}
+
+% =======================================================================
+% SLIDE 5 — PRÉ-PROCESSAMENTO
+% =======================================================================
+\begin{frame}{Pré-Processamento}
+  \begin{columns}[T]
+    \begin{column}{0.50\textwidth}
+      \textbf{Transformações aplicadas (Banco 1):}
+      \begin{itemize}
+        \item \textbf{Separação em colunas binárias:} tipo de dor torácica\\
+              ATA, NAP, ASY, TA $\to$ 4 colunas binárias
+        \item \textbf{Mapeamento binário:}\\
+              Sexo (M=1 / F=0)\\
+              Angina (Y=1 / N=0)
+        \item \textbf{Binarização por faixas clínicas:}\\
+              Idade, colesterol, pressão arterial\ldots
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.50\textwidth}
+      \textbf{Divisão treino/teste:}
+      \begin{itemize}
+        \item Proporção \textbf{70/30}
+        \item Preserva proporção de casos positivos em cada partição
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =======================================================================
+% SLIDE 6 — ADALINE TEORIA
+% =======================================================================
+\section{Modelos}
+
+\begin{frame}{ADALINE Logístico — Modelo e Justificativa}
+  \begin{columns}[T]
+    \begin{column}{0.50\textwidth}
+      \textbf{O que é o ADALINE Logístico?}
+      \begin{itemize}
+        \item Modelo de \textbf{neurônio único}
+        \item Aplica a função \textbf{sigmoide} na saída para classificação binária, retornando uma \textbf{probabilidade} entre 0 e 1
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.50\textwidth}
+      \begin{block}{Por que usar o ADALINE Logístico?}
+        \begin{itemize}
+          \item \textbf{Referência simples:} se já performa bem, questiona-se o ganho real do Multicamadas
+          \item Computacionalmente leve
+        \end{itemize}
+      \end{block}
+
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =======================================================================
+% SLIDE 7 — MLP TEORIA
+% =======================================================================
+\begin{frame}{Perceptron Multicamadas (MLP) — Modelo e Justificativa}
+  \begin{columns}[T]
+    \begin{column}{0.50\textwidth}
+      \textbf{O que é o Multicamadas?}
+      \begin{itemize}
+        \item Rede com \textbf{pelo menos uma camada oculta}
+        \item Aprende relações \textbf{não-lineares} entre variáveis
+        \item Nossa implementação:\\
+              \textbf{10 neurônios ocultos}\\
+              + 1 neurônio de saída (sigmoide)
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.50\textwidth}
+      \begin{block}{Por que usar o Multicamadas?}
+        \begin{itemize}
+          \item Responde à pergunta central: a \textbf{complexidade extra traz ganho real} em dados clínicos?
+          \item Representa o próximo nível acima do ADALINE Logístico
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =======================================================================
+% SLIDE 8 — CONFIGURAÇÕES DE EXPERIMENTO
+% =======================================================================
+\section{Experimentos}
+
+\begin{frame}{Configurações de Experimento}
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      \textbf{Épocas:}
+      \begin{itemize}
+        \item Quantas vezes o modelo percorre os dados de treino
+        \item Poucas épocas → modelo \textbf{não aprende o suficiente}
+        \item Épocas demais → modelo \textbf{memoriza} os dados e perde capacidade de generalizar (\textit{overfitting})
+      \end{itemize}
+      \vspace{0.4em}
+      \textbf{Taxa de aprendizado:}
+      \begin{itemize}
+        \item Controla o \textbf{tamanho do passo} de cada ajuste
+        \item Taxa alta → aprende rápido, mas de forma \textbf{grosseira}
+        \item Taxa baixa → ajustes mais \textbf{finos}, mas exige mais tempo
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.45\textwidth}
+      \begin{block}{Três configurações por modelo}
+        \vspace{0.1em}
+        \centering
+        \renewcommand{\arraystretch}{1.3}
+        \begin{tabular}{ccc}
+          \toprule
+          \textbf{Config.} & \textbf{Épocas} & \textbf{Taxa} \\
+          \midrule
+          C1 & 500     & 0,01    \\
+          C2 & 1.000   & 0,001   \\
+          C3 & 3.000   & 0,0001  \\
+          \bottomrule
+        \end{tabular}
+      \end{block}
+      \vspace{0.25em}
+      \small
+      \begin{itemize}\setlength{\itemsep}{2pt}
+        \item \textbf{C1} — rápido, ajustes grosseiros
+        \item \textbf{C2} — equilíbrio velocidade/precisão
+        \item \textbf{C3} — ajustes finos, risco de \textit{overfitting}
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =======================================================================
+% SLIDE 9 — RESULTADOS BANCO 1 (texto)
+% =======================================================================
+\section{Resultados}
+
+\begin{frame}{Resultados — Banco 1: Heart Disease}
+  \centering\small
+  \textit{918 pacientes: 508 doentes | 410 saudáveis}
+  \vspace{0.3em}
+
+  \renewcommand{\arraystretch}{1.35}
+  \begin{tabular}{lllll}
+    \toprule
+    \textbf{Modelo} & \textbf{C1} & \textbf{C2} & \textbf{C3} & \textbf{FN mín.} \\
+    \midrule
+    Adaline Sem Biblioteca & 85,87\% / 28\,FN & 86,23\% / 21\,FN & \textbf{86,96\% / 20\,FN} & 20 (C3) \\
+    Adaline Com Biblioteca & 85,87\% / 21\,FN & 86,23\% / 21\,FN & \textbf{86,23\% / 21\,FN} & 21 (Todos) \\
+    Multicamadas Sem Biblioteca     & 82,97\% / 27\,FN & 86,23\% / 16\,FN & \cellcolor{ufvjmbluelight}\textbf{87,68\% / 15\,FN} & \textbf{15 (C3)} \\
+    Multicamadas Com Biblioteca     & 87,32\% / 18\,FN & \cellcolor{ufvjmbluelight}\textbf{88,04\% / 20\,FN} & 82,61\% / 35\,FN & 18 (C1) \\
+    \bottomrule
+  \end{tabular}
+
+  \vfill
+  \begin{columns}[T]
+    \begin{column}{0.50\textwidth}
+      \begin{block}{Maior acurácia}
+        Multicamadas Com Biblioteca C2: \textbf{88,04\%}
+      \end{block}
+    \end{column}
+    \begin{column}{0.50\textwidth}
+      \begin{alertblock}{Melhor clinicamente}
+        Multicamadas Sem Biblioteca C3: \textbf{15 FN}
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+  \vspace{0.2em}
+  \centering{\small\textbf{Melhor modelo geral:} Multicamadas Sem Biblioteca C3 — melhor equilíbrio entre acurácia (87,68\%) e FN mínimo (15)}
+\end{frame}
+
+% =======================================================================
+% SLIDE 10 — RESULTADOS BANCO 1 (gráficos)
+% =======================================================================
+\begin{frame}{Banco 1 — Visualização dos Resultados}
+  \begin{columns}[c]
+    % ---- gráfico acurácia ----
+    \begin{column}{0.50\textwidth}
+      \centering
+      {\small\textbf{Acurácia por Configuração (\%)}}
+      \vspace{0.15em}
+
+      \begin{tikzpicture}
+        \begin{axis}[
+          ybar,
+          width=1.05\columnwidth,
+          height=5.6cm,
+          symbolic x coords={C1,C2,C3},
+          xtick=data,
+          xticklabel style={font=\scriptsize},
+          ymin=79, ymax=92,
+          ytick={80,82,84,86,88,90,92},
+          yticklabel={\pgfmathprintnumber{\tick}},
+          ylabel={\%},
+          ylabel style={font=\scriptsize,rotate=-90,at={(ticklabel cs:0.5)},anchor=south},
+          yticklabel style={font=\scriptsize},
+          bar width=5.5pt,
+          legend style={at={(0.5,-0.22)},anchor=north,legend columns=2,font=\tiny,
+                        draw=none,fill=none,column sep=2pt},
+          legend cell align=left,
+          every axis plot/.append style={draw=none},
+          axis line style={draw=ufvjmgray,thin},
+          tick style={draw=ufvjmgray,thin},
+          ymajorgrids=true,
+          grid style={dotted,gray!40},
+          clip=false,
+          nodes near coords={\pgfmathprintnumber[fixed,precision=1]{\pgfplotspointmeta}},
+          nodes near coords style={font=\tiny,inner sep=0pt,rotate=90,anchor=west,xshift=2pt},
+        ]
+          \addplot[fill=cAdalineNP] coordinates {(C1,85.87) (C2,86.23) (C3,86.96)};
+          \addplot[fill=cAdalineSK] coordinates {(C1,85.87) (C2,86.23) (C3,86.23)};
+          \addplot[fill=cMlpNP]     coordinates {(C1,82.97) (C2,86.23) (C3,87.68)};
+          \addplot[fill=cMlpSK]     coordinates {(C1,87.32) (C2,88.04) (C3,82.61)};
+          \legend{ADALINE SB, ADALINE CB, Multicamadas SB, Multicamadas CB}
+        \end{axis}
+      \end{tikzpicture}
+
+      \vspace{0.2em}
+      {\tiny $\uparrow$ maior acurácia = melhor desempenho geral}
+    \end{column}
+    % ---- gráfico FN ----
+    \begin{column}{0.50\textwidth}
+      \centering
+      {\small\textbf{Falsos Negativos por Configuração}}
+      \vspace{0.15em}
+
+      \begin{tikzpicture}
+        \begin{axis}[
+          ybar,
+          width=1.05\columnwidth,
+          height=5.6cm,
+          symbolic x coords={C1,C2,C3},
+          xtick=data,
+          xticklabel style={font=\scriptsize},
+          ymin=0, ymax=43,
+          ytick={0,10,20,30,40},
+          ylabel={FN},
+          ylabel style={font=\scriptsize,rotate=-90,at={(ticklabel cs:0.5)},anchor=south},
+          yticklabel style={font=\scriptsize},
+          bar width=5.5pt,
+          legend style={at={(0.5,-0.22)},anchor=north,legend columns=2,font=\tiny,
+                        draw=none,fill=none,column sep=2pt},
+          legend cell align=left,
+          every axis plot/.append style={draw=none},
+          axis line style={draw=ufvjmgray,thin},
+          tick style={draw=ufvjmgray,thin},
+          ymajorgrids=true,
+          grid style={dotted,gray!40},
+          nodes near coords,
+          nodes near coords style={font=\tiny,inner sep=1pt},
+          nodes near coords align=above,
+        ]
+          \addplot[fill=cAdalineNP] coordinates {(C1,28) (C2,21) (C3,20)};
+          \addplot[fill=cAdalineSK] coordinates {(C1,21) (C2,21) (C3,21)};
+          \addplot[fill=cMlpNP]     coordinates {(C1,27) (C2,16) (C3,15)};
+          \addplot[fill=cMlpSK]     coordinates {(C1,18) (C2,20) (C3,35)};
+          \legend{ADALINE SB, ADALINE CB, Multicamadas SB, Multicamadas CB}
+        \end{axis}
+      \end{tikzpicture}
+
+      \vspace{0.2em}
+      {\tiny $\downarrow$ menos FN = melhor clinicamente}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =======================================================================
+% SLIDE 11 — RESULTADOS BANCO 2 (texto)
+% =======================================================================
+\begin{frame}{Resultados — Banco 2: Heart Failure}
+  \centering\small
+  \textit{299 pacientes: 96 óbitos | 203 sobreviventes}
+  \vspace{0.3em}
+
+  \renewcommand{\arraystretch}{1.35}
+  \begin{tabular}{lllll}
+    \toprule
+    \textbf{Modelo} & \textbf{C1} & \textbf{C2} & \textbf{C3} & \textbf{FN mín.} \\
+    \midrule
+    Adaline Sem Biblioteca & 68,89\% / 17\,FN & 72,22\% / 17\,FN & \textbf{75,56\% / 16\,FN} & 16 (C3) \\
+    Adaline Com Biblioteca (=) & 68,89\% / 17\,FN & 68,89\% / 17\,FN & 68,89\% / 17\,FN & 17 (=) \\
+    Multicamadas Sem Biblioteca     & \cellcolor{ufvjmbluelight}\textbf{78,89\% / 9\,FN} & 75,56\% / 14\,FN & 71,11\% / 23\,FN & 9 (C1) \\
+    Multicamadas Com Biblioteca     & \textbf{73,33\% / 18\,FN} & 68,89\% / 17\,FN & 63,33\% / 8\,FN$^*$ & 17 (C2) \\
+    \bottomrule
+  \end{tabular}
+
+  {\tiny $^*$8\,FN com 63,3\% de acurácia: modelo classifica quase todos como doentes — clinicamente não confiável}
+
+  \vfill
+  \begin{columns}[T]
+    \begin{column}{0.50\textwidth}
+      \begin{block}{Maior acurácia}
+        Multicamadas Sem Biblioteca C1: \textbf{78,89\%}
+      \end{block}
+    \end{column}
+    \begin{column}{0.50\textwidth}
+      \begin{alertblock}{Melhor clinicamente}
+        Multicamadas Sem Biblioteca C1: \textbf{9 FN}
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+  \vspace{0.2em}
+  \centering{\small\textbf{Melhor modelo geral:} Multicamadas Sem Biblioteca C1 — melhor equilíbrio entre acurácia (78,89\%) e FN mínimo (9)}
+\end{frame}
+
+% =======================================================================
+% SLIDE 12 — RESULTADOS BANCO 2 (gráficos)
+% =======================================================================
+\begin{frame}{Banco 2 — Visualização dos Resultados}
+  \begin{columns}[c]
+    % ---- gráfico acurácia ----
+    \begin{column}{0.50\textwidth}
+      \centering
+      {\small\textbf{Acurácia por Configuração (\%)}}
+      \vspace{0.15em}
+
+      \begin{tikzpicture}
+        \begin{axis}[
+          ybar,
+          width=1.05\columnwidth,
+          height=5.6cm,
+          symbolic x coords={C1,C2,C3},
+          xtick=data,
+          xticklabel style={font=\scriptsize},
+          ymin=58, ymax=88,
+          ytick={60,65,70,75,80,85},
+          ylabel={\%},
+          ylabel style={font=\scriptsize,rotate=-90,at={(ticklabel cs:0.5)},anchor=south},
+          yticklabel style={font=\scriptsize},
+          bar width=5.5pt,
+          legend style={at={(0.5,-0.22)},anchor=north,legend columns=2,font=\tiny,
+                        draw=none,fill=none,column sep=2pt},
+          legend cell align=left,
+          every axis plot/.append style={draw=none},
+          axis line style={draw=ufvjmgray,thin},
+          tick style={draw=ufvjmgray,thin},
+          ymajorgrids=true,
+          grid style={dotted,gray!40},
+          clip=false,
+          nodes near coords={\pgfmathprintnumber[fixed,precision=1]{\pgfplotspointmeta}},
+          nodes near coords style={font=\tiny,inner sep=0pt,rotate=90,anchor=west,xshift=2pt},
+        ]
+          \addplot[fill=cAdalineNP] coordinates {(C1,68.89) (C2,72.22) (C3,75.56)};
+          \addplot[fill=cAdalineSK] coordinates {(C1,68.89) (C2,68.89) (C3,68.89)};
+          \addplot[fill=cMlpNP]     coordinates {(C1,78.89) (C2,75.56) (C3,71.11)};
+          \addplot[fill=cMlpSK]     coordinates {(C1,73.33) (C2,68.89) (C3,63.33)};
+          \legend{ADALINE SB, ADALINE CB, Multicamadas SB, Multicamadas CB}
+        \end{axis}
+      \end{tikzpicture}
+    \end{column}
+    % ---- gráfico FN ----
+    \begin{column}{0.50\textwidth}
+      \centering
+      {\small\textbf{Falsos Negativos por Configuração}}
+      \vspace{0.15em}
+
+      \begin{tikzpicture}
+        \begin{axis}[
+          ybar,
+          width=1.05\columnwidth,
+          height=5.6cm,
+          symbolic x coords={C1,C2,C3},
+          xtick=data,
+          xticklabel style={font=\scriptsize},
+          ymin=0, ymax=28,
+          ytick={0,5,10,15,20,25},
+          ylabel={FN},
+          ylabel style={font=\scriptsize,rotate=-90,at={(ticklabel cs:0.5)},anchor=south},
+          yticklabel style={font=\scriptsize},
+          bar width=5.5pt,
+          legend style={at={(0.5,-0.22)},anchor=north,legend columns=2,font=\tiny,
+                        draw=none,fill=none,column sep=2pt},
+          legend cell align=left,
+          every axis plot/.append style={draw=none},
+          axis line style={draw=ufvjmgray,thin},
+          tick style={draw=ufvjmgray,thin},
+          ymajorgrids=true,
+          grid style={dotted,gray!40},
+          nodes near coords,
+          nodes near coords style={font=\tiny,inner sep=1pt},
+          nodes near coords align=above,
+        ]
+          \addplot[fill=cAdalineNP] coordinates {(C1,17) (C2,17) (C3,16)};
+          \addplot[fill=cAdalineSK] coordinates {(C1,17) (C2,17) (C3,17)};
+          \addplot[fill=cMlpNP]     coordinates {(C1,9)  (C2,14) (C3,23)};
+          \addplot[fill=cMlpSK]     coordinates {(C1,18) (C2,17) (C3,8)};
+          \legend{ADALINE SB, ADALINE CB, Multicamadas SB, Multicamadas CB}
+        \end{axis}
+      \end{tikzpicture}
+    \end{column}
+  \end{columns}
+  \vspace{-0.3em}
+  \centering{\tiny Overfitting visível: Multicamadas SB e Multicamadas CB pioram progressivamente com mais épocas}
+\end{frame}
+
+% =======================================================================
+% SLIDE 13 — BINARIZADOS vs CONTÍNUOS
+% =======================================================================
+\section{Análise Complementar}
+
+\begin{frame}{Experimento Complementar: Binarizados \textit{vs} Contínuos}
+  \textbf{Hipótese:} A binarização favoreceria o ADALINE por simplificar o espaço de decisão.
+  \vspace{0.3em}
+
+  \begin{columns}[T]
+    \begin{column}{0.44\textwidth}
+      \begin{block}{Banco 1 — resultado próximo}
+        \small Acurácias similares. A binarização não trouxe ganho significativo, mas também não prejudicou.
+      \end{block}
+
+      \vspace{0.3em}
+      \begin{alertblock}{Banco 2 — resultado revelador}
+        \small ADALINE SB subiu de 68,9\% para \textbf{82,2\%}\\
+        FN: de 17 para \textbf{11}\\[0.15em]
+        Multicamadas CB: caiu para \textbf{45,6\%} (instável)
+      \end{alertblock}
+    \end{column}
+    \begin{column}{0.56\textwidth}
+      \centering
+      {\small\textbf{Banco 2 — Acurácia: Binarizados \textit{vs} Contínuos}}
+      \vspace{0.15em}
+
+      \begin{tikzpicture}
+        \begin{axis}[
+          ybar,
+          width=\columnwidth,
+          height=5.5cm,
+          symbolic x coords={ADALINE SB, ADALINE CB, Multicamadas SB, Multicamadas CB},
+          xtick=data,
+          xticklabel style={font=\tiny,rotate=20,anchor=east},
+          ymin=30, ymax=90,
+          ytick={30,40,50,60,70,80,90},
+          ylabel={\%},
+          ylabel style={font=\scriptsize,rotate=-90,at={(ticklabel cs:0.5)},anchor=south},
+          yticklabel style={font=\scriptsize},
+          bar width=7pt,
+          legend style={at={(0.5,-0.26)},anchor=north,legend columns=2,font=\tiny,
+                        draw=none,fill=none},
+          legend cell align=left,
+          every axis plot/.append style={draw=none},
+          axis line style={draw=ufvjmgray,thin},
+          tick style={draw=ufvjmgray,thin},
+          ymajorgrids=true,
+          grid style={dotted,gray!40},
+          clip=false,
+          nodes near coords={\pgfmathprintnumber[fixed,precision=1]{\pgfplotspointmeta}},
+          nodes near coords style={font=\tiny,inner sep=0pt,rotate=90,anchor=west,xshift=2pt},
+        ]
+          \addplot[fill=cBin]  coordinates {(ADALINE SB,68.89) (ADALINE CB,68.89) (Multicamadas SB,78.89) (Multicamadas CB,73.33)};
+          \addplot[fill=cCont] coordinates {(ADALINE SB,82.2)  (ADALINE CB,82.2)  (Multicamadas SB,78.89) (Multicamadas CB,45.6)};
+          \legend{Binarizados, Contínuos}
+        \end{axis}
+      \end{tikzpicture}
+    \end{column}
+  \end{columns}
+  \vspace{-0.2em}
+  \centering{\tiny A hipótese não se confirmou: o ADALINE se beneficiou \textbf{mais} dos dados contínuos neste contexto}
+\end{frame}
+
+% =======================================================================
+% SLIDE 14 — COMPARAÇÃO MANUAL vs BIBLIOTECA
+% =======================================================================
+\begin{frame}{Validação: Implementação Manual \textit{vs} Biblioteca}
+  \begin{columns}[T]
+    \begin{column}{0.38\textwidth}
+      \begin{itemize}\setlength{\itemsep}{6pt}
+        \item \textbf{ADALINE SB} \textit{vs} \textbf{ADALINE CB}:\\
+              Resultados praticamente idênticos
+        \item \textbf{Multicamadas SB} \textit{vs} \textbf{Multicamadas CB}:\\
+              Divergências maiores
+      \end{itemize}
+      \vspace{0.5em}
+      \begin{block}{Destaque}
+        \small Multicamadas SB \textbf{superou} o Multicamadas CB em C3 (87,68\% \textit{vs} 82,61\%) — implementação manual \textbf{competitiva}.
+      \end{block}
+    \end{column}
+    \begin{column}{0.62\textwidth}
+      \begin{columns}[c]
+        \begin{column}{0.50\textwidth}
+          \centering
+          {\tiny\textbf{ADALINE — SB \textit{vs} CB}}\\[-0.1em]
+          {\tiny\textit{\color{gray}Resultados praticamente idênticos}}
+          \vspace{0.15em}
+
+          \begin{tikzpicture}
+            \begin{axis}[
+              ybar,
+              width=1.05\columnwidth,
+              height=5cm,
+              symbolic x coords={C1,C2,C3},
+              xtick=data,
+              xticklabel style={font=\tiny},
+              ymin=84, ymax=89,
+              ytick={84,85,86,87,88,89},
+              ylabel={\%},
+              ylabel style={font=\tiny,rotate=-90,at={(ticklabel cs:0.5)},anchor=south},
+              yticklabel style={font=\tiny},
+              bar width=6pt,
+              legend style={at={(0.5,-0.18)},anchor=north,legend columns=2,font=\tiny,
+                            draw=none,fill=none},
+              legend cell align=left,
+              every axis plot/.append style={draw=none},
+              axis line style={draw=ufvjmgray,thin},
+              tick style={draw=ufvjmgray,thin},
+              ymajorgrids=true,
+              grid style={dotted,gray!40},
+              clip=false,
+              nodes near coords={\pgfmathprintnumber[fixed,precision=1]{\pgfplotspointmeta}},
+              nodes near coords style={font=\tiny,inner sep=0pt,rotate=90,anchor=west,xshift=2pt},
+            ]
+              \addplot[fill=cBin]  coordinates {(C1,85.87) (C2,86.23) (C3,86.96)};
+              \addplot[fill=cCont] coordinates {(C1,85.87) (C2,86.23) (C3,86.23)};
+              \legend{Sem Bib., Com Bib.}
+            \end{axis}
+          \end{tikzpicture}
+        \end{column}
+        \begin{column}{0.50\textwidth}
+          \centering
+          {\tiny\textbf{Multicamadas — SB \textit{vs} CB}}\\[-0.1em]
+          {\tiny\textit{\color{gray}Divergência maior em C3}}
+          \vspace{0.15em}
+
+          \begin{tikzpicture}
+            \begin{axis}[
+              ybar,
+              width=1.05\columnwidth,
+              height=5cm,
+              symbolic x coords={C1,C2,C3},
+              xtick=data,
+              xticklabel style={font=\tiny},
+              ymin=80, ymax=92,
+              ytick={80,82,84,86,88,90,92},
+              ylabel={\%},
+              ylabel style={font=\tiny,rotate=-90,at={(ticklabel cs:0.5)},anchor=south},
+              yticklabel style={font=\tiny},
+              bar width=6pt,
+              legend style={at={(0.5,-0.18)},anchor=north,legend columns=2,font=\tiny,
+                            draw=none,fill=none},
+              legend cell align=left,
+              every axis plot/.append style={draw=none},
+              axis line style={draw=ufvjmgray,thin},
+              tick style={draw=ufvjmgray,thin},
+              ymajorgrids=true,
+              grid style={dotted,gray!40},
+              clip=false,
+              nodes near coords={\pgfmathprintnumber[fixed,precision=1]{\pgfplotspointmeta}},
+              nodes near coords style={font=\tiny,inner sep=0pt,rotate=90,anchor=west,xshift=2pt},
+            ]
+              \addplot[fill=cBin]  coordinates {(C1,82.97) (C2,86.23) (C3,87.68)};
+              \addplot[fill=cCont] coordinates {(C1,87.32) (C2,88.04) (C3,82.61)};
+              \legend{Sem Bib., Com Bib.}
+            \end{axis}
+          \end{tikzpicture}
+        \end{column}
+      \end{columns}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =======================================================================
+% SLIDE 15 — CONCLUSÃO
+% =======================================================================
+\section{Conclusão}
+
+\begin{frame}{Conclusão}
+  \begin{columns}[T]
+    \begin{column}{0.50\textwidth}
+      \textbf{Melhores resultados:}
+      \begin{itemize}\setlength{\itemsep}{4pt}
+        \item \textbf{Banco 1:} Multicamadas Sem Biblioteca C3 — \textbf{melhor modelo geral} (87,68\% / \textbf{15 FN})
+        \item \textbf{Banco 2:} Multicamadas Sem Biblioteca C1 — melhor equilíbrio (\textbf{78,89\% / 9 FN})
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.50\textwidth}
+      \textbf{Conclusões das comparações:}
+      \begin{itemize}\setlength{\itemsep}{4pt}
+        \item \textbf{Qual modelo?} O Multicamadas superou o ADALINE em ambos os bancos — a complexidade extra \textbf{trouxe ganho real}
+        \item \textbf{Manual \textit{vs} Biblioteca?} Implementações manuais produziram resultados \textbf{competitivos} e, no Multicamadas C3, até \textbf{superiores}
+        \item \textbf{Binarizar ou não?} A binarização \textbf{não trouxe vantagem}; os dados contínuos favoreceram o ADALINE no Banco 2
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =======================================================================
+% SLIDE 16 — OBRIGADO / PERGUNTAS
+% =======================================================================
+\begin{frame}[plain]
+  \centering
+  \vfill
+  {\Huge\color{ufvjmblue}\textbf{Obrigado!}}
+  \vfill
+  {\large Lucas dos Santos Martins}\\[0.3em]
+  {\normalsize Orientador: Prof.\ Dr.\ Leonardo Lana de Carvalho}\\[0.3em]
+  {\small Universidade Federal dos Vales do Jequitinhonha e Mucuri}
+  \vfill
+  {\normalsize\itshape À disposição para perguntas.}
+  \vfill
+\end{frame}
+
+\end{document}

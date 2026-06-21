@@ -1,0 +1,384 @@
+%%TCC -- Roteiro de apresentação (defesa)
+%%Predição de Evasão Estudantil no Curso de SI da UFVJM
+%%Estrutura sugerida pelo orientador: Objetivo -> Hipóteses -> Metodologia -> Resultados -> Dashboard (ao final)
+%%Compilar com: pdflatex apresentacao.tex  (ou latexmk -pdf apresentacao.tex)
+
+\documentclass[aspectratio=169,11pt,brazil]{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{mathptmx}          % Times New Roman, consistente com o TCC
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{xcolor}
+
+% --- Identidade visual ---------------------------------------------------
+\definecolor{ufvjmgreen}{RGB}{0,96,64}
+\definecolor{ufvjmgray}{RGB}{90,90,90}
+
+\usetheme{Madrid}
+\usecolortheme[named=ufvjmgreen]{structure}
+\setbeamercolor{palette primary}{bg=ufvjmgreen,fg=white}
+\setbeamercolor{palette secondary}{bg=ufvjmgreen!80,fg=white}
+\setbeamercolor{palette tertiary}{bg=ufvjmgreen!60,fg=white}
+\setbeamercolor{title}{bg=ufvjmgreen,fg=white}
+\setbeamercolor{subtitle}{fg=white}
+\setbeamercolor{frametitle}{fg=ufvjmgreen}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{caption}{\insertcaption}
+\setbeamerfont{frametitle}{series=\bfseries}
+\graphicspath{{reports/figures/}{./}}
+
+% --- Dados do trabalho ---------------------------------------------------
+\title[Predição de Evasão no SI/UFVJM]{Predição de evasão estudantil no curso de\\Sistemas de Informação da UFVJM}
+\subtitle{Uma Análise por Ciência de Dados e Aprendizado de Máquina}
+\author[Josiney M. B. Junior]{Josiney Mafra Barbosa Junior}
+\institute[UFVJM]{Orientador: Prof. Dr. Alessandro Vivas\\Universidade Federal dos Vales do Jequitinhonha e Mucuri}
+\date{2026}
+
+\begin{document}
+
+% ======================================================================
+% BLOCO 1 -- ABERTURA E CONTEXTO  (~2 min)
+% ======================================================================
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+
+\begin{frame}{Contexto: por que estudar a evasão?}
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      \begin{itemize}
+        \item Evasão na grande área de \textbf{Computação} no Brasil ultrapassa \textbf{60\%}.
+        \item Fenômeno \textbf{multifatorial}: condições acadêmicas, socioeconômicas, institucionais e pessoais.
+        \item Custos em três níveis: \textbf{estudante}, \textbf{universidade} e \textbf{sociedade}.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.45\textwidth}
+      \begin{block}{Oportunidade analítica}
+        Cada estudante deixa um \textbf{rastro digital} nos sistemas institucionais (matrículas, notas, frequência).
+        \medskip
+
+        A Ciência de Dados permite \textbf{antecipar} o desfecho e apoiar um \textbf{Sistema de Alerta Precoce (SAP)}.
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ======================================================================
+% BLOCO 2 -- OBJETIVO  (~1,5 min)
+% ======================================================================
+\section{Objetivo}
+
+\begin{frame}{Objetivo}
+  \begin{block}{Objetivo geral}
+    Aplicar técnicas de \textbf{Ciência de Dados e Aprendizado de Máquina} para \textbf{identificar e analisar os fatores preditivos da evasão e da retenção prolongada} dos estudantes do curso de Sistemas de Informação da UFVJM.
+  \end{block}
+  \begin{block}{Objetivos específicos}
+    \begin{enumerate}
+      \item \textbf{Explorar} e preparar os dados, garantindo qualidade e consistência.
+      \item \textbf{Modelar} a evasão (Regressão Logística, \emph{Random Forest}, \emph{XGBoost}) e a dimensão temporal (Kaplan-Meier e Cox).
+      \item \textbf{Avaliar} o desempenho com métricas sensíveis ao desbalanceamento e identificar os atributos de maior impacto.
+    \end{enumerate}
+  \end{block}
+  \centering\small Produto final: subsídio para um \textbf{Sistema de Alerta Precoce}.
+\end{frame}
+
+% ======================================================================
+% BLOCO 3 -- HIPÓTESES  (~2 min)
+% ======================================================================
+\section{Hipóteses}
+
+\begin{frame}{Hipóteses de pesquisa}
+  \begin{itemize}
+    \item[\textbf{H1}] A \textbf{reprovação por frequência} é um dos preditores mais relevantes da evasão.
+    \item[\textbf{H2}] O \textbf{ciclo de Matemática} (MAT001--MAT003) é o filtro estrutural dominante, acima das disciplinas iniciais de Computação.
+    \item[\textbf{H3}] O \textbf{CRA} dos primeiros semestres é indicador precoce de risco.
+    \item[\textbf{H4}] O \textbf{tempo prolongado sem progressão} curricular eleva o risco de evasão.
+    \item[\textbf{H5}] \textbf{\emph{Ensembles} de árvore} (RF, XGBoost) superam a Regressão Logística em métricas sensíveis ao desbalanceamento.
+  \end{itemize}
+  \vfill
+  \centering\small Cada hipótese é retomada nos \textbf{Resultados} com veredito de confirmação.
+\end{frame}
+
+% ======================================================================
+% BLOCO 4 -- METODOLOGIA  (~4 min)
+% ======================================================================
+\section{Metodologia}
+
+\begin{frame}{Metodologia: CRISP-DM como fio condutor}
+  \begin{columns}[c]
+    \begin{column}{0.52\textwidth}
+      \begin{itemize}
+        \item Abordagem \textbf{quantitativa, orientada a dados}.
+        \item Organizada nas \textbf{6 fases} do CRISP-DM.
+        \item Cada fase materializada em artefatos: \texttt{src/}, \emph{notebooks} e painel \emph{Streamlit}.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \centering
+      \includegraphics[width=\linewidth,height=0.72\textheight,keepaspectratio]{fig_crispdm_ciclo.pdf}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Dados e preparação}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \textbf{Base institucional (SIE/UFVJM)} --- 3 tabelas integradas:
+      \begin{itemize}
+        \item \textbf{1.119 estudantes}
+        \item \textbf{37.925 registros disciplinares}
+      \end{itemize}
+      \medskip
+      \textbf{Decisões-chave}
+      \begin{itemize}
+        \item Recorte: ingressantes até 2024/1.
+        \item Exclusão de \texttt{COM038} (TCC).
+        \item Tabela analítica: \textbf{uma linha por aluno}.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \begin{block}{\emph{Features} ancoradas nas hipóteses}
+        \small
+        CRA e CRA médio, taxa de aprovação, reprovações por nota/frequência, tentativas em MAT001--003, trancamentos, variância das notas.
+      \end{block}
+      \begin{alertblock}{Ressalva metodológica}
+        \small As \emph{features} são \textbf{cumulativas}.
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Modelagem e avaliação}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \begin{block}{Duas frentes complementares}
+        \begin{itemize}
+          \item \textbf{Sobrevivência} (Kaplan-Meier + Cox): \emph{quando} a evasão ocorre.
+          \item \textbf{Classificação} (LogReg, RF, XGBoost): \emph{quem} tende a evadir.
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \begin{block}{Avaliação}
+        \begin{itemize}
+          \item \textbf{F1, \emph{recall}, precisão, AUC} (acurácia engana em dados desbalanceados).
+          \item Validação cruzada estratificada (5 \emph{folds}) + \emph{hold-out}.
+          \item Interpretabilidade via \textbf{SHAP}.
+          \item Reprodutibilidade: \texttt{random\_state = 42}.
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ======================================================================
+% BLOCO 5 -- RESULTADOS  (~7 min)
+% ======================================================================
+\section{Resultados}
+
+\begin{frame}{Caracterização da coorte}
+  \begin{columns}[c]
+    \begin{column}{0.46\textwidth}
+      \begin{itemize}
+        \item 587 \textbf{Evadidos} (52,5\%), 260 \textbf{Concluintes} (23,2\%), 271 \textbf{Ativos} (24,2\%).
+        \item Taxa de evasão (desfecho consolidado): \[ \frac{587}{587+260} = \textbf{69,3\%} \]
+        \item Compatível com a literatura ($>$60\% em Computação).
+      \end{itemize}
+      \footnotesize\color{ufvjmgray} Cautela: coortes recentes sofrem censura à direita.
+    \end{column}
+    \begin{column}{0.54\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{fig_situacao_e_evasao_por_ano.pdf}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{H3 --- O CRA separa os grupos}
+  \begin{columns}[c]
+    \begin{column}{0.48\textwidth}
+      \begin{itemize}
+        \item Concluintes: mediana de CRA $\approx$ \textbf{73}.
+        \item Evadidos: mediana $\approx$ \textbf{45}.
+        \item Ativos: comportamento próximo ao dos concluintes.
+      \end{itemize}
+      \medskip
+      \begin{block}{Leitura}
+        Primeira evidência descritiva forte a favor de \textbf{H3}.
+      \end{block}
+    \end{column}
+    \begin{column}{0.52\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{fig_cra_por_situacao.pdf}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{H2 --- Disciplinas-gargalo}
+  \begin{columns}[c]
+    \begin{column}{0.5\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{fig_top_gargalos.pdf}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \begin{itemize}
+        \item Ciclo de Matemática nas 3 primeiras posições: \textbf{MAT003 63\%}, \textbf{MAT002 57\%}, \textbf{MAT001 53\%}.
+        \item \texttt{COM001} em 5º (48\%) e \texttt{COM006} em 6º (45\%).
+        \item \texttt{MAT001}: maior \textbf{evasão subsequente} (52\%).
+      \end{itemize}
+      \begin{block}{Veredito}
+        \textbf{H2 confirmada}: Matemática supera Computação.
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{H4 --- Análise de sobrevivência}
+  \begin{columns}[c]
+    \begin{column}{0.5\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{fig_sobrevivencia_geral.pdf}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \begin{itemize}
+        \item \textbf{11\%} evadem já no 1º semestre; $\sim$46\% até o 9º (tempo regular).
+        \item Mediana de permanência $\approx$ \textbf{11 semestres}.
+        \item Estratificação por CRA: \textbf{log-rank $p<0{,}001$}.
+        \item Modelo de Cox: índice de concordância \textbf{0,913}.
+      \end{itemize}
+      \footnotesize\color{ufvjmgray} HR $<$ 1 das reprovações cumulativas (viés de seleção).
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{H5 --- Desempenho dos modelos}
+  \centering
+  \begin{table}
+    \small
+    \begin{tabular}{lcccc}
+      \toprule
+      \textbf{Modelo} & \textbf{F1} & \textbf{AUC} & \textbf{\emph{Recall}} & \textbf{Precisão} \\
+      \midrule
+      Regressão Logística & 0,943 & 0,976 & 0,908 & \textbf{0,980} \\
+      \emph{Random Forest} & 0,953 & 0,981 & 0,944 & 0,962 \\
+      \emph{XGBoost} & \textbf{0,957} & \textbf{0,982} & \textbf{0,947} & 0,967 \\
+      \bottomrule
+    \end{tabular}
+    \caption*{\footnotesize Médias na validação cruzada estratificada (5 \emph{folds}).}
+  \end{table}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \begin{itemize}
+        \item \emph{Hold-out}: RF melhor F1 (\textbf{0,966}); \emph{recall} RF/XGB $=0{,}949$.
+        \item \emph{Recall} importa num SAP: falso negativo custa mais.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \begin{block}{Veredito}
+        \textbf{H5 confirmada}: \emph{ensembles} superam o \emph{baseline} em F1 e \emph{recall}.
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Interpretabilidade (SHAP) e achados emergentes}
+  \begin{columns}[c]
+    \begin{column}{0.5\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{fig_importancia_rf.pdf}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \begin{itemize}
+        \item Topo: \texttt{taxa\_aprovacao}, \texttt{cra\_medio}, \texttt{reprovacoes\_nota}, \texttt{cra}.
+        \item \texttt{tentativas\_mat002/003} em 4º--6º $\Rightarrow$ \textbf{H2} em nível individual.
+        \item \texttt{reprovacoes\_frequencia} em 8º $\Rightarrow$ \textbf{H1 parcial}.
+        \item \texttt{tipoingresso\_Vestibular} em 12º $\Rightarrow$ discussão de \textbf{viés algorítmico}.
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Placar das hipóteses}
+  \centering
+  \begin{table}
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabular}{clc}
+      \toprule
+      & \textbf{Hipótese} & \textbf{Veredito} \\
+      \midrule
+      H1 & Reprovação por frequência & \color{orange}\textbf{Parcial} \\
+      H2 & Ciclo de Matemática como filtro dominante & \color{ufvjmgreen}\textbf{Confirmada} \\
+      H3 & CRA como indicador precoce & \color{ufvjmgreen}\textbf{Confirmada} \\
+      H4 & Tempo sem progressão & \color{orange}\textbf{Parcial} \\
+      H5 & \emph{Ensembles} de árvore superam \emph{baseline} & \color{ufvjmgreen}\textbf{Confirmada} \\
+      \bottomrule
+    \end{tabular}
+  \end{table}
+\end{frame}
+
+% ======================================================================
+% BLOCO 6 -- DASHBOARD (AO FINAL, conforme orientador)  (~2,5 min)
+% ======================================================================
+\section{Dashboard}
+
+\begin{frame}{Dashboard --- demonstração ao vivo}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \textbf{Painel interativo em \emph{Streamlit}}
+      \begin{itemize}
+        \item Visão temporal da evasão por coorte.
+        \item Mapeamento das disciplinas-gargalo.
+        \item \textbf{Semáforo de risco individual} com explicação.
+      \end{itemize}
+      \medskip
+      Cada alerta vem com \textbf{justificativa quantificada}. A decisão final é da \textbf{coordenação}.
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \begin{block}{Enfrenta o ``problema da última milha''}
+        Traduz o rigor técnico em \textbf{instrumento acionável} pela gestão.
+      \end{block}
+      % \includegraphics[width=\textwidth]{dashboard_screenshot.png} % inserir print do painel
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ======================================================================
+% BLOCO 7 -- FECHAMENTO  (~1 min)
+% ======================================================================
+\section{Considerações finais}
+
+\begin{frame}{Contribuições, limitações e trabalhos futuros}
+  \begin{columns}[T]
+    \begin{column}{0.34\textwidth}
+      \begin{block}{Contribuições}
+        \footnotesize
+        \begin{itemize}
+          \item Painel acionável (SAP).
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.34\textwidth}
+      \begin{block}{Limitação central}
+        \footnotesize
+        Modelo é \textbf{diagnóstico retrospectivo}, não predição prospectiva pura (\emph{features} cumulativas).
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[plain]
+  \centering
+  \vfill
+  {\Huge\color{ufvjmgreen}\textbf{Obrigado!}}
+  \vfill
+  {\large Josiney Mafra Barbosa Junior}\\[0.3em]
+  {\normalsize Orientador: Prof. Dr. Alessandro Vivas}\\[0.3em]
+  {\small Universidade Federal dos Vales do Jequitinhonha e Mucuri}
+  \vfill
+  {\normalsize\itshape À disposição para perguntas.}
+  \vfill
+\end{frame}
+
+\end{document}

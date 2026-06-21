@@ -1,0 +1,579 @@
+\chapter{Metodologia}
+\label{cap:metodologia}
+
+Este capítulo descreve os procedimentos e decisões técnicas que fundamentaram o desenvolvimento do presente trabalho. São detalhados os conjuntos de dados utilizados, as etapas de pré-processamento, as arquiteturas de redes neurais implementadas, os hiperparâmetros adotados e as métricas selecionadas para avaliação de desempenho. Toda a implementação foi realizada na linguagem de programação Python, combinando algoritmos desenvolvidos do zero com recursos de bibliotecas especializadas em aprendizado de máquina.
+
+\section{Conjuntos de Dados}
+
+A base empírica deste trabalho apoia-se em dois conjuntos de dados publicamente disponíveis, ambos relacionados a condições cardiovasculares, porém com perfis clínicos, volumes e objetivos preditivos distintos. Essa escolha foi deliberada: ao avaliar os modelos implementados sobre dois contextos diferentes, triagem diagnóstica e prognóstico de mortalidade, é possível analisar a capacidade de generalização de cada arquitetura e identificar limitações que não seriam observáveis com um único banco de dados.
+
+\subsection{Banco de Dados 1, UCI Heart Disease Dataset}
+
+O primeiro conjunto de dados, denominado neste trabalho como Banco 1, é proveniente de uma versão consolidada do repositório UCI Machine Learning Repository, que compila registros clínicos de múltiplas instituições hospitalares \cite{fedesoriano2021}. O banco contém 918 registros de pacientes e 11 variáveis preditoras, além de uma variável alvo binária denominada \textit{HeartDisease}, que assume valor 1 quando o paciente apresenta doença cardíaca diagnosticada e 0 em caso contrário.
+
+O objetivo preditivo do Banco 1 é a triagem diagnóstica: a partir de dados coletados em uma única consulta ou exame cardiológico de rotina, como pressão arterial, colesterol sérico, eletrocardiograma e resultado de teste de esforço, o modelo deve determinar se o paciente apresenta ou não doença cardíaca. Essa formulação é clinicamente relevante para apoiar decisões em ambientes de atenção primária à saúde, onde o acesso a exames mais invasivos pode ser limitado.
+
+A Tabela~\ref{tab:features_banco1} apresenta a descrição das variáveis originais do Banco 1, suas escalas de medição e o tipo de dado correspondente.
+
+\begin{table}[H]
+\centering
+\caption{Variáveis originais do Banco 1 (UCI Heart Disease Dataset).}
+\label{tab:features_banco1}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Variável} & \textbf{Descrição} & \textbf{Tipo} \\
+\hline
+Age            & Idade do paciente (anos)                       & Numérica contínua \\
+Sex            & Sexo biológico (M/F)                           & Categórica binária \\
+ChestPainType  & Tipo de dor torácica (ATA/NAP/ASY/TA)          & Categórica nominal \\
+RestingBP      & Pressão arterial em repouso (mmHg)             & Numérica contínua \\
+Cholesterol    & Colesterol sérico (mg/dL)                      & Numérica contínua \\
+FastingBS      & Glicemia em jejum $>$ 120 mg/dL (0/1)         & Numérica binária \\
+RestingECG     & Eletrocardiograma em repouso (Normal/ST/LVH)   & Categórica nominal \\
+MaxHR          & Frequência cardíaca máxima atingida (bpm)      & Numérica contínua \\
+ExerciseAngina & Angina induzida por exercício (Y/N)             & Categórica binária \\
+Oldpeak        & Depressão do segmento ST por exercício         & Numérica contínua \\
+ST\_Slope      & Inclinação do segmento ST (Up/Flat/Down)       & Categórica ordinal \\
+\hline
+HeartDisease   & Presença de doença cardíaca (0/1)              & Alvo binário \\
+\hline
+\end{tabular}%
+}
+\fonte{Adaptado de \cite{fedesoriano2021}.}
+\end{table}
+
+Entre as variáveis do Banco 1, destacam-se algumas de particular relevância clínica. A variável \textit{ChestPainType} discrimina quatro padrões de dor torácica: ATA (\textit{Atypical Angina}, angina atípica), NAP (\textit{Non-Anginal Pain}, dor não anginosa), ASY (\textit{Asymptomatic}, assintomático) e TA (\textit{Typical Angina}, angina típica). A apresentação assintomática é clinicamente crítica, pois representa pacientes com doença silenciosa, grupo de alto risco que frequentemente não procura atendimento médico e, portanto, pode permanecer sem diagnóstico e tratamento. A variável \textit{Oldpeak} registra a magnitude da depressão do segmento ST induzida por esforço físico, amplamente utilizada na literatura cardiológica como indicador de isquemia miocárdica. Já \textit{ST\_Slope} complementa essa informação com a direção da variação do segmento, sendo a forma descendente (\textit{Down}) fortemente associada a comprometimento coronariano significativo.
+
+Observa-se no Banco 1 um leve desequilíbrio de classes, com aproximadamente 55\% dos registros classificados como doentes (\textit{HeartDisease} = 1) e 45\% como saudáveis (\textit{HeartDisease} = 0). Esse desbalanceamento moderado motivou a adoção de divisão estratificada dos dados, descrita na Seção~\ref{sec:divisao_dados}. Adicionalmente, a variável \textit{Cholesterol} apresentou registros com valor zero, convenção utilizada no dataset original para indicar dado ausente, tratados mediante substituição pela mediana da distribuição, conforme detalhado na Seção~\ref{sec:preprocessamento}.
+
+\subsection{Banco de Dados 2, Heart Failure Clinical Records Dataset}
+
+O segundo conjunto de dados, denominado Banco 2, contém 299 registros clínicos e 12 variáveis preditoras de pacientes com diagnóstico prévio de insuficiência cardíaca, coletados durante acompanhamento ambulatorial no Instituto de Cardiologia e Cirurgia Cardíaca de Faisalabad, Paquistão, entre abril e dezembro de 2015 \cite{chicco2020}. A variável alvo, denominada \textit{DEATH\_EVENT}, registra o óbito do paciente durante o período de acompanhamento (1 = óbito; 0 = sobrevivência).
+
+O objetivo preditivo do Banco 2 é o prognóstico: diferentemente do Banco 1, que parte de dados de triagem para determinar a presença ou ausência de doença, o Banco 2 trabalha com pacientes já diagnosticados com insuficiência cardíaca e busca estimar o risco de óbito ao longo do acompanhamento. Trata-se de uma tarefa clinicamente mais complexa: enquanto o Banco 1 identifica a existência de um quadro patológico, o Banco 2 procura estimar a gravidade e a evolução de uma condição já estabelecida, com base em biomarcadores que refletem o estado funcional de múltiplos órgãos.
+
+\begin{table}[H]
+\centering
+\caption{Variáveis originais do Banco 2 (Heart Failure Clinical Records Dataset).}
+\label{tab:features_banco2}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Variável} & \textbf{Descrição} & \textbf{Tipo} \\
+\hline
+age                       & Idade do paciente (anos; intervalo: 40--95)         & Numérica contínua \\
+anaemia                   & Anemia (0/1)                                        & Binária \\
+creatinine\_phosphokinase & Nível de CPK no sangue (U/L)                        & Numérica contínua \\
+diabetes                  & Diabetes mellitus (0/1)                             & Binária \\
+ejection\_fraction        & Fração de ejeção do ventrículo esquerdo (\%)       & Numérica contínua \\
+high\_blood\_pressure     & Hipertensão arterial (0/1)                          & Binária \\
+platelets                 & Contagem de plaquetas (kiloplaquetas/mL)            & Numérica contínua \\
+serum\_creatinine         & Creatinina sérica (mg/dL)                           & Numérica contínua \\
+serum\_sodium             & Sódio sérico (mEq/L)                                & Numérica contínua \\
+sex                       & Sexo biológico (1 = masculino, 0 = feminino)        & Binária \\
+smoking                   & Tabagismo (0/1)                                     & Binária \\
+time                      & Período de acompanhamento (dias; intervalo: 4--285) & Numérica contínua \\
+\hline
+DEATH\_EVENT              & Óbito durante o acompanhamento (0/1)                & Alvo binário \\
+\hline
+\end{tabular}}
+\fonte{Adaptado de \cite{chicco2020}.}
+\end{table}
+
+O Banco 2 se distingue do Banco 1 por incluir, além de variáveis clínicas binárias já codificadas, biomarcadores laboratoriais, variáveis que exigem exames sanguíneos específicos e que refletem o estado funcional de órgãos diretamente comprometidos pela insuficiência cardíaca. A creatinina fosfoquinase (CPK) é uma enzima liberada na corrente sanguínea em resposta ao dano ao músculo cardíaco; no Banco 2, seus valores variam de 23 a 7.861 U/L, evidenciando grande heterogeneidade clínica entre os pacientes. A fração de ejeção mede a porcentagem de sangue expelida do ventrículo esquerdo a cada batimento, sendo o principal indicador de função sistólica cardíaca; valores inferiores a 50\% caracterizam disfunção ventricular. A creatinina sérica e o sódio sérico refletem respectivamente a função renal e o equilíbrio eletrolítico, ambos frequentemente comprometidos em quadros avançados de insuficiência cardíaca.
+
+A variável \textit{time} representa o período de acompanhamento de cada paciente em dias (mediana de 115 dias) e não constitui um marcador clínico direto. Sua inclusão como preditor foi avaliada neste trabalho e justificada pelo fato de que o período de acompanhamento registrado para cada paciente carrega informação implícita sobre a progressão da doença, conforme discutido na Seção~\ref{sec:preprocessamento}.
+
+O Banco 2 apresenta desequilíbrio de classes mais acentuado que o Banco 1, com aproximadamente 67\% dos pacientes na classe de sobrevivência (\textit{DEATH\_EVENT} = 0) e 33\% na classe de óbito (\textit{DEATH\_EVENT} = 1). Esse desequilíbrio, somado ao menor volume de registros (299 versus 918 do Banco 1), torna o Banco 2 inerentemente mais desafiador para os modelos, fato que se refletirá diretamente nos resultados discutidos no Capítulo~\ref{cap:resultados}.
+
+\section{Pré-processamento dos Dados}
+\label{sec:preprocessamento}
+
+A binarização das variáveis foi adotada com o intuito de auxiliar os modelos, entregando-lhes representações previamente categorizadas segundo os parâmetros médicos das diretrizes brasileiras de cardiologia. A premissa era que variáveis discretizadas conforme os critérios clínicos, pressão arterial acima de 140~mmHg como hipertensão, colesterol acima de 190~mg/dL como elevado, fração de ejeção abaixo de 50\% como disfunção sistólica significativa, seriam mais informativas do que os valores contínuos brutos, ao refletirem diretamente a interpretação clínica utilizada na avaliação do paciente. Uma vez que os modelos implementados neste trabalho operam exclusivamente sobre entradas numéricas, todas as variáveis dos dois conjuntos de dados foram convertidas para representações binárias (valores 0 ou 1) antes do treinamento. Essa abordagem de binarização total substitui cada variável contínua ou categórica por uma ou mais colunas indicadoras, em que cada coluna representa uma faixa ou categoria específica do atributo original.
+
+Os limiares clínicos utilizados na discretização das variáveis contínuas foram definidos com base em consulta às especialistas médicas Dr.\textsuperscript{a} Ana Flávia Ramos Pires Anacleto e Dr.\textsuperscript{a} Izabela dos Santos Martins\footnote{Ambas vinculadas à Universidade Federal dos Vales do Jequitinhonha e Mucuri (UFVJM). Informações obtidas por meio de comunicação verbal em consulta presencial realizada em julho de 2025. As especialistas forneceram orientação sobre os limiares clínicos adotados na discretização das variáveis dos dois conjuntos de dados.}, e confrontados com os valores de referência estabelecidos pelas principais diretrizes brasileiras de cardiologia e semiologia médica \cite{brandao2025,rached2025,rohde2018,porto2019}. A seguir, são detalhadas as transformações aplicadas a cada variável dos dois bancos de dados.
+
+\subsection{Variáveis do Banco 1 --- UCI Heart Disease Dataset}
+
+A variável \textit{Age} foi categorizada em três faixas etárias, Jovem (18--39 anos), Adulto (40--59) e Idoso ($\geq 60$, conforme o Estatuto do Idoso \cite{brasil2003}), originando 3 colunas binárias. \textit{Sex} (M/F) e \textit{ExerciseAngina} (Y/N) foram expandidas em 2 colunas complementares cada. As variáveis multiclasse \textit{ChestPainType} (TA, ATA, NAP, ASY), \textit{RestingECG} (Normal, ST, LVH) e \textit{ST\_Slope} (Up, Flat, Down) foram codificadas por \textit{one-hot encoding}, gerando 4, 3 e 3 colunas respectivamente \cite{porto2019}.
+
+A pressão arterial sistólica (\textit{RestingBP}) foi estratificada em 6 faixas conforme a Diretriz Brasileira de Hipertensão Arterial 2025 \cite{brandao2025}: PA Normal ($\leq 120$~mmHg), Pré-Hipertensão Leve (121--129), Pré-Hipertensão (130--139), Hipertensão Estágio~1 (140--159), Estágio~2 (160--179) e Estágio~3 ($\geq 180$~mmHg). O colesterol (\textit{Cholesterol}), após substituição de registros com valor zero pela mediana, foi binarizado em Desejável ($\leq 189$~mg/dL) e Elevado ($\geq 190$~mg/dL), limiar da Diretriz Brasileira de Dislipidemias 2025 \cite{rached2025}. A glicemia em jejum (\textit{FastingBS}), já codificada no dataset como indicador de glicemia $> 120$~mg/dL \cite{fedesoriano2021}, originou 2 colunas complementares.
+
+A frequência cardíaca máxima (\textit{MaxHR}) foi dividida em Submáxima ($< 130$~bpm), Esperada (130--170~bpm) e Supramáxima ($> 170$~bpm), com base no critério de 85\% da $FC_{\text{máx}} = 220 - \text{idade}$ adotado pela Diretriz de Ecocardiografia de Estresse da SBC \cite{camarozano2026}. A depressão do segmento ST (\textit{Oldpeak}) foi estratificada em 5 níveis: Elevação ($\leq -0{,}1$~mm), Sem Alteração ($= 0$), Depressão Leve (0,1--1,5~mm), Moderada (1,6--3,0~mm) e Severa ($\geq 3{,}1$~mm) \cite{porto2019}.
+
+\subsection{Variáveis do Banco 2 --- Heart Failure Clinical Records Dataset}
+
+As transformações seguiram os valores de referência da Diretriz Brasileira de Insuficiência Cardíaca \cite{rohde2018} e da Semiologia Médica \cite{porto2019}, com apoio das especialistas consultadas. A variável \textit{age} foi discretizada em Meia-Idade (40--59 anos) e Idoso ($\geq 60$), gerando 2 colunas. As quatro variáveis já binárias no dataset (\textit{anaemia}, \textit{diabetes}, \textit{high\_blood\_pressure}, \textit{smoking}) e o \textit{sex} (1~=~masculino) foram mantidos com sua codificação original, totalizando 5 colunas sem transformação.
+
+Os biomarcadores laboratoriais contínuos foram binarizados com base em seus limiares de referência: a creatinina fosfoquinase (\textit{creatinine\_phosphokinase}) em CPK Elevada ($> 200$~U/L); a fração de ejeção (\textit{ejection\_fraction}) em Ejeção Baixa ($< 50\%$, disfunção sistólica ventricular \cite{rohde2018}); a creatinina sérica (\textit{serum\_creatinine}) em Creatinina Elevada ($> 1{,}2$~mg/dL, indicador de disfunção renal); e o sódio sérico (\textit{serum\_sodium}) em Sódio Baixo ($< 135$~mEq/L, hiponatremia). As plaquetas (\textit{platelets}) originaram 2 colunas: Trombocitopenia ($< 150{.}000$/mL) e Trombocitose ($> 450{.}000$/mL), com a faixa normal como referência implícita \cite{porto2019}.
+
+A variável \textit{time} foi binarizada com o limiar de 100 dias (próximo à mediana de 115 dias), gerando a coluna Acompanhamento Curto ($< 100$ dias), compatível com o período convencional de reavaliação clínica de 3 meses \cite{rohde2018}. Cabe ressaltar que \textit{time} apresenta potencial \textit{data leakage}: pacientes que foram a óbito tendem a ter períodos de acompanhamento sistematicamente menores, tornando essa variável parcialmente determinada pelo próprio desfecho. As métricas do Banco~2 podem, portanto, estar artificialmente elevadas em razão da presença desta variável \cite{chicco2020}.
+
+\subsection{Resultado do Pré-processamento}
+
+Após a aplicação de todas as transformações descritas, os conjuntos de dados apresentaram as dimensionalidades finais exibidas na Tabela~\ref{tab:preprocessamento}.
+
+\begin{table}[H]
+\centering
+\caption{Resumo das transformações e dimensionalidade final após o pré-processamento.}
+\label{tab:preprocessamento}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Variável Original} & \textbf{Banco 1 (colunas)} & \textbf{Banco 2 (colunas)} \\
+\hline
+Idade                        & 3 (Jovem, Adulto, Idoso)        & 2 (Meia-Idade, Idoso) \\
+Sexo                         & 2 (Masculino, Feminino)         & 1 (Masculino) \\
+Tipo de Dor Torácica         & 4 (TA, ATA, NAP, ASY)           & --- \\
+Pressão Arterial             & 6 (PA Normal a HA Estágio 3)    & --- \\
+Colesterol                   & 2 (Desejável, Elevado)          & --- \\
+Glicemia em Jejum            & 2 (Normal, Pré-Diab./Diab.)    & --- \\
+Eletrocardiograma            & 3 (Normal, ST, LVH)             & --- \\
+Freq.\ Cardíaca Máxima       & 3 (Submáx., Esperada, Supramáx.) & --- \\
+Angina Induzida              & 2 (Sim, Não)                    & --- \\
+Depressão ST (\textit{Oldpeak}) & 5 (Elevação a Severa)        & --- \\
+Inclinação ST                & 3 (Asc., Horiz., Desc.)         & --- \\
+CPK                          & ---                             & 1 (CPK Elevada) \\
+Fração de Ejeção             & ---                             & 1 (Ejeção Baixa) \\
+Plaquetas                    & ---                             & 2 (Baixas, Altas) \\
+Creatinina Sérica            & ---                             & 1 (Creatinina Elevada) \\
+Sódio Sérico                 & ---                             & 1 (Sódio Baixo) \\
+Anemia                       & ---                             & 1 (Anemia) \\
+Diabetes                     & ---                             & 1 (Diabetes) \\
+Hipertensão                  & ---                             & 1 (Hipertensão) \\
+Tabagismo                    & ---                             & 1 (Fumante) \\
+Período de Acompanhamento    & ---                             & 1 (Acomp.\ Curto) \\
+\hline
+\textbf{Total de características} & \textbf{35} & \textbf{14} \\
+\hline
+\end{tabular}%
+}
+\fonte{Elaborado pelo autor.}
+\end{table}
+
+A expansão de 11 variáveis originais para 35 características binárias no Banco 1 decorre da codificação por faixas e do \textit{one-hot encoding}, que substitui cada variável categórica por tantas colunas binárias quantas forem suas categorias. Para o Banco 2, a estratégia de manter uma única coluna binária para variáveis cujo desvio clínico relevante é unilateral, como CPK elevada, ejeção baixa, creatinina elevada e sódio baixo, resultou em uma representação compacta de 14 características, reduzindo redundâncias sem perda de informação clínica relevante. Em ambos os bancos, a representação homogênea em escala binária elimina a necessidade de normalização adicional, permitindo que os modelos recebam entradas já em escala compatível com as funções de ativação sigmoide e ReLU utilizadas.
+
+Cabe registrar que essa escolha de pré-processamento foi submetida a verificação empírica: a Seção~\ref{sec:resultados_bruto} apresenta um experimento complementar em que os mesmos modelos foram treinados sobre os dados originais contínuos, sem binarização, com o objetivo de isolar o efeito do pré-processamento sobre o desempenho relativo entre as arquiteturas.
+
+\section{Divisão Estratificada dos Dados}
+\label{sec:divisao_dados}
+
+Para garantir que os conjuntos de treino, validação e teste possuíssem distribuições de classe representativas, aspecto crítico em conjuntos com desbalanceamento, todos os modelos adotaram divisão estratificada com proporção 70/30 e semente aleatória $\texttt{randomState} = 42$, assegurando reprodutibilidade e comparabilidade dos resultados.
+
+Na implementação própria do ADALINE Logístico (NumPy), a divisão primária foi realizada por meio de uma função manual denominada \texttt{meuTrainTestSplit}, desenvolvida para replicar a lógica da divisão estratificada do scikit-learn com controle explícito sobre o embaralhamento. O algoritmo opera da seguinte forma: para cada classe $c \in \{0, 1\}$, os índices dos pacientes pertencentes à classe $c$ são identificados e embaralhados de forma controlada com a semente definida. Em seguida, define-se um ponto de corte $\lfloor n_c \cdot (1 - \texttt{testeSize}) \rfloor$, onde $n_c$ é o total de pacientes da classe $c$ e $\texttt{testeSize} = 0{,}3$. Os primeiros $\lfloor n_c \cdot 0{,}7 \rfloor$ índices são alocados ao conjunto de treino e os restantes ao conjunto de teste; por fim, ambos os conjuntos são embaralhados novamente, eliminando qualquer agrupamento residual por classe. Nos demais modelos --- MLP NumPy e ambas as implementações com biblioteca --- a divisão primária foi realizada diretamente pela função \texttt{train\_test\_split} do scikit-learn com o parâmetro \texttt{stratify}, produzindo resultado equivalente.
+
+A divisão resultante foi:
+
+\begin{itemize}
+    \item \textbf{Conjunto de treino/validação}: 70\% dos registros, com a mesma proporção de classes do conjunto original;
+    \item \textbf{Conjunto de teste}: 30\% dos registros, mantida a estratificação de classes.
+\end{itemize}
+
+A partir do conjunto de treino/validação (70\%), realizou-se uma segunda divisão utilizando a função \texttt{train\_test\_split} do scikit-learn com \texttt{stratify}, reservando 20\% desse subconjunto como conjunto de validação. O conjunto de validação foi utilizado durante o treinamento para monitorar o comportamento da curva de acurácia a cada época, sem interferir na atualização dos pesos. O conjunto de teste final permaneceu isolado durante todo o processo de treinamento e validação, sendo utilizado exclusivamente para a avaliação final dos modelos. As proporções efetivas de cada partição são exibidas na Tabela~\ref{tab:divisao_dados}.
+
+\begin{table}[H]
+\centering
+\caption{Partições dos conjuntos de dados após divisão estratificada.}
+\label{tab:divisao_dados}
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Partição} & \textbf{Banco 1 (registros)} & \textbf{Banco 2 (registros)} \\
+\hline
+Treino (56\% do total) & $\approx$ 514 & $\approx$ 167 \\
+Validação (14\% do total) & $\approx$ 129 & $\approx$ 42 \\
+Teste (30\% do total) & 276 & $\approx$ 90 \\
+\hline
+\textbf{Total} & \textbf{918} & \textbf{299} \\
+\hline
+\end{tabular}
+\fonte{Elaborado pelo autor.}
+\end{table}
+
+\section{Arquiteturas e Implementação dos Modelos}
+\label{sec:implementacao}
+
+Quatro modelos foram implementados e avaliados neste trabalho: dois baseados no ADALINE Logístico e dois baseados no Perceptron Multicamadas (MLP). Para cada arquitetura, foi produzida uma versão desenvolvida integralmente com a biblioteca NumPy, denominada implementação própria, e uma versão equivalente construída com a biblioteca scikit-learn, denominada implementação com biblioteca. Essa dualidade permite comparar não apenas as arquiteturas entre si, mas também verificar se a implementação manual converge para resultados compatíveis com as ferramentas otimizadas de alto nível, além de evidenciar as diferenças práticas entre ambas as abordagens de desenvolvimento.
+
+Nas subseções a seguir, cada implementação é descrita com rigor matemático, apresentando as equações que fundamentam cada etapa do algoritmo e sua correspondência direta com as estruturas de código desenvolvidas.
+
+\subsection{ADALINE Logístico --- Implementação Própria (NumPy)}
+\label{sec:adaline_numpy}
+
+O ADALINE Logístico implementado neste trabalho é formalmente um neurônio artificial com função de ativação sigmoide, treinado pelo algoritmo do gradiente descendente em lote (\textit{batch gradient descent}). Conforme \citeonline{braga2007}, a arquitetura ADALINE (\textit{Adaptive Linear Neuron}) foi proposta originalmente por Widrow e Hoff em 1960 como modelo adaptativo de neurônio linear; a extensão logística adotada aqui substitui a saída linear pela sigmoide, habilitando o modelo a produzir probabilidades e realizar classificação binária diretamente. A classe \texttt{AdalineLogistica} encapsula toda a lógica de inicialização, treinamento e predição.
+
+\subsubsection{Arquitetura e Inicialização dos Parâmetros}
+
+O modelo recebe um vetor de entrada $\mathbf{x} = (x_1, x_2, \ldots, x_n)^T \in \mathbb{R}^n$, onde $n$ é o número de características binárias (35 para o Banco~1 e 14 para o Banco~2). Os parâmetros ajustáveis são o vetor de pesos $\mathbf{w} \in \mathbb{R}^n$ e o escalar de viés $b \in \mathbb{R}$. Os pesos foram inicializados com distribuição normal de média zero e desvio padrão $0{,}01$; o viés com zero; e a semente aleatória $42$ fixada via \texttt{RandomState} para reprodutibilidade \cite{silva2016}:
+
+\begin{equation}
+w_i \sim \mathcal{N}(0;\, 0{,}01), \quad i = 1, 2, \ldots, n; \qquad b = 0
+\label{eq:adaline_init}
+\end{equation}
+
+No código:
+
+\begin{lstlisting}[caption={Inicialização dos parâmetros do ADALINE Logístico.}, label={lst:adaline_init}]
+geradorAleatorio = np.random.RandomState(self.estagioAleatorio)
+self.pesos = geradorAleatorio.normal(loc=0.0, scale=0.01,
+                                     size=nCaracteristicas)
+self.bias = 0.0
+\end{lstlisting}
+\fonte{Elaborado pelo autor.}
+
+\subsubsection{Propagação Direta (\textit{Forward Pass})}
+
+A cada época, para a matriz de entradas $\mathbf{X} \in \mathbb{R}^{m \times n}$ com $m$ exemplos de treinamento, calcula-se a entrada líquida (combinação linear ponderada de todas as entradas):
+
+\begin{equation}
+\mathbf{z} = \mathbf{X}\mathbf{w} + b \in \mathbb{R}^m
+\label{eq:adaline_z}
+\end{equation}
+
+A função de ativação sigmoide transforma cada componente em uma probabilidade estimada $\hat{y}_i \in (0,1)$:
+
+\begin{equation}
+\hat{y}_i = \sigma(z_i) = \frac{1}{1 + e^{-z_i}}
+\label{eq:adaline_sigmoid}
+\end{equation}
+
+Para estabilidade numérica, o argumento da exponencial é limitado ao intervalo $[-250, 250]$ pela função \texttt{numpy.clip}, prevenindo \textit{overflow} para $z \ll 0$ e \textit{underflow} para $z \gg 0$. No código:
+
+\begin{lstlisting}[caption={Propagação direta do ADALINE Logístico.}, label={lst:adaline_forward}]
+entradaLiquida = np.dot(X, self.pesos) + self.bias
+ativacao = 1.0 / (1.0 + np.exp(-np.clip(entradaLiquida, -250, 250)))
+\end{lstlisting}
+\fonte{Elaborado pelo autor.}
+
+\subsubsection{Função de Custo e Atualização dos Pesos}
+
+O erro de predição para cada amostra é $e_i = y_i - \hat{y}_i$, onde $y_i \in \{0, 1\}$ é o rótulo real. A função de custo adotada é o Erro Quadrático Médio (MSE) sobre os $m$ exemplos de treinamento:
+
+\begin{equation}
+J(\mathbf{w}) = \frac{1}{m} \sum_{i=1}^{m} (y_i - \hat{y}_i)^2
+\label{eq:adaline_mse}
+\end{equation}
+
+A atualização dos parâmetros segue a regra delta (ou regra de Widrow-Hoff), que utiliza diretamente o erro na saída do modelo sem propagar o gradiente pela derivada da função de ativação. Diferentemente da retropropagação plena, que incluiria o fator $\sigma'(\hat{y}) = \hat{y}(1-\hat{y})$ na cadeia de derivadas, o ADALINE atualiza os pesos proporcionalmente ao erro de saída $e_i = y_i - \hat{y}_i$, o que constitui a formulação clássica do modelo proposta por Widrow e Hoff \cite{braga2007}. A equivalência desta regra com o gradiente da entropia cruzada binária com saída sigmoide é formalmente demonstrada na Nota de Implementação do Capítulo~\ref{cap:fundamentacao}. O vetor de erro e os termos de atualização são:
+
+\begin{equation}
+\mathbf{e} = \mathbf{y} - \hat{\mathbf{y}} \in \mathbb{R}^m, \qquad \boldsymbol{\delta}_{\mathbf{w}} = -\mathbf{X}^T \mathbf{e}, \qquad \delta_b = -\sum_{i=1}^{m} e_i
+\label{eq:adaline_grad}
+\end{equation}
+
+Os termos $\boldsymbol{\delta}_{\mathbf{w}}$ e $\delta_b$ são proporcionais ao gradiente da função de custo em relação a cada parâmetro ($\boldsymbol{\delta}_{\mathbf{w}} \propto \partial J/\partial \mathbf{w}$), de forma que a regra de atualização a seguir implementa a descida do gradiente. Aplicada a cada época completa sobre todos os $m$ exemplos (modo lote):
+
+\begin{equation}
+\mathbf{w} \leftarrow \mathbf{w} - \eta \cdot \boldsymbol{\delta}_{\mathbf{w}}, \qquad b \leftarrow b - \eta \cdot \delta_b
+\label{eq:adaline_update}
+\end{equation}
+
+O modo lote utiliza o erro acumulado sobre todos os exemplos por época, conferindo maior estabilidade à trajetória de convergência em comparação ao modo estocástico, que atualiza os parâmetros a cada exemplo individual \cite{silva2016}. No código, esses termos são calculados e aplicados diretamente:
+
+\begin{lstlisting}[caption={Cálculo dos gradientes e atualização dos pesos do ADALINE.}, label={lst:adaline_update}]
+erro = y - ativacao
+gradientesPesos = -X.T.dot(erro)
+gradientesBias  = -np.sum(erro)
+self.pesos -= self.taxaAprendizado * gradientesPesos
+self.bias  -= self.taxaAprendizado * gradientesBias
+erroQuadraticoMedio = np.mean(erro ** 2)
+\end{lstlisting}
+\fonte{Elaborado pelo autor.}
+
+\subsubsection{Classificação Final}
+
+A probabilidade $\hat{y}$ é convertida em rótulo binário pelo limiar de decisão:
+
+\begin{equation}
+\hat{c} = \begin{cases} 1 & \text{se } \hat{y} \geq 0{,}5 \\ 0 & \text{se } \hat{y} < 0{,}5 \end{cases}
+\label{eq:adaline_thresh}
+\end{equation}
+
+No código, o método \texttt{predict} implementa essa decisão com \texttt{numpy.where}, retornando um vetor de rótulos inteiros calculados a partir das probabilidades de \texttt{predictProba}.
+
+\subsection{ADALINE Logístico --- Implementação com Biblioteca (scikit-learn)}
+\label{sec:adaline_sklearn}
+
+Esta seção descreve a versão do ADALINE Logístico construída com recursos da biblioteca scikit-learn, equivalente arquitetural da implementação NumPy apresentada na Seção~\ref{sec:adaline_numpy}. O objetivo é verificar se a implementação manual produz resultados compatíveis com as ferramentas otimizadas de alto nível e evidenciar as diferenças práticas entre as duas abordagens de desenvolvimento. O estimador adotado é o \texttt{SGDClassifier}, configurado para minimizar a perda logarítmica via gradiente descendente estocástico, cujo funcionamento é detalhado a seguir.
+
+\subsubsection{O Estimador \texttt{SGDClassifier} e o Gradiente Descendente Estocástico}
+
+A versão com biblioteca do ADALINE Logístico foi construída com o estimador \texttt{SGDClassifier} do scikit-learn, configurado com \texttt{loss='log\_loss'} e \texttt{random\_state=42}. O \texttt{SGDClassifier} implementa o algoritmo de Gradiente Descendente Estocástico (\textit{Stochastic Gradient Descent}, SGD), uma variante do gradiente descendente em que os parâmetros são atualizados com base em um único exemplo (ou mini-lote) de cada vez, em vez de todos os $m$ exemplos como na implementação NumPy \cite{silva2016}.
+
+Formalmente, a cada iteração $t$ do SGD, seleciona-se um exemplo $(\mathbf{x}^{(i)}, y^{(i)})$ do conjunto de treinamento e o gradiente instantâneo desse exemplo é utilizado como estimativa do gradiente global:
+
+\begin{equation}
+\mathbf{w} \leftarrow \mathbf{w} - \eta \cdot \nabla_{\mathbf{w}} J^{(i)}(\mathbf{w}), \qquad b \leftarrow b - \eta \cdot \nabla_b J^{(i)}(b)
+\label{eq:sgd_update}
+\end{equation}
+
+onde $J^{(i)}$ é a função de custo avaliada no exemplo $i$. Embora mais ruidosa que a versão em lote, essa abordagem converge com maior rapidez em conjuntos de dados grandes e pode escapar de mínimos locais rasos, sendo amplamente empregada no treinamento de redes neurais modernas \cite{dsa2022}.
+
+A configuração \texttt{loss='log\_loss'} especifica que o estimador deve minimizar a perda logarítmica (entropia cruzada binária), que para cada exemplo é definida como:
+
+\begin{equation}
+\mathcal{L}(y, \hat{y}) = -\left[ y \log(\hat{y}) + (1-y) \log(1-\hat{y}) \right]
+\label{eq:logloss}
+\end{equation}
+
+Ao minimizar essa função via SGD com saída sigmoide, o \texttt{SGDClassifier} com \texttt{loss='log\_loss'} é matematicamente equivalente à \textbf{regressão logística} treinada por gradiente estocástico, e, portanto, arquiteturalmente análogo ao ADALINE Logístico implementado em NumPy \cite{braga2007}. A diferença principal, que impede a equivalência funcional estrita, reside na função de custo: a implementação NumPy minimiza o MSE, enquanto o \texttt{SGDClassifier} com \texttt{log\_loss} minimiza a entropia cruzada, que do ponto de vista da máxima verossimilhança é formalmente mais adequada para classificação binária \cite{silva2016}. A instanciação e o treinamento do modelo seguiram o padrão:
+
+\begin{lstlisting}[caption={Instanciação e treinamento do ADALINE com biblioteca (SGDClassifier).}, label={lst:adaline_sklearn}]
+from sklearn.linear_model import SGDClassifier
+modelo = SGDClassifier(loss='log_loss',
+                       max_iter=3000,
+                       learning_rate='constant',
+                       eta0=0.0001,
+                       random_state=42)
+modelo.fit(XTreino, yTreino)
+previsoes = modelo.predict(XTeste)
+\end{lstlisting}
+\fonte{Elaborado pelo autor.}
+
+Os valores \texttt{max\_iter=3000} e \texttt{eta0=0.0001} exibidos correspondem à configuração C3. Para as configurações C1 ($500$ épocas, $\eta = 0{,}01$) e C2 ($1.000$ épocas, $\eta = 0{,}001$), o modelo foi reinstanciado com os valores correspondentes da Tabela~\ref{tab:configuracoes}.
+
+\subsection{Perceptron Multicamadas --- Implementação Própria (NumPy)}
+\label{sec:mlp_numpy}
+
+O Perceptron Multicamadas (MLP) implementado neste trabalho possui três camadas: uma camada de entrada, uma camada oculta com 10 neurônios e uma camada de saída com 1 neurônio. Conforme o Teorema da Aproximação Universal, uma rede \textit{feedforward} com uma única camada oculta contendo neurônios suficientes é capaz de aproximar qualquer função contínua com precisão arbitrária \cite{braga2007}, fundamentando teoricamente a arquitetura de uma camada oculta adotada. A classe \texttt{Multicamadas} encapsula os parâmetros e os quatro estágios do treinamento: inicialização, propagação direta, cálculo do erro e retropropagação.
+
+\subsubsection{Notação e Dimensões}
+
+Seja $n$ o número de características de entrada, $h = 10$ o número de neurônios ocultos, $s = 1$ o número de neurônios de saída e $m$ o número de exemplos de treinamento. Os parâmetros ajustáveis da rede são:
+
+\begin{itemize}
+    \item $\mathbf{W}^{(1)} \in \mathbb{R}^{n \times h}$: matriz de pesos da camada de entrada para a oculta;
+    \item $\mathbf{b}^{(1)} \in \mathbb{R}^{1 \times h}$: vetor de viés da camada oculta;
+    \item $\mathbf{W}^{(2)} \in \mathbb{R}^{h \times s}$: matriz de pesos da camada oculta para a saída;
+    \item $\mathbf{b}^{(2)} \in \mathbb{R}^{1 \times s}$: vetor de viés da camada de saída.
+\end{itemize}
+
+O número total de parâmetros ajustáveis de cada arquitetura é diretamente determinado por $n$. Para o Banco 1 ($n = 35$): o ADALINE possui $35 + 1 = 36$ parâmetros; o MLP possui $35 \cdot 10 + 10 + 10 \cdot 1 + 1 = 371$ parâmetros, razão de $371/36 \approx 10{,}3$ vezes mais parâmetros. Para o Banco 2 ($n = 14$): o ADALINE possui $14 + 1 = 15$ parâmetros e o MLP possui $14 \cdot 10 + 10 + 10 + 1 = 161$ parâmetros, razão de $161/15 \approx 10{,}7$ vezes. Essa assimetria na quantidade de parâmetros é relevante para interpretar as diferenças de desempenho entre os modelos.
+
+\subsubsection{Inicialização de Xavier (\textit{Glorot Uniform})}
+
+Os pesos das duas camadas foram inicializados pelo método de Xavier (\textit{Glorot uniform initialization}), proposto originalmente por \citeonline{glorot2010}, conforme também descrito em \cite{silva2016,dsa2022}, projetado para manter a variância dos sinais propagados aproximadamente constante entre camadas durante as primeiras épocas de treinamento. Essa estratégia evita tanto o desaparecimento (\textit{vanishing}) quanto a explosão (\textit{exploding}) dos gradientes, problemas que emergem quando os pesos são inicializados com valores muito pequenos ou muito grandes, respectivamente. Para uma camada que conecta $n_{\text{ent}}$ entradas a $n_{\text{saí}}$ saídas, os pesos são amostrados da distribuição uniforme simétrica:
+
+\begin{equation}
+w_{ij} \sim \mathcal{U}\!\left(-\sqrt{\frac{6}{n_{\text{ent}} + n_{\text{saí}}}},\; +\sqrt{\frac{6}{n_{\text{ent}} + n_{\text{saí}}}}\right)
+\label{eq:xavier}
+\end{equation}
+
+Os vieses de ambas as camadas foram inicializados com vetores nulos. No código, o método \texttt{inicializarParametros} calcula os limites para cada camada e amostra os pesos com a semente fixada:
+
+\begin{lstlisting}[caption={Inicialização de Xavier para as camadas do MLP NumPy.}, label={lst:mlp_xavier}]
+geradorAleatorio = np.random.RandomState(self.estagioAleatorio)
+# Camada oculta
+limiteOculta = np.sqrt(6 / (self.nEntrada + self.nOculta))
+pesosOculta = geradorAleatorio.uniform(
+                  -limiteOculta, limiteOculta,
+                  (self.nEntrada, self.nOculta))
+biasOculta = np.zeros((1, self.nOculta))
+# Camada de saida
+limiteSaida = np.sqrt(6 / (self.nOculta + self.nSaida))
+pesosSaida = geradorAleatorio.uniform(
+                 -limiteSaida, limiteSaida,
+                 (self.nOculta, self.nSaida))
+biasSaida = np.zeros((1, self.nSaida))
+\end{lstlisting}
+\fonte{Elaborado pelo autor.}
+
+\subsubsection{Propagação Direta (\textit{Forward Pass})}
+
+Na camada oculta, calcula-se a entrada líquida $\mathbf{Z}^{(1)} \in \mathbb{R}^{m \times h}$ pela combinação linear e aplica-se a ativação ReLU:
+
+\begin{equation}
+\mathbf{Z}^{(1)} = \mathbf{X} \mathbf{W}^{(1)} + \mathbf{b}^{(1)}, \qquad \mathbf{A}^{(1)} = \text{ReLU}\!\left(\mathbf{Z}^{(1)}\right) = \max\!\left(\mathbf{0},\, \mathbf{Z}^{(1)}\right)
+\label{eq:mlp_oculta}
+\end{equation}
+
+A função ReLU (\textit{Rectified Linear Unit}) foi adotada na camada oculta por apresentar gradiente constante igual a 1 para entradas positivas, mitigando o problema do desaparecimento de gradientes que afeta a sigmoide nas camadas intermediárias \cite{dsa2022}. Para entradas negativas, a ReLU retorna zero, introduzindo esparsidade nas ativações ocultas e reduzindo o custo computacional de cada passo de atualização.
+
+Na camada de saída, aplica-se a função sigmoide para obter a probabilidade predita $\hat{\mathbf{Y}} \in \mathbb{R}^{m \times 1}$:
+
+\begin{equation}
+\mathbf{Z}^{(2)} = \mathbf{A}^{(1)} \mathbf{W}^{(2)} + \mathbf{b}^{(2)}, \qquad \hat{\mathbf{Y}} = \sigma\!\left(\mathbf{Z}^{(2)}\right)
+\label{eq:mlp_saida}
+\end{equation}
+
+No código, a propagação direta é implementada nas linhas iniciais do laço de treinamento:
+
+\begin{lstlisting}[caption={Propagação direta do MLP NumPy.}, label={lst:mlp_forward}]
+# Camada oculta: ReLU
+entradaOculta  = np.dot(X, self.pesosOculta) + self.biasOculta
+ativacaoOculta = np.maximum(0, entradaOculta)
+# Camada de saida: sigmoide
+entradaSaida  = np.dot(ativacaoOculta, self.pesosSaida) + self.biasSaida
+ativacaoSaida = 1.0 / (1.0 + np.exp(
+                        -np.clip(entradaSaida, -250, 250)))
+\end{lstlisting}
+\fonte{Elaborado pelo autor.}
+
+\subsubsection{Função de Custo}
+
+O erro vetorial é $\mathbf{E} = \hat{\mathbf{Y}} - \mathbf{Y}$ (predição menos alvo, sinal oposto à convenção $e_k = t_k - o_k$ do Capítulo~\ref{cap:fundamentacao}, compensado nas equações de atualização abaixo) e a função de custo adotada é o MSE sobre os $m$ exemplos:
+
+\begin{equation}
+J = \frac{1}{m} \sum_{i=1}^{m} E_i^2
+\label{eq:mlp_custo}
+\end{equation}
+
+\subsubsection{Retropropagação do Erro (\textit{Backpropagation})}
+
+O algoritmo de retropropagação calcula os gradientes da função de custo em relação a cada parâmetro, propagando o erro da camada de saída em direção à camada de entrada por meio da regra da cadeia (\textit{chain rule}) \cite{braga2007,silva2016}.
+
+O delta de saída $\boldsymbol{\Delta}^{(2)} \in \mathbb{R}^{m \times 1}$ incorpora a derivada da sigmoide $\sigma'(\hat{y}) = \hat{y}(1 - \hat{y})$:
+
+\begin{equation}
+\boldsymbol{\Delta}^{(2)} = \mathbf{E} \odot \hat{\mathbf{Y}} \odot \left(\mathbf{1} - \hat{\mathbf{Y}}\right)
+\label{eq:mlp_delta2}
+\end{equation}
+
+O delta oculto $\boldsymbol{\Delta}^{(1)} \in \mathbb{R}^{m \times h}$ é obtido retropropagando $\boldsymbol{\Delta}^{(2)}$ pelos pesos da camada de saída e multiplicando pela derivada da ReLU, que é a função indicadora $\mathbb{1}[z > 0]$:
+
+\begin{equation}
+\boldsymbol{\Delta}^{(1)} = \left(\boldsymbol{\Delta}^{(2)} \left(\mathbf{W}^{(2)}\right)^T\right) \odot \mathbb{1}\!\left[\mathbf{Z}^{(1)} > 0\right]
+\label{eq:mlp_delta1}
+\end{equation}
+
+As atualizações dos parâmetros de cada camada seguem a regra do gradiente descendente:
+
+\begin{align}
+\mathbf{W}^{(2)} &\leftarrow \mathbf{W}^{(2)} - \eta \left(\mathbf{A}^{(1)}\right)^T \boldsymbol{\Delta}^{(2)} \label{eq:mlp_upd_w2} \\
+\mathbf{b}^{(2)} &\leftarrow \mathbf{b}^{(2)} - \eta \sum_{i=1}^{m} \boldsymbol{\Delta}^{(2)}_i \label{eq:mlp_upd_b2} \\
+\mathbf{W}^{(1)} &\leftarrow \mathbf{W}^{(1)} - \eta \mathbf{X}^T \boldsymbol{\Delta}^{(1)} \label{eq:mlp_upd_w1} \\
+\mathbf{b}^{(1)} &\leftarrow \mathbf{b}^{(1)} - \eta \sum_{i=1}^{m} \boldsymbol{\Delta}^{(1)}_i \label{eq:mlp_upd_b1}
+\end{align}
+
+No código, os deltas e as atualizações são calculados sequencialmente após a propagação direta:
+
+\begin{lstlisting}[caption={Retropropagação e atualização de parâmetros no MLP NumPy.}, label={lst:mlp_backprop}]
+# Deltas
+dSaida = erroVetor * ativacaoSaida * (1 - ativacaoSaida)
+dOculta = np.dot(dSaida, self.pesosSaida.T) * (entradaOculta > 0)
+# Atualizacao dos pesos e bias
+self.pesosSaida  -= self.taxaAprendizado * np.dot(ativacaoOculta.T,
+                                                   dSaida)
+self.biasSaida   -= self.taxaAprendizado * np.sum(dSaida,
+                                                   axis=0, keepdims=True)
+self.pesosOculta -= self.taxaAprendizado * np.dot(X.T, dOculta)
+self.biasOculta  -= self.taxaAprendizado * np.sum(dOculta,
+                                                   axis=0, keepdims=True)
+\end{lstlisting}
+\fonte{Elaborado pelo autor.}
+
+A expressão \texttt{(entradaOculta > 0)} retorna 1 onde a entrada líquida da camada oculta foi positiva, onde a ReLU propagou o sinal, e 0 onde foi negativa, implementando precisamente a função indicadora $\mathbb{1}[z > 0]$ da Equação~\eqref{eq:mlp_delta1}.
+
+\subsection{Perceptron Multicamadas --- Implementação com Biblioteca (scikit-learn)}
+\label{sec:mlp_sklearn}
+
+Esta seção descreve a versão do Perceptron Multicamadas construída com recursos da biblioteca scikit-learn, equivalente arquitetural da implementação NumPy apresentada na Seção~\ref{sec:mlp_numpy}. Manteve-se a mesma topologia de rede, uma camada oculta com 10 neurônios, ativação ReLU e saída logística, de modo que as diferenças de desempenho entre as duas versões decorrem exclusivamente das escolhas de otimizador e função de custo, e não da arquitetura. O estimador adotado é o \texttt{MLPClassifier} do scikit-learn, cujos detalhes de configuração e algoritmo de otimização são apresentados a seguir.
+
+\subsubsection{O Estimador \texttt{MLPClassifier}}
+
+{\sloppy
+A versão com biblioteca do MLP utilizou o estimador \texttt{MLPClassifier} do scikit-learn \cite{pedregosa2011}, com a mesma topologia da implementação NumPy: 10 neurônios na camada oculta, ativação ReLU e saída logística. O solucionador adotado foi o gradiente descendente estocástico com momento (\texttt{solver='sgd'}), com taxa de aprendizado constante (\texttt{learning\_rate='constant'}) e semente aleatória fixa (\texttt{random\_state=42}). O \texttt{MLPClassifier} abstrai internamente o processo de retropropagação e a atualização de pesos, como exibido a seguir:
+\par}
+
+\begin{lstlisting}[caption={Instanciação e treinamento do MLP com biblioteca (MLPClassifier).}, label={lst:mlp_sklearn}]
+from sklearn.neural_network import MLPClassifier
+modelo = MLPClassifier(hidden_layer_sizes=(10,),
+                       activation='relu',
+                       solver='sgd',
+                       learning_rate='constant',
+                       learning_rate_init=0.0001,
+                       random_state=42,
+                       max_iter=3000)
+modelo.fit(XTreino, yTreino)
+previsoes = modelo.predict(XTeste)
+\end{lstlisting}
+\fonte{Elaborado pelo autor.}
+
+{\sloppy Os valores \texttt{max\_iter=3000} e \texttt{learning\_rate\_init=0,0001} exibidos correspondem à configuração C3. Para as configurações C1 ($500$ épocas, $\eta = 0{,}01$) e C2 ($1.000$ épocas, $\eta = 0{,}001$), o modelo foi reinstanciado com os valores correspondentes da Tabela~\ref{tab:configuracoes}.\par}
+
+\subsubsection{O Algoritmo de Otimização: SGD com Momento}
+
+O solucionador \texttt{'sgd'} implementa o gradiente descendente estocástico com momento (\textit{Stochastic Gradient Descent with Momentum}), configurado com taxa de aprendizado constante (\texttt{learning\_rate='constant'}) e coeficiente de momento $\beta = 0{,}9$ (valor padrão do scikit-learn). Diferentemente do gradiente descendente em lote da implementação NumPy, que calcula o gradiente sobre todos os $m$ exemplos de treinamento a cada época, o \texttt{MLPClassifier} processa os dados em mini-lotes de tamanho $B = \min(200,\, m_{\text{treino}})$. Para o Banco~1, com $m_{\text{treino}} \approx 514$, o tamanho do mini-lote é $B = 200$, resultando em aproximadamente 3 atualizações de pesos por época; para o Banco~2, com $m_{\text{treino}} \approx 167 < 200$, o conjunto completo de treinamento forma um único lote, de modo que cada época equivale a uma única atualização em termos de passagens pelos dados, diferença que, no entanto, não elimina o efeito do momento acumulado ($\beta = 0{,}9$), que continua distinguindo o otimizador do MLP Sklearn do gradiente descendente em lote sem momento do MLP NumPy.
+
+O momento acumula uma velocidade $\mathbf{v}_t$ que combina o gradiente do mini-lote $\mathbf{g}_t$ com a direção de atualização da iteração anterior, na forma do método de bola pesada (\textit{heavy ball}):
+
+\begin{equation}
+\mathbf{v}_t = \beta \, \mathbf{v}_{t-1} + \eta \, \mathbf{g}_t
+\label{eq:sgd_momentum_v}
+\end{equation}
+
+\begin{equation}
+\boldsymbol{\theta}_t \leftarrow \boldsymbol{\theta}_{t-1} - \mathbf{v}_t
+\label{eq:sgd_momentum_update}
+\end{equation}
+
+onde $\mathbf{g}_t = \nabla_{\boldsymbol{\theta}} J_B(\boldsymbol{\theta}_{t-1})$ é o gradiente calculado sobre o mini-lote $B$ na iteração $t$, $\eta$ é a taxa de aprendizado constante e $\mathbf{v}_0 = \mathbf{0}$. O momento suaviza oscilações e acelera a convergência em direções com gradientes consistentes, mas pode amplificar o \textit{overfitting} em conjuntos pequenos ao continuar impulsionando os parâmetros mesmo após o gradiente se tornar reduzido \cite{silva2016}. As principais diferenças em relação à implementação NumPy são o otimizador (lote sem momento vs.\ SGD com momento $\beta = 0{,}9$) e a função de custo (MSE vs.\ entropia cruzada), aspectos que influenciam a velocidade de convergência e limitam comparações diretas entre ambas as versões.
+
+\section{Configuração de Hiperparâmetros}
+\label{sec:hiperparametros}
+
+Os hiperparâmetros dos modelos foram organizados em dois grupos: parâmetros fixos, mantidos constantes em todos os experimentos, e configurações de treinamento, que variam sistematicamente para permitir a análise da influência do número de épocas e da taxa de aprendizado no desempenho de cada arquitetura.
+
+\subsection{Parâmetros Fixos}
+
+Os parâmetros que definem a arquitetura e garantem a reprodutibilidade dos experimentos foram mantidos idênticos em todas as execuções e para todos os modelos. A Tabela~\ref{tab:hiperparametros_fixos} apresenta esses valores.
+
+\begin{table}[H]
+\centering
+\caption{Parâmetros fixos dos modelos implementados.}
+\label{tab:hiperparametros_fixos}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Parâmetro} & \textbf{ADALINE NumPy} & \textbf{ADALINE Sklearn} & \textbf{MLP NumPy} & \textbf{MLP Sklearn} \\
+\hline
+Neurônios na camada oculta   & ---                               & ---                  & 10      & 10 \\
+Semente aleatória             & 42                                & 42                   & 42      & 42 \\
+Inicialização dos pesos       & $\mathcal{N}(\mu{=}0,\,\sigma{=}0{,}01)$ & Automático (sklearn) & Xavier  & Glorot (sklearn) \\
+Função de perda               & MSE                               & Entropia cruzada     & MSE     & Entropia cruzada \\
+Limiar de classificação       & 0,5                               & 0,5                  & 0,5     & 0,5 \\
+\hline
+\end{tabular}}
+\fonte{Elaborado pelo autor.}
+\end{table}
+
+A semente aleatória $42$ foi mantida uniforme entre todos os modelos para garantir que quaisquer diferenças de desempenho observadas sejam atribuíveis às escolhas arquiteturais e não à variabilidade da inicialização. O número de neurônios ocultos foi fixado em 10 para ambas as versões do MLP, mantendo a equivalência arquitetural entre implementação própria e com biblioteca.
+
+\subsection{Configurações de Treinamento}
+
+O número de épocas e a taxa de aprendizado foram variados conjuntamente, definindo três \textbf{configurações de treinamento} denominadas C1, C2 e C3, aplicadas a todos os modelos e aos dois bancos de dados. Essa variação sistemática permite analisar o comportamento de convergência de cada arquitetura sob diferentes regimes de aprendizado: taxas elevadas com poucas épocas (aprendizado agressivo) versus taxas reduzidas com mais épocas (aprendizado conservador). A Tabela~\ref{tab:configuracoes} apresenta os valores adotados.
+
+\begin{table}[H]
+\centering
+\caption{Configurações de treinamento avaliadas nos experimentos.}
+\label{tab:configuracoes}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Configuração} & \textbf{Épocas} & \textbf{Taxa de aprendizado ($\eta$)} \\
+\hline
+C1 & 500   & 0,01   \\
+C2 & 1.000 & 0,001  \\
+C3 & 3.000 & 0,0001 \\
+\hline
+\end{tabular}
+\fonte{Elaborado pelo autor.}
+\end{table}
+
+A configuração C1 (500 épocas, $\eta = 0{,}01$) representa um regime de aprendizado rápido: a taxa elevada permite atualizações de pesos mais agressivas, potencialmente atingindo regiões razoáveis do espaço de parâmetros com menor custo computacional, mas com risco de oscilações na convergência e de ultrapassar o mínimo da função de custo. A configuração C2 (1.000 épocas, $\eta = 0{,}001$) adota uma taxa intermediária, equilibrando velocidade e estabilidade de convergência. A configuração C3 (3.000 épocas, $\eta = 0{,}0001$) representa o regime mais conservador: a taxa reduzida produz atualizações mais suaves e trajetória de convergência mais estável, ao custo de um maior número de épocas para atingir o mesmo nível de ajuste \cite{silva2016,braga2007}.
+
+A variação conjunta de épocas e taxa de aprendizado, em vez de variar cada parâmetro independentemente, foi motivada pela relação inversa entre esses dois hiperparâmetros: taxas menores requerem mais iterações para convergir ao mesmo ponto, de modo que combiná-los em configurações coerentes reproduz cenários de treinamento representativos e comparáveis entre si. Os resultados obtidos com cada configuração, em cada modelo e em cada banco de dados, são apresentados e analisados no Capítulo~\ref{cap:resultados}.
+
+\section{Ferramentas e Ambiente de Desenvolvimento}
+
+Todos os modelos foram implementados na linguagem \textbf{Python 3}, escolhida por seu extenso ecossistema de bibliotecas científicas e por ser a linguagem predominante em pesquisa de aprendizado de máquina. As principais bibliotecas utilizadas foram:
+
+\begin{itemize}
+    \item \textbf{NumPy}: computação numérica e álgebra linear, utilizada na implementação manual dos modelos;
+    \item \textbf{Pandas}: manipulação e pré-processamento dos conjuntos de dados em formato tabular;
+    \item \textbf{Scikit-learn}: modelos com biblioteca (\texttt{SGDClassifier} e \texttt{MLPClassifier}), divisão (\texttt{train\_test\_split}) e métricas (\texttt{accuracy\_score});
+    \item \textbf{Matplotlib} e \textbf{Seaborn}: geração de gráficos de curvas de aprendizado e matrizes de confusão.
+\end{itemize}
+
+{\sloppy
+A organização do código seguiu o padrão orientado a objetos, com uma classe dedicada a cada modelo: \texttt{AdalineLogistica} e \texttt{AdalineLogisticaBibliotecas} para as versões do ADALINE, e \texttt{Multicamadas} e \texttt{MulticamadasBibliotecas} para as versões do MLP. Classes \texttt{Executor} são responsáveis por orquestrar o pipeline completo de carregamento de dados, divisão, treinamento, avaliação e visualização dos resultados. Um módulo central (\texttt{main.py}) coordena a execução dos quatro modelos sobre os dois bancos de dados, permitindo comparação sistemática e reprodutível dos experimentos.
+\par}

@@ -1,0 +1,144 @@
+\chapter{Trabalhos Relacionados}
+\label{cap:trabalhos}
+
+A incorpora\c c\~ao de t\'ecnicas de aprendizado de m\'aquina \`a pr\'atica cl\'inica cardiovascular tem se intensificado de maneira significativa nos \'ultimos anos, gerando um conjunto crescente de pesquisas que exploram desde algoritmos lineares simples at\'e arquiteturas de redes neurais profundas para apoiar o diagn\'ostico, o progn\'ostico e a estratifica\c c\~ao de risco de doen\c cas card\'iacas \cite{mesquita2020}. Neste cen\'ario, torna-se fundamental posicionar o presente trabalho em rela\c c\~ao a estudos anteriores que abordaram problem\'aticas afins, de modo a evidenciar contribui\c c\~oes, lacunas e especificidades metodol\'ogicas que justificam a abordagem aqui proposta.
+
+A sele\c c\~ao dos trabalhos relacionados seguiu tr\^es crit\'erios principais: (a) uso de algoritmos de aprendizado de m\'aquina ou redes neurais artificiais aplicados a dados cl\'inicos cardiovasculares; (b) compara\c c\~ao entre dois ou mais modelos preditivos ou s\'intese de m\'ultiplos resultados da \'area; e (c) utiliza\c c\~ao de m\'etricas de desempenho pass\'iveis de cotejo com os resultados obtidos neste trabalho.
+
+Os tr\^es trabalhos selecionados s\~ao apresentados nas se\c c\~oes seguintes: \citeonline{mesquita2020} apresentam uma revis\~ao sobre conceitos, ferramentas e desafios da intelig\^encia artificial em cardiologia; \citeonline{santos2023} investiga o uso de aprendizado profundo para a classifica\c c\~ao de diagn\'osticos cardiovasculares a partir de sinais eletrocardiogr\'aficos; e \citeonline{ravani2024} prop\~oe uma compara\c c\~ao entre m\'ultiplos algoritmos de machine learning cl\'assico aplicados \`a predi\c c\~ao de doen\c cas card\'iacas. A an\'alise comparativa e as considera\c c\~oes finais encerram o cap\'itulo.
+
+% -------------------------------------------------------------------
+\section{Intelig\^encia Artificial em Cardiologia: Conceitos, Ferramentas e Desafios}
+% -------------------------------------------------------------------
+
+Esta se\c c\~ao apresenta a revis\~ao narrativa de \citeonline{mesquita2020}, publicada nos Arquivos Brasileiros de Cardiologia, que mapeia e contextualiza as principais aplica\c c\~oes de intelig\^encia artificial em cardiologia, discutindo conceitos fundamentais, ferramentas computacionais e os desafios para a implementa\c c\~ao cl\'inica efetiva dos modelos preditivos.
+
+\subsection{Conte\'udo e Abrang\^encia da Revis\~ao}
+
+A revis\~ao aborda as principais categorias de aplica\c c\~ao da IA em cardiologia, organizadas em dom\'inios cl\'inicos distintos. Entre os temas tratados destacam-se: (a) an\'alise autom\'atica de sinais eletrocardiogr\'aficos para detec\c c\~ao de arritmias e isquemia; (b) processamento de imagens ecocardiogr\'aficas e de resson\^ancia magn\'etica para avalia\c c\~ao de fun\c c\~ao ventricular; (c) estratifica\c c\~ao de risco e predi\c c\~ao de mortalidade a partir de vari\'aveis cl\'inicas e laboratoriais; e (d) identifica\c c\~ao de padr\~oes em grandes volumes de dados eletr\^onicos de sa\'ude.
+
+Os autores apresentam resultados expressivos reportados na literatura internacional para cada dom\'inio. Dentre os exemplos discutidos, destacam-se: um modelo para predi\c c\~ao de deteriora\c c\~ao ventricular em pacientes com Tetralogia de Fallot, que obteve AUC de $0{,}82 \pm 0{,}06$; um classificador de S\'indrome Coron\'ariana Aguda com precis\~ao de $99{,}19\%$; e um modelo de predi\c c\~ao de mortalidade em dez anos com sensibilidade de $87{,}4\%$ e especificidade de $97{,}2\%$ \cite{mesquita2020}. Estes resultados ilustram a amplitude de aplica\c c\~oes e os diferentes n\'iveis de desempenho alcan\c c\'aveis dependendo da tarefa, do tipo de dado e do tamanho do conjunto de treinamento.
+
+A revis\~ao tamb\'em descreve as principais categorias de algoritmos empregados, incluindo m\'etodos de aprendizado supervisionado (regress\~ao log\'istica, m\'aquinas de vetores de suporte, florestas aleat\'orias, redes neurais), n\~ao supervisionado (agrupamento, redu\c c\~ao de dimensionalidade) e por refor\c co. O trabalho enfatiza que a escolha do algoritmo deve ser guiada pelas caracter\'isticas do problema e dos dados, e n\~ao por uma prefer\^encia a priori por determinadas t\'ecnicas.
+
+\subsection{Implica\c c\~oes Pr\'aticas e Limita\c c\~oes Identificadas}
+
+Um dos aspectos centrais da revis\~ao \'e a distin\c c\~ao entre acur\'acia t\'ecnica e utilidade cl\'inica. Os autores argumentam que um modelo pode apresentar m\'etricas estat\'isticas elevadas em conjuntos de dados de valida\c c\~ao e, ainda assim, n\~ao agregar valor \`a tomada de decis\~ao cl\'inica, seja por falta de interpretabilidade, seja por n\~ao contemplar o contexto espec\'ifico do paciente ou da institui\c c\~ao de sa\'ude. Esta distin\c c\~ao \'e particularmente relevante para o presente trabalho, que adota o n\'umero de Falsos Negativos (FN) como crit\'erio cl\'inico complementar \`a acur\'acia global.
+
+Os principais desafios identificados por \citeonline{mesquita2020} para a implementa\c c\~ao cl\'inica da IA em cardiologia incluem:
+
+\begin{itemize}
+  \item \textbf{Interpretabilidade}: modelos de alta complexidade, como redes neurais profundas, funcionam como ``caixas-pretas'', dificultando a explica\c c\~ao das decis\~oes diagn\'osticas por parte do cl\'inico;
+  \item \textbf{Valida\c c\~ao externa}: a maioria dos modelos \'e desenvolvida e validada em conjuntos de dados espec\'ificos, sem testes de generaliza\c c\~ao em popula\c c\~oes diversas;
+  \item \textbf{Qualidade dos dados}: dados cl\'inicos frequentemente apresentam valores ausentes, inconsist\^encias e vi\'eses de sele\c c\~ao que impactam o desempenho dos modelos;
+  \item \textbf{Quest\~oes \'eticas e regulat\'orias}: a integra\c c\~ao de sistemas de IA \`a assist\^encia m\'edica levanta quest\~oes sobre responsabilidade, privacidade de dados e a rela\c c\~ao m\'edico-paciente.
+\end{itemize}
+
+A revis\~ao tamb\'em aponta para a necessidade de estudos comparativos rigorosos entre modelos de IA e m\'etodos diagn\'osticos tradicionais j\'a validados, como escores de risco cl\'inico. Esta lacuna, identificada em 2020, \'e parcialmente abordada no presente trabalho, que compara sistematicamente duas arquiteturas de redes neurais com diferentes n\'iveis de complexidade.
+
+\subsection{Rela\c c\~ao com o Presente Trabalho}
+
+O trabalho de \citeonline{mesquita2020} fornece o enquadramento contextual mais amplo em que o presente estudo se insere. A revis\~ao confirma que a predi\c c\~ao de condi\c c\~oes cardiovasculares a partir de dados cl\'inicos tabulares \'e uma das aplica\c c\~oes mais recorrentes na literatura de IA em cardiologia, validando a escolha metodol\'ogica deste trabalho. Al\'em disso, os desafios identificados, interpretabilidade, valida\c c\~ao em popula\c c\~oes diversas e tamanho de conjunto de dados, s\~ao precisamente as limita\c c\~oes que o presente trabalho reconhece e discute na conclus\~ao.
+
+Do ponto de vista das m\'etricas, os resultados reportados na revis\~ao, AUC entre $0{,}82$ e $0{,}99$ para diferentes aplica\c c\~oes, contextualizam os resultados do presente trabalho (acur\'acia de at\'e $88{,}04\%$ no Banco~1 e $78{,}89\%$ no Banco~2), que se posicionam dentro de um intervalo coerente com a literatura para o tipo de dado e tamanho amostral utilizados, ainda que a m\'etrica predominante nas revis\~oes da \'area (AUC) difira da acur\'acia global adotada neste trabalho.
+
+O trabalho de \citeonline{mesquita2020} tamb\'em justifica a relev\^ancia da pergunta de pesquisa do presente estudo ao demonstrar que a compara\c c\~ao entre abordagens de diferentes complexidades permanece uma necessidade investigativa importante para o avan\c co do campo de IA em cardiologia.
+
+
+% -------------------------------------------------------------------
+\section{Aprendizado Profundo para Diagn\'ostico de Doen\c cas Cardiovasculares}
+% -------------------------------------------------------------------
+
+Esta se\c c\~ao apresenta o trabalho de \citeonline{santos2023}, desenvolvido como Trabalho de Conclus\~ao de Curso na Universidade Federal do Cear\'a, que comparou duas arquiteturas de aprendizado profundo, LSTM e Transformer, aplicadas \`a classifica\c c\~ao de diagn\'osticos cardiovasculares a partir de sinais eletrocardiogr\'aficos, constituindo um contraponto metodol\'ogico relevante ao presente estudo por abordar dados de natureza sequencial em vez de tabulares.
+
+\subsection{Metodologia e Conjunto de Dados}
+
+O estudo utilizou um conjunto de dados de sinais eletrocardiogr\'aficos para a classifica\c c\~ao multiclasse de diagn\'osticos cardiovasculares. A entrada para os modelos consiste em s\'eries temporais de sinais el\'etricos card\'iacos, o que contrasta diretamente com a abordagem do presente trabalho, que utiliza vari\'aveis cl\'inicas tabulares estruturadas, convertidas em 35 vari\'aveis bin\'arias ap\'os pr\'e-processamento.
+
+Foram implementadas e comparadas duas arquiteturas distintas de aprendizado profundo:
+
+\begin{enumerate}
+  \item \textbf{LSTM (\textit{Long Short-Term Memory})}: Rede neural recorrente especializada em capturar depend\^encias temporais de longo prazo em sequ\^encias de dados. O mecanismo de portas de esquecimento, entrada e sa\'ida permite que a rede selecione quais informa\c c\~oes do contexto hist\'orico s\~ao relevantes para a classifica\c c\~ao, sendo amplamente utilizada em aplica\c c\~oes de processamento de s\'eries temporais biom\'edicas;
+  \item \textbf{Transformer}: Arquitetura baseada no mecanismo de auto-aten\c c\~ao (\textit{self-attention}), originalmente proposta para processamento de linguagem natural e, mais recentemente, aplicada a dados biom\'edicos sequenciais. Diferentemente da LSTM, o Transformer n\~ao processa a sequ\^encia de forma recorrente, mas sim em paralelo, pesando a relev\^ancia de cada posi\c c\~ao da sequ\^encia em rela\c c\~ao \`as demais.
+\end{enumerate}
+
+Os modelos foram avaliados por meio das m\'etricas de precis\~ao, revoca\c c\~ao e \textit{F1-score} para cada classe diagn\'ostica, permitindo uma an\'alise detalhada do comportamento diferenciado de cada arquitetura em fun\c c\~ao da categoria cardiovascular avaliada.
+
+\subsection{Resultados}
+
+Os experimentos revelaram que a rede LSTM apresentou valores de precis\~ao entre aproximadamente $70\%$ e $84\%$ dependendo da classe cardiovascular avaliada, demonstrando capacidade razo\'avel para a tarefa de classifica\c c\~ao de diagn\'osticos a partir de sinais de ECG. O modelo Transformer, por sua vez, apresentou desempenho inferior ao da LSTM neste contexto, com valores de revoca\c c\~ao mais baixos, sugerindo que a arquitetura recorrente \'e mais adequada do que a aten\c c\~ao posicional para a modelagem de sinais cardíacos de curta dura\c c\~ao \cite{santos2023}.
+
+Este resultado \'e relevante para o campo, pois os Transformers t\^em dominado benchmarks em tarefas de processamento de linguagem natural e imagem, mas seu desempenho para s\'eries temporais biom\'edicas curtas pode ser inferior ao das redes recorrentes especializadas. O autor concluiu que a LSTM \'e mais adequada do que o Transformer para a classifica\c c\~ao de diagn\'osticos cardiovasculares com o conjunto de dados utilizado \cite{santos2023}.
+
+\subsection{Rela\c c\~ao com o Presente Trabalho}
+
+O trabalho de \citeonline{santos2023} estabelece um contraponto metodol\'ogico relevante com o presente estudo. Enquanto Santos utiliza sinais de ECG como entrada, dados de natureza sequencial e de alta dimensionalidade, o presente trabalho emprega vari\'aveis cl\'inicas tabulares binarizadas, de natureza est\'atica e de menor dimensionalidade relativa.
+
+Esta distin\c c\~ao fundamenta uma das diferen\c cas centrais entre os dois trabalhos: quando a entrada consiste em sinais temporais complexos, arquiteturas de aprendizado profundo como a LSTM t\^em vantagem natural, pois foram projetadas especificamente para capturar padr\~oes em sequ\^encias. No entanto, quando os dados de entrada s\~ao de natureza tabular cl\'inica estruturada, como no presente estudo com os Bancos 1 e 2, a complexidade adicional do MLP n\~ao se traduz necessariamente em ganho de desempenho, fen\^omeno atribu\'ivel principalmente ao volume limitado de dados e \`a natureza predominantemente linear dos problemas em estudo, conforme discutido no Cap\'itulo~\ref{cap:resultados}.
+
+Adicionalmente, ambos os trabalhos comparam explicitamente duas arquiteturas de rede neural em domínios distintos, LSTM vs.\ Transformer para ECG em Santos; ADALINE vs.\ MLP para dados tabulares no presente estudo. Em ambos os casos, a análise comparativa evidencia qual arquitetura é mais adequada para o tipo específico de dado, sem afirmar superioridade universal de um modelo.
+
+
+% -------------------------------------------------------------------
+\section{Compara\c c\~ao de Algoritmos de Machine Learning para Predi\c c\~ao de Doen\c cas Card\'iacas}
+% -------------------------------------------------------------------
+
+Esta se\c c\~ao apresenta o trabalho de \citeonline{ravani2024}, desenvolvido como Trabalho de Conclus\~ao de Curso no Instituto Federal do Esp\'irito Santo, que comparou sistematicamente m\'ultiplos algoritmos de machine learning cl\'assico para a predi\c c\~ao de doen\c cas card\'iacas, sendo o trabalho relacionado com maior proximidade tem\'atica e metodol\'ogica ao presente estudo.
+
+\subsection{Metodologia}
+
+O trabalho de \citeonline{ravani2024} emprega um conjunto de dados de doen\c cas card\'iacas e aplica m\'ultiplos algoritmos de machine learning cl\'assico, avaliando e comparando sistematicamente o desempenho de cada modelo. A metodologia inclui etapas de pr\'e-processamento dos dados, divis\~ao em conjuntos de treino e teste, treinamento dos modelos e avalia\c c\~ao por meio da acur\'acia como m\'etrica central. O estudo busca identificar o modelo com melhor desempenho preditivo para o problema de classifica\c c\~ao bin\'aria de doen\c cas card\'iacas, o que constitui exatamente o mesmo objetivo central deste trabalho.
+
+Dentre os algoritmos comparados, o K-Vizinhos Mais Pr\'oximos (KNN) se destacou como o modelo de melhor desempenho, obtendo $89\%$ de acur\'acia na classifica\c c\~ao de doen\c cas card\'iacas \cite{ravani2024}. O algoritmo KNN \'e um m\'etodo de aprendizado baseado em inst\^ancia, que classifica um novo exemplo pela maioria dos $k$ vizinhos mais pr\'oximos no espa\c co de atributos, sem constru\c c\~ao expl\'icita de um modelo preditivo durante o treinamento. Sua simplicidade conceitual e facilidade de implementa\c c\~ao o tornam uma escolha comum em estudos comparativos iniciais \cite{silva2016}.
+
+\subsection{Resultados}
+
+O resultado mais expressivo obtido por \citeonline{ravani2024} foi a acur\'acia de $89\%$ do algoritmo KNN. Este valor \'e particularmente relevante como patamar de compara\c c\~ao para o presente estudo, pois \'e obtido em um problema de classifica\c c\~ao bin\'aria de doen\c cas card\'iacas com metodologia similar \`a adotada neste trabalho. Cabe ressaltar, contudo, que o trabalho n\~ao especifica o conjunto de dados utilizado nem a propor\c c\~ao da divis\~ao treino/teste, o que impede uma compara\c c\~ao direta e rigorosa com os resultados do presente estudo; as diferen\c cas observadas podem decorrer dessas varia\c c\~oes metodol\'ogicas tanto quanto do algoritmo em si. Toda compara\c c\~ao entre os dois trabalhos deve, portanto, ser lida como indicativa, n\~ao conclusiva.
+
+\subsection{Rela\c c\~ao com o Presente Trabalho}
+
+A compara\c c\~ao entre os resultados de \citeonline{ravani2024} e o presente estudo \'e particularmente elucidativa. O melhor modelo do presente trabalho no Banco 1 foi o MLP Sklearn na configura\c c\~ao C2, com $88{,}04\%$ de acur\'acia. O ADALINE Sklearn atingiu $86{,}23\%$ na configura\c c\~ao C2. Ambos os valores s\~ao vis\'ivelmente pr\'oximos do KNN reportado por \citeonline{ravani2024} ($89\%$), com diferen\c cas de no m\'aximo 2 a 3 pontos percentuais entre os melhores resultados dos dois trabalhos.
+
+Esta proximidade \'e significativa: ela demonstra que redes neurais simples, tanto o ADALINE quanto o MLP, s\~ao competitivas com algoritmos cl\'assicos como o KNN para o mesmo tipo de problema. A diferen\c ca residual de acur\'acia entre os trabalhos \'e plaus\'ivelmente explicada por varia\c c\~oes nas estrat\'egias de pr\'e-processamento (binariza\c c\~ao versus codifica\c c\~ao alternativa das vari\'aveis), nas propor\c c\~oes de divis\~ao treino/teste e na aus\^encia de busca sistem\'atica de hiperpar\^ametros em ambos os trabalhos.
+
+Do ponto de vista metodológico, a diferença central é a classe de modelos: \citeonline{ravani2024} analisa algoritmos clássicos de ML (incluindo KNN), enquanto o presente estudo compara especificamente ADALINE e MLP. Analisados em conjunto, os dois trabalhos mostram que o espaço de soluções para predição de doenças cardíacas abrange múltiplos algoritmos no patamar de 86\% a 89\% de acurácia nas melhores configurações, KNN ($89\%$), ADALINE ($86{,}23\%$--$86{,}96\%$) e MLP ($87{,}68\%$--$88{,}04\%$ nas configurações favoráveis), corroborando a hipótese de que a complexidade do modelo não é o fator determinante quando os dados são adequadamente preparados.
+
+
+% -------------------------------------------------------------------
+\section{An\'alise Comparativa dos Trabalhos Relacionados}
+% -------------------------------------------------------------------
+
+A an\'alise conjunta dos tr\^es trabalhos relacionados apresentados nas se\c c\~oes anteriores permite identificar padr\~oes, contrastes e contribui\c c\~oes que contextualizam o presente estudo. A Tabela~\ref{tab:trabalhos_relacionados} resume as principais caracter\'isticas de cada trabalho comparativamente ao presente estudo.
+
+\begin{table}[H]
+\centering
+\caption{Comparativo dos trabalhos relacionados com o presente estudo.}
+\label{tab:trabalhos_relacionados}
+\begin{tabular}{|p{3.0cm}|p{2.3cm}|p{2.5cm}|p{2.0cm}|p{2.8cm}|}
+\hline
+\textbf{Trabalho} & \textbf{Abordagem} & \textbf{Dados de Entrada} & \textbf{Melhor Resultado} & \textbf{Contribui\c c\~ao Principal} \\
+\hline
+Mesquita et al.\ (2020) & Revis\~ao da literatura & --- & --- & Panorama da IA em cardiologia \\
+\hline
+Santos (2023) & LSTM vs.\ Transformer & Sinais de ECG & Acur\'acia $\leq$ 84\% (LSTM) & Aprendizado profundo para ECG \\
+\hline
+Ravani (2024) & ML cl\'assico comparativo & Vari\'aveis cl\'inicas & 89\% (KNN) & Compara\c c\~ao de algoritmos ML \\
+\hline
+\textbf{Presente trabalho} & \textbf{ADALINE vs.\ MLP} & \textbf{Vari\'aveis cl\'inicas bin\'arias} & \textbf{88,04\% (MLP Sklearn, C2)} & \textbf{Redes neurais, foco em FN cl\'inico} \\
+\hline
+\end{tabular}
+\fonte{Elaborado pelo autor.}
+\end{table}
+
+Os trabalhos analisados confirmam que: (a) modelos lineares e algoritmos cl\'assicos s\~ao competitivos com abordagens mais complexas para dados tabulares de tamanho moderado; (b) a natureza dos dados (tabular vs.\ sequencial) determina a arquitetura adequada, justificando as escolhas do presente estudo; (c) a acur\'acia isolada n\~ao captura a assimetria cl\'inica entre Falsos Negativos e Falsos Positivos \cite{mesquita2020}; e (d) a valida\c c\~ao externa permanece uma lacuna comum. As acur\'acias obtidas neste trabalho, entre $86{,}23\%$ e $88{,}04\%$ no Banco~1, s\~ao compat\'iveis com os resultados reportados na literatura para tipo e tamanho amostral equivalentes.
+
+
+% -------------------------------------------------------------------
+\section{Considera\c c\~oes do Cap\'itulo}
+% -------------------------------------------------------------------
+
+Este capítulo apresentou três trabalhos relacionados, representando diferentes abordagens, revisões narrativas e implementações comparativas, que fornecem o enquadramento necessário para posicionar o presente estudo.
+
+Os padrões identificados nos três estudos confirmam que a complexidade do modelo não é determinante para dados tabulares de tamanho moderado e que métricas clínicas como Falsos Negativos são essenciais em contexto biomédico. O presente trabalho contribui ao comparar especificamente ADALINE e MLP com foco em Falsos Negativos, aspecto ausente na maioria dos trabalhos revisados.
+
+O pr\'oximo cap\'itulo apresenta os procedimentos metodol\'ogicos adotados neste estudo, incluindo a descri\c c\~ao detalhada dos conjuntos de dados, as etapas de pr\'e-processamento, as arquiteturas dos modelos implementados e os protocolos de avalia\c c\~ao utilizados.

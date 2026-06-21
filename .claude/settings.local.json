@@ -1,0 +1,58 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.portal.cardiol.br)",
+      "WebFetch(domain:abccardiol.org)",
+      "Bash(python TransformacaoDados.py)",
+      "Bash(python -c \"import pandas as pd; df=pd.read_csv\\('Dados/DadosCompletos/BancoCompleto1.csv'\\); print\\('Shape:', df.shape\\); print\\('Colunas:', list\\(df.columns\\)\\)\")",
+      "Bash(python gerador_resultados.py)",
+      "Bash(echo '{\"model\":{\"display_name\":\"claude-sonnet-4-6\"},\"cwd\":\"C:\\\\\\\\Users\\\\\\\\Lucas\\\\\\\\Documents\\\\\\\\TCC\",\"context_window\":{\"used_percentage\":12.5,\"remaining_percentage\":87.5,\"total_input_tokens\":15000,\"total_output_tokens\":3200}}')",
+      "Bash(python \"C:\\\\Users\\\\Lucas\\\\.claude\\\\statusline-command.py\")",
+      "Bash(python *)",
+      "Bash(pdflatex --version)",
+      "Bash(pdflatex -interaction=nonstopmode modelo-de-tcc.tex)",
+      "Bash(bibtex modelo-de-tcc *)",
+      "PowerShell(cd \"C:\\\\Users\\\\Lucas\\\\Documents\\\\TCC - Previsao Insuficiencia Cardiaca\\\\TCC - Parte Escrita\\\\Modelo_de_dissertação___PROFMAT_UFVJM__1_\"; Get-Content \"modelo-de-tcc.log\" | Select-Object -Index \\(918..940\\))",
+      "PowerShell(cd \"C:\\\\Users\\\\Lucas\\\\Documents\\\\TCC - Previsao Insuficiencia Cardiaca\\\\TCC - Parte Escrita\\\\Modelo_de_dissertação___PROFMAT_UFVJM__1_\"; Get-Content \"modelo-de-tcc.log\" | Select-Object -Index \\(958..980\\))",
+      "PowerShell(cd \"C:\\\\Users\\\\Lucas\\\\Documents\\\\TCC - Previsao Insuficiencia Cardiaca\\\\TCC - Parte Escrita\\\\Modelo_de_dissertação___PROFMAT_UFVJM__1_\"; Get-Content \"modelo-de-tcc.log\" | Select-Object -Index \\(1175..1200\\))",
+      "WebSearch",
+      "WebFetch(domain:repositorio.ufc.br)",
+      "WebFetch(domain:sol.sbc.org.br)",
+      "WebFetch(domain:www.scielo.br)",
+      "WebFetch(domain:repositorio.unesp.br)",
+      "WebFetch(domain:pmc.ncbi.nlm.nih.gov)",
+      "WebFetch(domain:repositorio.ifes.edu.br)",
+      "Bash(grep *)",
+      "Bash(dir \"C:\\\\Users\\\\Lucas\\\\Documents\\\\TCC - Previsao Insuficiencia Cardiaca\")",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\Lucas\\\\Documents\\\\TCC - Previsao Insuficiencia Cardiaca\" -Recurse -Filter \"*.py\")",
+      "Bash(Select-Object FullName)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\Lucas\\\\Documents\\\\TCC - Previsao Insuficiencia Cardiaca\" -Recurse | Where-Object { $_.Extension -in \".csv\", \".xlsx\" } | Select-Object FullName)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\Lucas\\\\Documents\\\\TCC - Previsao Insuficiencia Cardiaca\\\\Doenca-Cardiaca-IA\" -Recurse | Where-Object { $_.Extension -eq \".py\" -and $_.FullName -notmatch \"\\\\.venv\" } | Select-Object FullName)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\Lucas\\\\Documents\\\\TCC - Previsao Insuficiencia Cardiaca\\\\Doenca-Cardiaca-IA\" -Depth 3 | Where-Object { !$_.PSIsContainer } | Select-Object FullName, Extension | Where-Object { $_.Extension -ne \"\" } | Sort-Object Extension)",
+      "PowerShell(dir \"C:\\\\Users\\\\Lucas\\\\Documents\\\\TCC - Previsao Insuficiencia Cardiaca\\\\TCC - Parte Escrita\\\\Modelo_de_dissertação___PROFMAT_UFVJM__1_\\\\figuras\" -Recurse | Where-Object { !$_.PSIsContainer } | Select-Object FullName)",
+      "PowerShell(& \"C:\\\\Users\\\\Lucas\\\\Documents\\\\TCC - Previsao Insuficiencia Cardiaca\\\\Doenca-Cardiaca-IA\\\\.venv\\\\Scripts\\\\python.exe\" --version)",
+      "Bash(pdflatex -interaction=nonstopmode \"modelo-de-tcc.tex\")",
+      "PowerShell(Get-ChildItem *)",
+      "Bash(Get-Content \"C:\\\\Users\\\\Lucas\\\\Documents\\\\TCC - Previsao Insuficiencia Cardiaca\\\\TCC - Parte Escrita\\\\Modelo_de_dissertação___PROFMAT_UFVJM__1_\\\\modelo-de-tcc.aux\")",
+      "Bash(Select-String \"lastpage|LastPage|totalpages|setcounter\\\\{page\")",
+      "Bash(Select-Object -Last 20)"
+    ],
+    "defaultMode": "bypassPermissions"
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$json = [Console]::In.ReadToEnd() | ConvertFrom-Json; $fp = $json.tool_input.file_path; if ($fp -match '\\.tex$') { Push-Location 'C:\\Users\\Lucas\\Documents\\TCC - Previsao Insuficiencia Cardiaca\\TCC - Parte Escrita\\Modelo_de_dissertação___PROFMAT_UFVJM__1_'; pdflatex -interaction=nonstopmode modelo-de-tcc.tex | Out-Null; Pop-Location }",
+            "shell": "powershell",
+            "timeout": 60,
+            "statusMessage": "Compilando PDF..."
+          }
+        ]
+      }
+    ]
+  }
+}

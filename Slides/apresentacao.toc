@@ -1,0 +1,10 @@
+\babel@toc {brazil}{}\relax 
+\beamer@sectionintoc {1}{Contextualização}{2}{0}{1}
+\beamer@sectionintoc {2}{Objetivo}{3}{0}{2}
+\beamer@sectionintoc {3}{Dados e Métodos}{4}{0}{3}
+\beamer@sectionintoc {4}{Modelos}{6}{0}{4}
+\beamer@sectionintoc {5}{Experimentos}{8}{0}{5}
+\beamer@sectionintoc {6}{Resultados}{9}{0}{6}
+\beamer@sectionintoc {7}{Análise Complementar}{13}{0}{7}
+\beamer@sectionintoc {8}{Conclusão}{15}{0}{8}
+\beamer@sectionintoc {9}{Referências}{16}{0}{9}

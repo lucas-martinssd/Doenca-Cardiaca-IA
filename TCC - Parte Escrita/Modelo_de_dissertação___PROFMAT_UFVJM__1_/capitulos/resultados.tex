@@ -89,7 +89,7 @@ O MLP NumPy obteve os melhores resultados clínicos do Banco 1: 27 FNs em C1, re
 
 O MLP Sklearn demonstrou o comportamento mais problemático clinicamente: embora tenha iniciado com bons resultados em C1 (18 FNs), degradou-se progressivamente para 20 em C2 e chegou ao pior resultado do Banco 1 com 35 FNs em C3. Esse número representa 22,88\% dos pacientes doentes sendo classificados como saudáveis, quase um em cada quatro doentes não detectados. Esse resultado contradiz diretamente a acurácia de C1 (87,32\%) e demonstra que a otimização de acurácia global não garante minimização de FNs.
 
-A Figura~\ref{fig:matrizes_banco1} apresenta as matrizes de confusão de todos os modelos na configuração C3 (3.000 épocas, $\eta = 0{,}0001$), permitindo visualizar a distribuição completa de acertos e erros.
+A Figura~\ref{fig:matrizes_banco1} apresenta as matrizes de confusão de todos os modelos na configuração C3 (3.000 épocas, $\eta = 0{,}0001$). Essa configuração foi adotada como referência de visualização por ser aquela em que as diferenças de comportamento clínico entre os modelos se manifestam de forma mais acentuada: em particular, a degradação do MLP Sklearn, com 35 Falsos Negativos em C3 contra 18 em C1, torna-se visível nas matrizes e faz da comparação entre arquiteturas nessa configuração a mais informativa dentre as três estudadas.
 
 \begin{figure}[H]
 \centering

@@ -28,10 +28,10 @@ Um dos aspectos centrais da revis\~ao \'e a distin\c c\~ao entre acur\'acia t\'e
 Os principais desafios identificados por \citeonline{mesquita2020} para a implementa\c c\~ao cl\'inica da IA em cardiologia incluem:
 
 \begin{itemize}
-  \item \textbf{Interpretabilidade}: modelos de alta complexidade, como redes neurais profundas, funcionam como ``caixas-pretas'', dificultando a explica\c c\~ao das decis\~oes diagn\'osticas por parte do cl\'inico;
-  \item \textbf{Valida\c c\~ao externa}: a maioria dos modelos \'e desenvolvida e validada em conjuntos de dados espec\'ificos, sem testes de generaliza\c c\~ao em popula\c c\~oes diversas;
-  \item \textbf{Qualidade dos dados}: dados cl\'inicos frequentemente apresentam valores ausentes, inconsist\^encias e vi\'eses de sele\c c\~ao que impactam o desempenho dos modelos;
-  \item \textbf{Quest\~oes \'eticas e regulat\'orias}: a integra\c c\~ao de sistemas de IA \`a assist\^encia m\'edica levanta quest\~oes sobre responsabilidade, privacidade de dados e a rela\c c\~ao m\'edico-paciente.
+  \item Interpretabilidade: modelos de alta complexidade, como redes neurais profundas, funcionam como ``caixas-pretas'', dificultando a explica\c c\~ao das decis\~oes diagn\'osticas por parte do cl\'inico;
+  \item Valida\c c\~ao externa: a maioria dos modelos \'e desenvolvida e validada em conjuntos de dados espec\'ificos, sem testes de generaliza\c c\~ao em popula\c c\~oes diversas;
+  \item Qualidade dos dados: dados cl\'inicos frequentemente apresentam valores ausentes, inconsist\^encias e vi\'eses de sele\c c\~ao que impactam o desempenho dos modelos;
+  \item Quest\~oes \'eticas e regulat\'orias: a integra\c c\~ao de sistemas de IA \`a assist\^encia m\'edica levanta quest\~oes sobre responsabilidade, privacidade de dados e a rela\c c\~ao m\'edico-paciente.
 \end{itemize}
 
 A revis\~ao tamb\'em aponta para a necessidade de estudos comparativos rigorosos entre modelos de IA e m\'etodos diagn\'osticos tradicionais j\'a validados, como escores de risco cl\'inico. Esta lacuna, identificada em 2020, \'e parcialmente abordada no presente trabalho, que compara sistematicamente duas arquiteturas de redes neurais com diferentes n\'iveis de complexidade.
@@ -58,8 +58,8 @@ O estudo utilizou um conjunto de dados de sinais eletrocardiogr\'aficos para a c
 Foram implementadas e comparadas duas arquiteturas distintas de aprendizado profundo:
 
 \begin{enumerate}
-  \item \textbf{LSTM (\textit{Long Short-Term Memory})}: Rede neural recorrente especializada em capturar depend\^encias temporais de longo prazo em sequ\^encias de dados. O mecanismo de portas de esquecimento, entrada e sa\'ida permite que a rede selecione quais informa\c c\~oes do contexto hist\'orico s\~ao relevantes para a classifica\c c\~ao, sendo amplamente utilizada em aplica\c c\~oes de processamento de s\'eries temporais biom\'edicas;
-  \item \textbf{Transformer}: Arquitetura baseada no mecanismo de auto-aten\c c\~ao (\textit{self-attention}), originalmente proposta para processamento de linguagem natural e, mais recentemente, aplicada a dados biom\'edicos sequenciais. Diferentemente da LSTM, o Transformer n\~ao processa a sequ\^encia de forma recorrente, mas sim em paralelo, pesando a relev\^ancia de cada posi\c c\~ao da sequ\^encia em rela\c c\~ao \`as demais.
+  \item LSTM (\textit{Long Short-Term Memory}): Rede neural recorrente especializada em capturar depend\^encias temporais de longo prazo em sequ\^encias de dados. O mecanismo de portas de esquecimento, entrada e sa\'ida permite que a rede selecione quais informa\c c\~oes do contexto hist\'orico s\~ao relevantes para a classifica\c c\~ao, sendo amplamente utilizada em aplica\c c\~oes de processamento de s\'eries temporais biom\'edicas;
+  \item Transformer: Arquitetura baseada no mecanismo de auto-aten\c c\~ao (\textit{self-attention}), originalmente proposta para processamento de linguagem natural e, mais recentemente, aplicada a dados biom\'edicos sequenciais. Diferentemente da LSTM, o Transformer n\~ao processa a sequ\^encia de forma recorrente, mas sim em paralelo, pesando a relev\^ancia de cada posi\c c\~ao da sequ\^encia em rela\c c\~ao \`as demais.
 \end{enumerate}
 
 Os modelos foram avaliados por meio das m\'etricas de precis\~ao, revoca\c c\~ao e \textit{F1-score} para cada classe diagn\'ostica, permitindo uma an\'alise detalhada do comportamento diferenciado de cada arquitetura em fun\c c\~ao da categoria cardiovascular avaliada.

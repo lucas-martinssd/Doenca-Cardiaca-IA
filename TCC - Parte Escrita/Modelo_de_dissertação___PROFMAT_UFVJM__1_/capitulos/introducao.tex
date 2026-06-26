@@ -25,7 +25,14 @@ Comparar o desempenho preditivo do ADALINE Log\'istico e do Perceptron Multicama
 
 \subsection{Objetivos Espec\'ificos}
 
-{\sloppy Para atingir esse objetivo, este trabalho prop\~oe-se a implementar o ADALINE Log\'istico e o Perceptron Multicamadas do zero, em Python com NumPy, formalizando matematicamente as regras de atualiza\c c\~ao de pesos e verificando a corretude das implementa\c c\~oes por meio da correspond\^encia com vers\~oes equivalentes da biblioteca scikit-learn. O pr\'e-processamento \'e realizado com base nos limiares das diretrizes cl\'inicas brasileiras de cardiologia, convertendo as vari\'aveis cont\'inuas e categ\'oricas de ambos os bancos de dados em representa\c c\~oes bin\'arias interpret\'aveis. Os quatro modelos, ADALINE NumPy, ADALINE Sklearn, MLP NumPy e MLP Sklearn, s\~ao avaliados sob tr\^es configura\c c\~oes sistem\'aticas de treinamento, com varia\c c\~ao do n\'umero de \'epocas e da taxa de aprendizado, gerando 24 experimentos independentes com semente aleat\'oria fixada. Os resultados s\~ao analisados sob dois crit\'erios complementares: acur\'acia global e n\'umero de Falsos Negativos, com justificativa da prioridade cl\'inica do segundo crit\'erio no contexto de diagn\'ostico m\'edico. Por fim, s\~ao identificados e discutidos os fatores estruturais, volume de dados e instabilidade do SGD com momento, efetivamente respons\'aveis pelas diferen\c cas de desempenho observadas entre arquiteturas e configura\c c\~oes de treinamento, com a hip\'otese inicial de que a binariza\c c\~ao total das vari\'aveis seria tamb\'em determinante testada e descartada empiricamente pelo experimento complementar com dados brutos.\par}
+\begin{itemize}
+  \item Implementar o ADALINE Log\'istico e o Perceptron Multicamadas do zero em Python com NumPy, formalizando matematicamente as regras de atualiza\c c\~ao de pesos de cada arquitetura.
+  \item Validar as implementa\c c\~oes pr\'oprias por correspond\^encia com as vers\~oes equivalentes da biblioteca scikit-learn.
+  \item Pr\'e-processar os dois conjuntos de dados com base nos limiares das diretrizes cl\'inicas brasileiras de cardiologia, convertendo vari\'aveis cont\'inuas e categ\'oricas em representa\c c\~oes bin\'arias interpret\'aveis.
+  \item Avaliar os quatro modelos sob tr\^es configura\c c\~oes sistem\'aticas de treinamento, totalizando 24 experimentos independentes com semente aleat\'oria fixada.
+  \item Analisar os resultados sob dois crit\'erios complementares: acur\'acia global e n\'umero de Falsos Negativos, justificando a prioridade cl\'inica do segundo crit\'erio no contexto de diagn\'ostico card\'iaco.
+  \item Identificar os fatores estruturais respons\'aveis pelas diferen\c cas de desempenho observadas entre arquiteturas e configura\c c\~oes de treinamento, incluindo o efeito da binariza\c c\~ao das vari\'aveis avaliado em experimento complementar com dados brutos.
+\end{itemize}
 
 \section{Organiza\c c\~ao do Trabalho}
 

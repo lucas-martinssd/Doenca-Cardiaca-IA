@@ -108,7 +108,7 @@
 \contentsline {subsection}{\numberline {7.1.2}Banco 2 --- Prognóstico de Mortalidade}{93}{}%
 \contentsline {section}{\numberline {7.2}Por que o ADALINE Mostrou-se Competitivo nos Dados Atuais}{94}{}%
 \contentsline {section}{\numberline {7.3}O Potencial do MLP e a Perspectiva de Continuidade}{95}{}%
-\contentsline {section}{\numberline {7.4}Contribuições do Trabalho}{97}{}%
-\contentsline {section}{\numberline {7.5}Limitações do Estudo}{98}{}%
-\contentsline {section}{\numberline {7.6}Considerações Conclusivas}{100}{}%
-\contentsline {chapter}{REFER\^ENCIAS}{101}{}%
+\contentsline {section}{\numberline {7.4}Contribuições do Trabalho}{98}{}%
+\contentsline {section}{\numberline {7.5}Limitações do Estudo}{99}{}%
+\contentsline {section}{\numberline {7.6}Considerações Conclusivas}{101}{}%
+\contentsline {chapter}{REFER\^ENCIAS}{103}{}%

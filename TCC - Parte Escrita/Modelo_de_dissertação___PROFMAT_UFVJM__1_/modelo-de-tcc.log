@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.4.12)  21 JUN 2026 20:30
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.4.12)  26 JUN 2026 08:32
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -700,13 +700,7 @@ vjm.png>] [1
 ])
 \openout2 = `pre-textual/resumo-ptbr.aux'.
 
- (pre-textual/resumo-ptbr.tex
-Overfull \hbox (0.27174pt too wide) in paragraph at lines 4--5
-\OT1/ptm/b/n/12 (-20) Palavras-chave: \OT1/ptm/m/n/12 (-20) ADA-LINE. Apren-di-
-zado de M[]aquina. Di-agn[]ostico de Doen[]as Card[]^^Pacas.
- []
-
-[5
+ (pre-textual/resumo-ptbr.tex [5
 
 
 
@@ -714,7 +708,8 @@ zado de M[]aquina. Di-agn[]ostico de Doen[]as Card[]^^Pacas.
 ] [6])
 \openout2 = `pre-textual/resumo-en.aux'.
 
- (pre-textual/resumo-en.tex [7
+
+(pre-textual/resumo-en.tex [7
 
 
 
@@ -729,8 +724,8 @@ zado de M[]aquina. Di-agn[]ostico de Doen[]as Card[]^^Pacas.
 
 
 
-]
-(modelo-de-tcc.lot [9
+] (modelo-de-tcc.lot
+[9
 
 ])
 \tf@lot=\write6
@@ -745,8 +740,7 @@ zado de M[]aquina. Di-agn[]ostico de Doen[]as Card[]^^Pacas.
 ])
 \openout2 = `pre-textual/siglas.aux'.
 
-
-(pre-textual/siglas.tex [12
+ (pre-textual/siglas.tex [12
 
 
 
@@ -755,14 +749,14 @@ zado de M[]aquina. Di-agn[]ostico de Doen[]as Card[]^^Pacas.
 ])
 \openout2 = `pre-textual/simbolos.aux'.
 
- (pre-textual/simbolos.tex [13
+
+(pre-textual/simbolos.tex [13
 
 
 
 
 
-])
-(modelo-de-tcc.toc [14
+]) (modelo-de-tcc.toc [14
 
 
 
@@ -797,10 +791,13 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [2]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 2
+9.
 
- [3])
-[4]
+(C:\Users\Lucas\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ts1ptm.fd
+File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
+)
+[3]) [4]
 \openout2 = `capitulos/fundamentacao-teorica.aux'.
 
  (capitulos/fundamentacao-teorica.tex
@@ -824,9 +821,19 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Underfull \vbox (badness 1281) has occurred while \output is active []
 
  [10]
-Overfull \hbox (3.2125pt too wide) in paragraph at lines 152--153
-\OT1/ptm/b/n/12 (-20) Nota de implementa[][]ao: \OT1/ptm/m/n/12 (-20) A impleme
-nta[][]ao ma-nual apre-sen-tada no Cap[]^^Ptulo 4[] (Se[][]ao 4.4.1[])
+! Undefined control sequence.
+l.152 \noindentNota
+                    de implementação: A implementação manual apresentada...
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+Overfull \hbox (6.45149pt too wide) in paragraph at lines 152--153
+[]\OT1/ptm/m/n/12 (-20) de implementa[][]ao: A implementa[][]ao ma-nual apre-se
+n-tada no Cap[]^^Ptulo 4[] (Se[][]ao 4.4.1[])
  []
 
 [11] [12]
@@ -836,12 +843,6 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Underfull \vbox (badness 1406) has occurred while \output is active []
 
  [14]
-LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 2
-22.
-
-(C:\Users\Lucas\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ts1ptm.fd
-File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
-)
 [15] [16] [17] [18]
 LaTeX Font Info:    Trying to load font information for U+eus on input line 320
 .
@@ -1339,33 +1340,39 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
  [98]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [99])
-[100] (modelo-de-tcc.bbl [101
+ [99]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [100]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [101])
+[102] (modelo-de-tcc.bbl [103
 
 
 
-] [102]) [103]
+] [104]) [105]
 \openout2 = `pos-textual/declaracao-ia.aux'.
 
  (pos-textual/declaracao-ia.tex)
-[104
+[106
 
 
 
 ]
 No file modelo-de-tcc.ind.
-[105
+[107
 
 
 
 
 ]
-<figuras/capa-final-ufvjm.png, id=434, 597.49646pt x 845.00308pt>
+<figuras/capa-final-ufvjm.png, id=440, 597.49646pt x 845.00308pt>
 File: figuras/capa-final-ufvjm.png Graphic file (type png)
 <use figuras/capa-final-ufvjm.png>
 Package pdftex.def Info: figuras/capa-final-ufvjm.png  used on input line 268.
 (pdftex.def)             Requested size: 597.52234pt x 845.0397pt.
- [106
+ [108
 
  <./figuras/capa-final-ufvjm.png>] (modelo-de-tcc.aux
 (pre-textual/agradecimento.aux) (pre-textual/epigrafe.aux)
@@ -1381,11 +1388,11 @@ L3 programming layer <2025-12-24>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 14014 strings out of 467871
- 227337 string characters out of 5418376
+ 13987 strings out of 467871
+ 227184 string characters out of 5418376
  934905 words of memory out of 5000000
- 42088 multiletter control sequences out of 15000+600000
- 693717 words of font info for 414 fonts, out of 8000000 for 9000
+ 42097 multiletter control sequences out of 15000+600000
+ 692205 words of font info for 390 fonts, out of 8000000 for 9000
  1150 hyphenation exceptions out of 8191
  68i,14n,90p,3226b,1316s stack positions out of 10000i,1000n,20000p,200000b,200000s
  <C:\Users\Lucas\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm
@@ -1406,9 +1413,9 @@ imes/utmb8a.pfb><C:/Users/Lucas/AppData/Local/Programs/MiKTeX/fonts/type1/urw/t
 imes/utmbi8a.pfb><C:/Users/Lucas/AppData/Local/Programs/MiKTeX/fonts/type1/urw/
 times/utmr8a.pfb><C:/Users/Lucas/AppData/Local/Programs/MiKTeX/fonts/type1/urw/
 times/utmri8a.pfb>
-Output written on modelo-de-tcc.pdf (124 pages, 2660709 bytes).
+Output written on modelo-de-tcc.pdf (126 pages, 2665755 bytes).
 PDF statistics:
- 510 PDF objects out of 1000 (max. 8388607)
+ 516 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  68167 words of extra memory for PDF output out of 74296 (max. 10000000)
 

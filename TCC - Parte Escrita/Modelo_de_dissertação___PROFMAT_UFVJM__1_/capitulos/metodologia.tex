@@ -166,8 +166,8 @@ Na implementação própria do ADALINE Logístico (NumPy), a divisão primária 
 A divisão resultante foi:
 
 \begin{itemize}
-    \item \textbf{Conjunto de treino/validação}: 70\% dos registros, com a mesma proporção de classes do conjunto original;
-    \item \textbf{Conjunto de teste}: 30\% dos registros, mantida a estratificação de classes.
+    \item Conjunto de treino/validação: 70\% dos registros, com a mesma proporção de classes do conjunto original;
+    \item Conjunto de teste: 30\% dos registros, mantida a estratificação de classes.
 \end{itemize}
 
 A partir do conjunto de treino/validação (70\%), realizou-se uma segunda divisão utilizando a função \texttt{train\_test\_split} do scikit-learn com \texttt{stratify}, reservando 20\% desse subconjunto como conjunto de validação. O conjunto de validação foi utilizado durante o treinamento para monitorar o comportamento da curva de acurácia a cada época, sem interferir na atualização dos pesos. O conjunto de teste final permaneceu isolado durante todo o processo de treinamento e validação, sendo utilizado exclusivamente para a avaliação final dos modelos. As proporções efetivas de cada partição são exibidas na Tabela~\ref{tab:divisao_dados}.
@@ -316,7 +316,7 @@ A configuração \texttt{loss='log\_loss'} especifica que o estimador deve minim
 \label{eq:logloss}
 \end{equation}
 
-Ao minimizar essa função via SGD com saída sigmoide, o \texttt{SGDClassifier} com \texttt{loss='log\_loss'} é matematicamente equivalente à \textbf{regressão logística} treinada por gradiente estocástico, e, portanto, arquiteturalmente análogo ao ADALINE Logístico implementado em NumPy \cite{braga2007}. A diferença principal, que impede a equivalência funcional estrita, reside na função de custo: a implementação NumPy minimiza o MSE, enquanto o \texttt{SGDClassifier} com \texttt{log\_loss} minimiza a entropia cruzada, que do ponto de vista da máxima verossimilhança é formalmente mais adequada para classificação binária \cite{silva2016}. A instanciação e o treinamento do modelo seguiram o padrão:
+Ao minimizar essa função via SGD com saída sigmoide, o \texttt{SGDClassifier} com \texttt{loss='log\_loss'} é matematicamente equivalente à regressão logística treinada por gradiente estocástico, e, portanto, arquiteturalmente análogo ao ADALINE Logístico implementado em NumPy \cite{braga2007}. A diferença principal, que impede a equivalência funcional estrita, reside na função de custo: a implementação NumPy minimiza o MSE, enquanto o \texttt{SGDClassifier} com \texttt{log\_loss} minimiza a entropia cruzada, que do ponto de vista da máxima verossimilhança é formalmente mais adequada para classificação binária \cite{silva2016}. A instanciação e o treinamento do modelo seguiram o padrão:
 
 \begin{lstlisting}[caption={Instanciação e treinamento do ADALINE com biblioteca (SGDClassifier).}, label={lst:adaline_sklearn}]
 from sklearn.linear_model import SGDClassifier
@@ -541,7 +541,7 @@ A semente aleatória $42$ foi mantida uniforme entre todos os modelos para garan
 
 \subsection{Configurações de Treinamento}
 
-O número de épocas e a taxa de aprendizado foram variados conjuntamente, definindo três \textbf{configurações de treinamento} denominadas C1, C2 e C3, aplicadas a todos os modelos e aos dois bancos de dados. Essa variação sistemática permite analisar o comportamento de convergência de cada arquitetura sob diferentes regimes de aprendizado: taxas elevadas com poucas épocas (aprendizado agressivo) versus taxas reduzidas com mais épocas (aprendizado conservador). A Tabela~\ref{tab:configuracoes} apresenta os valores adotados.
+O número de épocas e a taxa de aprendizado foram variados conjuntamente, definindo três configurações de treinamento denominadas C1, C2 e C3, aplicadas a todos os modelos e aos dois bancos de dados. Essa variação sistemática permite analisar o comportamento de convergência de cada arquitetura sob diferentes regimes de aprendizado: taxas elevadas com poucas épocas (aprendizado agressivo) versus taxas reduzidas com mais épocas (aprendizado conservador). A Tabela~\ref{tab:configuracoes} apresenta os valores adotados.
 
 \begin{table}[H]
 \centering
@@ -565,13 +565,13 @@ A variação conjunta de épocas e taxa de aprendizado, em vez de variar cada pa
 
 \section{Ferramentas e Ambiente de Desenvolvimento}
 
-Todos os modelos foram implementados na linguagem \textbf{Python 3}, escolhida por seu extenso ecossistema de bibliotecas científicas e por ser a linguagem predominante em pesquisa de aprendizado de máquina. As principais bibliotecas utilizadas foram:
+Todos os modelos foram implementados na linguagem Python 3, escolhida por seu extenso ecossistema de bibliotecas científicas e por ser a linguagem predominante em pesquisa de aprendizado de máquina. As principais bibliotecas utilizadas foram:
 
 \begin{itemize}
-    \item \textbf{NumPy}: computação numérica e álgebra linear, utilizada na implementação manual dos modelos;
-    \item \textbf{Pandas}: manipulação e pré-processamento dos conjuntos de dados em formato tabular;
-    \item \textbf{Scikit-learn}: modelos com biblioteca (\texttt{SGDClassifier} e \texttt{MLPClassifier}), divisão (\texttt{train\_test\_split}) e métricas (\texttt{accuracy\_score});
-    \item \textbf{Matplotlib} e \textbf{Seaborn}: geração de gráficos de curvas de aprendizado e matrizes de confusão.
+    \item NumPy: computação numérica e álgebra linear, utilizada na implementação manual dos modelos;
+    \item Pandas: manipulação e pré-processamento dos conjuntos de dados em formato tabular;
+    \item Scikit-learn: modelos com biblioteca (\texttt{SGDClassifier} e \texttt{MLPClassifier}), divisão (\texttt{train\_test\_split}) e métricas (\texttt{accuracy\_score});
+    \item Matplotlib e Seaborn: geração de gráficos de curvas de aprendizado e matrizes de confusão.
 \end{itemize}
 
 {\sloppy

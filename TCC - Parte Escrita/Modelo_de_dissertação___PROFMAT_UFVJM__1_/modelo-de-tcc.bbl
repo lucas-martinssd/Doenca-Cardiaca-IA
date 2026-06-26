@@ -64,6 +64,8 @@ Dispon{\'\i}vel em: \url{http://www.deeplearningbook.com.br/}. Acesso em: 09
 \bibitem[Fedesoriano 2021]{fedesoriano2021}
 \abntrefinfo{Fedesoriano}{FEDESORIANO}{2021}
 {FEDESORIANO. \textbf{Heart Disease Prediction Dataset}. 2021.
+Vers\~ao consolidada do UCI Machine Learning Repository, disponibilizada via
+  Kaggle.
 Dispon{\'\i}vel em:
   \url{https://www.kaggle.com/datasets/fedesoriano/heart-failure-prediction}.
   Acesso em: 10 mar. 2025.}
@@ -85,6 +87,14 @@ Dispon{\'\i}vel em:
 \abntrefinfo{Hornik}{HORNIK}{1991}
 {HORNIK, K. Approximation capabilities of multilayer feedforward networks.
 \textbf{Neural Networks}, v.~4, n.~2, p. 251--257, 1991.}
+
+\bibitem[Janosi et al. 1989]{janosi1989}
+\abntrefinfo{Janosi et al.}{JANOSI et al.}{1989}
+{JANOSI, A. et al. \textbf{Heart Disease [Dataset]}. 1989. UCI Machine Learning
+  Repository.
+DOI: 10.24432/C52P4X.
+Dispon{\'\i}vel em: \url{https://archive.ics.uci.edu/dataset/45/heart+disease}.
+  Acesso em: 25 jun. 2026.}
 
 \bibitem[Pedregosa et al. 2011]{pedregosa2011}
 \abntrefinfo{Pedregosa et al.}{PEDREGOSA et al.}{2011}
@@ -145,5 +155,13 @@ Dispon{\'\i}vel em: \url{https://repositorio.ufc.br/handle/riufc/75923}. Acesso
 {SILVA, I.~N.; SPATTI, D.~H.; FLAUZINO, R.~A. \textbf{Redes neurais artificiais
   para engenharia e ci\^encias aplicadas: curso pr\'atico}. 2. ed. S\~ao Paulo:
   Artliber, 2016.}
+
+\bibitem[Trindade 2019]{trindade2019}
+\abntrefinfo{Trindade}{TRINDADE}{2019}
+{TRINDADE, {\'A}.~R.
+\textbf{A new {SMBO}-Based Parameter Tuning Framework to Optimization
+  Algorithms}.
+Tese (Tese (Doutorado em Engenharia El{\'e}trica)) --- Universidade Federal de
+  Minas Gerais, Belo Horizonte, 2019.}
 
 \end{thebibliography}

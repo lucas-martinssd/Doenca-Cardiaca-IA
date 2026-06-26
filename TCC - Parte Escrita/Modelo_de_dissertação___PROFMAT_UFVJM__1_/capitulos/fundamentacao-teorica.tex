@@ -149,7 +149,7 @@ Para uma aprendizagem por pacote, a regra de atualização do ADALINE logístico
 onde $\odot$ denota o produto de Hadamard (elemento a elemento), $E = T - O$ é a matriz de erros, e $O = f(W^T X)$ é a matriz de saídas logísticas.
 
 \medskip
-\noindent\textbf{Nota de implementação:} A implementação manual apresentada no Capítulo~\ref{cap:metodologia} (Seção~\ref{sec:adaline_numpy}) adota a formulação simplificada da regra de Widrow-Hoff, sem o fator $o_k(1-o_k)$ da derivada da sigmoide. Nessa versão, os pesos são atualizados diretamente pelo erro de saída: $\Delta w = \eta(t_k - \hat{y}_k)x_k$. Cabe observar que o gradiente do MSE com saída sigmoide incluiria o fator $\hat{y}_k(1-\hat{y}_k)$; ao omiti-lo, a regra de atualização torna-se equivalente, conforme demonstrado na Seção seguinte, ao gradiente da \textbf{entropia cruzada} com saída sigmoide, não do MSE. Portanto, a função efetivamente minimizada pela implementação NumPy é a entropia cruzada, embora os valores de MSE sejam registrados a cada época para monitoramento da convergência. Essa escolha foi adotada por sua estabilidade de convergência e consistência com a regra de Widrow-Hoff original.
+\noindentNota de implementação: A implementação manual apresentada no Capítulo~\ref{cap:metodologia} (Seção~\ref{sec:adaline_numpy}) adota a formulação simplificada da regra de Widrow-Hoff, sem o fator $o_k(1-o_k)$ da derivada da sigmoide. Nessa versão, os pesos são atualizados diretamente pelo erro de saída: $\Delta w = \eta(t_k - \hat{y}_k)x_k$. Cabe observar que o gradiente do MSE com saída sigmoide incluiria o fator $\hat{y}_k(1-\hat{y}_k)$; ao omiti-lo, a regra de atualização torna-se equivalente, conforme demonstrado na Seção seguinte, ao gradiente da entropia cruzada com saída sigmoide, não do MSE. Portanto, a função efetivamente minimizada pela implementação NumPy é a entropia cruzada, embora os valores de MSE sejam registrados a cada época para monitoramento da convergência. Essa escolha foi adotada por sua estabilidade de convergência e consistência com a regra de Widrow-Hoff original.
 
 \subsubsection{A Entropia Cruzada Binária (\textit{Log-Loss})}
 
@@ -233,9 +233,9 @@ As sinapses $w_{l,i}$ e $z_{j,l}$ são modificáveis por retropropagação do er
 
 A escolha da função de ativação é um componente crítico do design de uma MLP. Cada neurônio oculto aplica uma função de ativação estritamente não-linear à sua soma ponderada de entradas. Sem não-linearidade, múltiplas camadas de pesos poderiam ser algebricamente reduzidas a uma única matriz linear equivalente, impedindo o ganho real de expressividade \cite{rand2006}.
 
-\textbf{Função Logística (Sigmoide)}: Define-se como $f(x) = 1/(1 + e^{-x})$, com derivada $f'(x) = f(x)[1 - f(x)]$. É especialmente adequada para a camada de saída em problemas de classificação binária, pois seus valores estão no intervalo $(0, 1)$, interpretáveis como probabilidades.
+Função Logística (Sigmoide): Define-se como $f(x) = 1/(1 + e^{-x})$, com derivada $f'(x) = f(x)[1 - f(x)]$. É especialmente adequada para a camada de saída em problemas de classificação binária, pois seus valores estão no intervalo $(0, 1)$, interpretáveis como probabilidades.
 
-\textbf{Função \textit{ReLU} (\textit{Rectified Linear Unit})}: Definida por $f(x) = \max(0, x)$. Sua derivada é:
+Função \textit{ReLU} (\textit{Rectified Linear Unit}): Definida por $f(x) = \max(0, x)$. Sua derivada é:
 \begin{equation}
 f'(x) = \begin{cases} 0, & \text{se } x < 0 \\ 1, & \text{se } x > 0 \end{cases}
 \end{equation}
@@ -248,22 +248,22 @@ Neste trabalho, adotou-se a função ReLU na camada oculta e a função sigmoide
 
 Durante a passagem adiante, o estímulo é propagado da camada de entrada até a camada de saída, gerando as ativações intermediárias e a resposta final. O processo compreende quatro etapas sequenciais:
 
-\textbf{Etapa 1, Ativação da camada intermediária}:
+Etapa 1, Ativação da camada intermediária:
 \begin{equation}
 b_k = W x_k
 \end{equation}
 
-\textbf{Etapa 2, Resposta da camada intermediária}:
+Etapa 2, Resposta da camada intermediária:
 \begin{equation}
 h_k = f(b_k)
 \end{equation}
 
-\textbf{Etapa 3, Ativação da camada de saída}:
+Etapa 3, Ativação da camada de saída:
 \begin{equation}
 a_k = Z h_k
 \end{equation}
 
-\textbf{Etapa 4, Resposta da camada de saída}:
+Etapa 4, Resposta da camada de saída:
 \begin{equation}
 o_k = f(a_k)
 \end{equation}
@@ -276,7 +276,7 @@ A arquitetura multicamadas exigiu o desenvolvimento de um método capaz de trein
 
 O algoritmo opera em dois sentidos: primeiramente no sentido normal (\textit{feedforward}), e depois no sentido inverso (\textit{backpropagation}). Para cada camada, a estimativa do sinal de erro difere.
 
-\textbf{Para as células da camada de saída}: o erro $e_k = t_k - o_k$ é diretamente observável. O sinal do erro (\textit{delta}) da camada de saída é obtido multiplicando o erro pela derivada da função de ativação avaliada na ativação da saída:
+Para as células da camada de saída: o erro $e_k = t_k - o_k$ é diretamente observável. O sinal do erro (\textit{delta}) da camada de saída é obtido multiplicando o erro pela derivada da função de ativação avaliada na ativação da saída:
 \begin{equation}
 \delta_{\text{saída},k} = f'(Zh_k) \odot e_k = o_k \odot (1 - o_k) \odot (t_k - o_k)
 \end{equation}
@@ -286,7 +286,7 @@ A correção da matriz de conexões $Z$ na etapa $t+1$ é:
 Z_{[t+1]} = Z_{[t]} + \eta \, \delta_{\text{saída},k} \, h_k^T = Z_{[t]} + \Delta Z_t
 \end{equation}
 
-\textbf{Para as células da camada intermediária}: o sinal de erro não é comparado diretamente com um valor ideal. Ele é estimado a partir da retropropagação do sinal de erro da camada de saída, ponderada pela intensidade das conexões $Z$:
+Para as células da camada intermediária: o sinal de erro não é comparado diretamente com um valor ideal. Ele é estimado a partir da retropropagação do sinal de erro da camada de saída, ponderada pela intensidade das conexões $Z$:
 \begin{equation}
 \delta_{\text{interm},k} = f'_{\text{ReLU}}(b_k) \odot \left(Z_{[t]}^T \delta_{\text{saída},k}\right), \quad \text{onde } b_k = Wx_k
 \end{equation}
@@ -343,10 +343,10 @@ O ADALINE logístico destaca-se pela interpretabilidade: cada peso $w_i$ corresp
 
 A avaliação do desempenho vai além da acurácia. A Matriz de Confusão organiza as predições em quatro categorias: Verdadeiros Positivos (VP), Verdadeiros Negativos (VN), Falsos Positivos (FP) e Falsos Negativos (FN). As métricas derivadas são:
 \begin{itemize}
-    \item \textbf{Acurácia}: $(VP + VN) / (VP + VN + FP + FN)$;
-    \item \textbf{Precisão}: $VP / (VP + FP)$;
-    \item \textbf{Sensibilidade (Recall)}: $VP / (VP + FN)$;
-    \item \textbf{Especificidade}: $VN / (VN + FP)$.
+    \item Acurácia: $(VP + VN) / (VP + VN + FP + FN)$;
+    \item Precisão: $VP / (VP + FP)$;
+    \item Sensibilidade (Recall): $VP / (VP + FN)$;
+    \item Especificidade: $VN / (VN + FP)$.
 \end{itemize}
 
 Em diagnóstico clínico, alta sensibilidade é desejada para triagem, enquanto alta especificidade é preferida quando o custo do falso positivo é elevado \cite{braga2007}. Os sistemas de suporte ao diagnóstico fornecem triagem algorítmica precoce, auxiliando o médico sem substituí-lo \cite{rand2006}. A implementação dos modelos ADALINE Logístico e MLP segue diretamente essa base teórica, explorada pelos métodos do Capítulo~\ref{cap:metodologia}.

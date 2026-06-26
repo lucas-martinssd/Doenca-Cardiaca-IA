@@ -19,97 +19,97 @@
 \contentsline {subsubsection}{\numberline {2.2.2.3}A Entropia Cruzada Binária (\textit {Log-Loss})}{12}{}%
 \contentsline {subsubsection}{\numberline {2.2.2.4}Convergência e Vantagens do Modelo Logístico}{13}{}%
 \contentsline {section}{\numberline {2.3}Múltiplas Camadas e o Espaço Não Linear}{13}{}%
-\contentsline {subsection}{\numberline {2.3.1}Perceptron, Funções Lógicas e o Problema XOR}{14}{}%
+\contentsline {subsection}{\numberline {2.3.1}Perceptron, Funções Lógicas e o Problema XOR}{13}{}%
 \contentsline {subsubsection}{\numberline {2.3.1.1}Funções Lógicas e Separabilidade Linear}{14}{}%
 \contentsline {subsubsection}{\numberline {2.3.1.2}A Restrição da Separabilidade Linear e o Problema XOR}{14}{}%
 \contentsline {subsection}{\numberline {2.3.2}Perceptron Multicamadas (MLP) e Funções Lógicas}{15}{}%
 \contentsline {subsubsection}{\numberline {2.3.2.1}Arquitetura e Notação Matricial}{15}{}%
 \contentsline {subsubsection}{\numberline {2.3.2.2}Funções de Ativação}{16}{}%
 \contentsline {subsubsection}{\numberline {2.3.2.3}Passagem Adiante (\textit {Forward Pass})}{17}{}%
-\contentsline {subsubsection}{\numberline {2.3.2.4}O Algoritmo de Retropropagação (\textit {Backpropagation})}{18}{}%
+\contentsline {subsubsection}{\numberline {2.3.2.4}O Algoritmo de Retropropagação (\textit {Backpropagation})}{17}{}%
 \contentsline {subsubsection}{\numberline {2.3.2.5}Inicialização de Xavier}{19}{}%
 \contentsline {subsubsection}{\numberline {2.3.2.6}O Teorema da Aproximação Universal}{20}{}%
 \contentsline {section}{\numberline {2.4}Redes Neurais Aplicadas na Área da Saúde}{21}{}%
-\contentsline {subsection}{\numberline {2.4.1}Métricas de Avaliação}{22}{}%
+\contentsline {subsection}{\numberline {2.4.1}Métricas de Avaliação}{21}{}%
 \contentsline {subsection}{\numberline {2.4.2}Aplicações em Diagnóstico Cardíaco}{22}{}%
-\contentsline {chapter}{3 \MakeUppercase []{Trabalhos Relacionados}}{25}{}%
-\contentsline {section}{\numberline {3.1}Intelig\^encia Artificial em Cardiologia: Conceitos, Ferramentas e Desafios}{25}{}%
-\contentsline {subsection}{\numberline {3.1.1}Conte\'udo e Abrang\^encia da Revis\~ao}{26}{}%
-\contentsline {subsection}{\numberline {3.1.2}Implica\c c\~oes Pr\'aticas e Limita\c c\~oes Identificadas}{26}{}%
-\contentsline {subsection}{\numberline {3.1.3}Rela\c c\~ao com o Presente Trabalho}{27}{}%
-\contentsline {section}{\numberline {3.2}Aprendizado Profundo para Diagn\'ostico de Doen\c cas Cardiovasculares}{28}{}%
-\contentsline {subsection}{\numberline {3.2.1}Metodologia e Conjunto de Dados}{28}{}%
-\contentsline {subsection}{\numberline {3.2.2}Resultados}{29}{}%
-\contentsline {subsection}{\numberline {3.2.3}Rela\c c\~ao com o Presente Trabalho}{30}{}%
-\contentsline {section}{\numberline {3.3}Compara\c c\~ao de Algoritmos de Machine Learning para Predi\c c\~ao de Doen\c cas Card\'iacas}{30}{}%
-\contentsline {subsection}{\numberline {3.3.1}Metodologia}{31}{}%
-\contentsline {subsection}{\numberline {3.3.2}Resultados}{31}{}%
-\contentsline {subsection}{\numberline {3.3.3}Rela\c c\~ao com o Presente Trabalho}{32}{}%
-\contentsline {section}{\numberline {3.4}An\'alise Comparativa dos Trabalhos Relacionados}{32}{}%
-\contentsline {section}{\numberline {3.5}Considera\c c\~oes do Cap\'itulo}{33}{}%
-\contentsline {chapter}{4 \MakeUppercase []{Metodologia}}{35}{}%
-\contentsline {section}{\numberline {4.1}Conjuntos de Dados}{35}{}%
-\contentsline {subsection}{\numberline {4.1.1}Banco de Dados 1, UCI Heart Disease Dataset}{35}{}%
-\contentsline {subsection}{\numberline {4.1.2}Banco de Dados 2, Heart Failure Clinical Records Dataset}{37}{}%
-\contentsline {section}{\numberline {4.2}Pré-processamento dos Dados}{39}{}%
-\contentsline {subsection}{\numberline {4.2.1}Variáveis do Banco 1 --- UCI Heart Disease Dataset}{40}{}%
-\contentsline {subsection}{\numberline {4.2.2}Variáveis do Banco 2 --- Heart Failure Clinical Records Dataset}{40}{}%
-\contentsline {subsection}{\numberline {4.2.3}Resultado do Pré-processamento}{41}{}%
-\contentsline {section}{\numberline {4.3}Divisão Estratificada dos Dados}{43}{}%
-\contentsline {section}{\numberline {4.4}Arquiteturas e Implementação dos Modelos}{44}{}%
-\contentsline {subsection}{\numberline {4.4.1}ADALINE Logístico --- Implementação Própria (NumPy)}{45}{}%
-\contentsline {subsubsection}{\numberline {4.4.1.1}Arquitetura e Inicialização dos Parâmetros}{45}{}%
-\contentsline {subsubsection}{\numberline {4.4.1.2}Propagação Direta (\textit {Forward Pass})}{46}{}%
-\contentsline {subsubsection}{\numberline {4.4.1.3}Função de Custo e Atualização dos Pesos}{46}{}%
-\contentsline {subsubsection}{\numberline {4.4.1.4}Classificação Final}{48}{}%
-\contentsline {subsection}{\numberline {4.4.2}ADALINE Logístico --- Implementação com Biblioteca (scikit-learn)}{48}{}%
-\contentsline {subsubsection}{\numberline {4.4.2.1}O Estimador \texttt {SGDClassifier} e o Gradiente Descendente Estocástico}{48}{}%
-\contentsline {subsection}{\numberline {4.4.3}Perceptron Multicamadas --- Implementação Própria (NumPy)}{50}{}%
-\contentsline {subsubsection}{\numberline {4.4.3.1}Notação e Dimensões}{50}{}%
-\contentsline {subsubsection}{\numberline {4.4.3.2}Inicialização de Xavier (\textit {Glorot Uniform})}{51}{}%
-\contentsline {subsubsection}{\numberline {4.4.3.3}Propagação Direta (\textit {Forward Pass})}{52}{}%
-\contentsline {subsubsection}{\numberline {4.4.3.4}Função de Custo}{53}{}%
-\contentsline {subsubsection}{\numberline {4.4.3.5}Retropropagação do Erro (\textit {Backpropagation})}{53}{}%
-\contentsline {subsection}{\numberline {4.4.4}Perceptron Multicamadas --- Implementação com Biblioteca (scikit-learn)}{54}{}%
-\contentsline {subsubsection}{\numberline {4.4.4.1}O Estimador \texttt {MLPClassifier}}{55}{}%
-\contentsline {subsubsection}{\numberline {4.4.4.2}O Algoritmo de Otimização: SGD com Momento}{56}{}%
-\contentsline {section}{\numberline {4.5}Configuração de Hiperparâmetros}{57}{}%
-\contentsline {subsection}{\numberline {4.5.1}Parâmetros Fixos}{57}{}%
-\contentsline {subsection}{\numberline {4.5.2}Configurações de Treinamento}{57}{}%
-\contentsline {section}{\numberline {4.6}Ferramentas e Ambiente de Desenvolvimento}{58}{}%
-\contentsline {chapter}{5 \MakeUppercase []{Resultados}}{60}{}%
-\contentsline {section}{\numberline {5.1}Banco 1 --- UCI Heart Disease Dataset}{60}{}%
-\contentsline {subsection}{\numberline {5.1.1}Acurácia por Configuração de Treinamento}{60}{}%
-\contentsline {subsection}{\numberline {5.1.2}Análise dos Falsos Negativos}{63}{}%
-\contentsline {subsection}{\numberline {5.1.3}Convergência do Erro de Treinamento}{66}{}%
-\contentsline {section}{\numberline {5.2}Banco 2 --- Heart Failure Clinical Records}{68}{}%
-\contentsline {subsection}{\numberline {5.2.1}Acurácia por Configuração de Treinamento}{68}{}%
-\contentsline {subsection}{\numberline {5.2.2}Análise dos Falsos Negativos}{71}{}%
-\contentsline {subsection}{\numberline {5.2.3}Convergência do Erro de Treinamento}{74}{}%
-\contentsline {section}{\numberline {5.3}Síntese Comparativa entre Modelos e Bancos de Dados}{75}{}%
-\contentsline {subsection}{\numberline {5.3.1}Considerações Finais sobre os Resultados}{78}{}%
-\contentsline {section}{\numberline {5.4}Experimento Complementar: Dados Originais sem Binarização}{78}{}%
-\contentsline {subsection}{\numberline {5.4.1}Resultados no Banco 1 com Dados Brutos}{79}{}%
-\contentsline {subsection}{\numberline {5.4.2}Resultados no Banco 2 com Dados Brutos}{79}{}%
-\contentsline {subsection}{\numberline {5.4.3}Comparação: Binarizado versus Bruto}{80}{}%
-\contentsline {chapter}{6 \MakeUppercase []{Discuss\~ao}}{83}{}%
-\contentsline {section}{\numberline {6.1}A Quest\~ao Central Respondida}{83}{}%
-\contentsline {section}{\numberline {6.2}Interpreta\c c\~ao Te\'orica dos Resultados}{83}{}%
-\contentsline {subsection}{\numberline {6.2.1}O ADALINE e a Convexidade da Fun\c c\~ao de Custo}{84}{}%
-\contentsline {subsection}{\numberline {6.2.2}O MLP e o Dilema da Capacidade Subutilizada}{84}{}%
-\contentsline {subsection}{\numberline {6.2.3}SGD com Momento versus Gradiente Descendente em Lote}{86}{}%
-\contentsline {subsection}{\numberline {6.2.4}O Papel da Binariza\c c\~ao: Evid\^encia Emp\'irica do Experimento Complementar}{87}{}%
-\contentsline {section}{\numberline {6.3}Di\'alogo com os Trabalhos Relacionados}{87}{}%
-\contentsline {section}{\numberline {6.4}Implica\c c\~oes Cl\'inicas}{89}{}%
-\contentsline {section}{\numberline {6.5}Sobre a Implementa\c c\~ao Manual e a Verifica\c c\~ao Emp\'irica da Teoria}{90}{}%
-\contentsline {section}{\numberline {6.6}Custo Computacional do Treinamento}{91}{}%
-\contentsline {chapter}{7 \MakeUppercase []{Conclusão}}{94}{}%
-\contentsline {section}{\numberline {7.1}Síntese dos Resultados}{94}{}%
-\contentsline {subsection}{\numberline {7.1.1}Banco 1 --- Triagem Diagnóstica}{94}{}%
-\contentsline {subsection}{\numberline {7.1.2}Banco 2 --- Prognóstico de Mortalidade}{95}{}%
-\contentsline {section}{\numberline {7.2}Por que o ADALINE Mostrou-se Competitivo nos Dados Atuais}{96}{}%
-\contentsline {section}{\numberline {7.3}O Potencial do MLP e a Perspectiva de Continuidade}{97}{}%
-\contentsline {section}{\numberline {7.4}Contribuições do Trabalho}{100}{}%
-\contentsline {section}{\numberline {7.5}Limitações do Estudo}{101}{}%
-\contentsline {section}{\numberline {7.6}Considerações Conclusivas}{103}{}%
-\contentsline {chapter}{REFER\^ENCIAS}{105}{}%
+\contentsline {chapter}{3 \MakeUppercase []{Trabalhos Relacionados}}{24}{}%
+\contentsline {section}{\numberline {3.1}Intelig\^encia Artificial em Cardiologia: Conceitos, Ferramentas e Desafios}{24}{}%
+\contentsline {subsection}{\numberline {3.1.1}Conte\'udo e Abrang\^encia da Revis\~ao}{25}{}%
+\contentsline {subsection}{\numberline {3.1.2}Implica\c c\~oes Pr\'aticas e Limita\c c\~oes Identificadas}{25}{}%
+\contentsline {subsection}{\numberline {3.1.3}Rela\c c\~ao com o Presente Trabalho}{26}{}%
+\contentsline {section}{\numberline {3.2}Aprendizado Profundo para Diagn\'ostico de Doen\c cas Cardiovasculares}{27}{}%
+\contentsline {subsection}{\numberline {3.2.1}Metodologia e Conjunto de Dados}{27}{}%
+\contentsline {subsection}{\numberline {3.2.2}Resultados}{28}{}%
+\contentsline {subsection}{\numberline {3.2.3}Rela\c c\~ao com o Presente Trabalho}{29}{}%
+\contentsline {section}{\numberline {3.3}Compara\c c\~ao de Algoritmos de Machine Learning para Predi\c c\~ao de Doen\c cas Card\'iacas}{29}{}%
+\contentsline {subsection}{\numberline {3.3.1}Metodologia}{30}{}%
+\contentsline {subsection}{\numberline {3.3.2}Resultados}{30}{}%
+\contentsline {subsection}{\numberline {3.3.3}Rela\c c\~ao com o Presente Trabalho}{31}{}%
+\contentsline {section}{\numberline {3.4}An\'alise Comparativa dos Trabalhos Relacionados}{31}{}%
+\contentsline {section}{\numberline {3.5}Considera\c c\~oes do Cap\'itulo}{32}{}%
+\contentsline {chapter}{4 \MakeUppercase []{Metodologia}}{34}{}%
+\contentsline {section}{\numberline {4.1}Conjuntos de Dados}{34}{}%
+\contentsline {subsection}{\numberline {4.1.1}Banco de Dados 1, UCI Heart Disease Dataset}{34}{}%
+\contentsline {subsection}{\numberline {4.1.2}Banco de Dados 2, Heart Failure Clinical Records Dataset}{36}{}%
+\contentsline {section}{\numberline {4.2}Pré-processamento dos Dados}{38}{}%
+\contentsline {subsection}{\numberline {4.2.1}Variáveis do Banco 1 --- UCI Heart Disease Dataset}{39}{}%
+\contentsline {subsection}{\numberline {4.2.2}Variáveis do Banco 2 --- Heart Failure Clinical Records Dataset}{39}{}%
+\contentsline {subsection}{\numberline {4.2.3}Resultado do Pré-processamento}{40}{}%
+\contentsline {section}{\numberline {4.3}Divisão Estratificada dos Dados}{42}{}%
+\contentsline {section}{\numberline {4.4}Arquiteturas e Implementação dos Modelos}{43}{}%
+\contentsline {subsection}{\numberline {4.4.1}ADALINE Logístico --- Implementação Própria (NumPy)}{44}{}%
+\contentsline {subsubsection}{\numberline {4.4.1.1}Arquitetura e Inicialização dos Parâmetros}{44}{}%
+\contentsline {subsubsection}{\numberline {4.4.1.2}Propagação Direta (\textit {Forward Pass})}{45}{}%
+\contentsline {subsubsection}{\numberline {4.4.1.3}Função de Custo e Atualização dos Pesos}{45}{}%
+\contentsline {subsubsection}{\numberline {4.4.1.4}Classificação Final}{47}{}%
+\contentsline {subsection}{\numberline {4.4.2}ADALINE Logístico --- Implementação com Biblioteca (scikit-learn)}{47}{}%
+\contentsline {subsubsection}{\numberline {4.4.2.1}O Estimador \texttt {SGDClassifier} e o Gradiente Descendente Estocástico}{47}{}%
+\contentsline {subsection}{\numberline {4.4.3}Perceptron Multicamadas --- Implementação Própria (NumPy)}{49}{}%
+\contentsline {subsubsection}{\numberline {4.4.3.1}Notação e Dimensões}{49}{}%
+\contentsline {subsubsection}{\numberline {4.4.3.2}Inicialização de Xavier (\textit {Glorot Uniform})}{50}{}%
+\contentsline {subsubsection}{\numberline {4.4.3.3}Propagação Direta (\textit {Forward Pass})}{51}{}%
+\contentsline {subsubsection}{\numberline {4.4.3.4}Função de Custo}{52}{}%
+\contentsline {subsubsection}{\numberline {4.4.3.5}Retropropagação do Erro (\textit {Backpropagation})}{52}{}%
+\contentsline {subsection}{\numberline {4.4.4}Perceptron Multicamadas --- Implementação com Biblioteca (scikit-learn)}{53}{}%
+\contentsline {subsubsection}{\numberline {4.4.4.1}O Estimador \texttt {MLPClassifier}}{54}{}%
+\contentsline {subsubsection}{\numberline {4.4.4.2}O Algoritmo de Otimização: SGD com Momento}{55}{}%
+\contentsline {section}{\numberline {4.5}Configuração de Hiperparâmetros}{56}{}%
+\contentsline {subsection}{\numberline {4.5.1}Parâmetros Fixos}{56}{}%
+\contentsline {subsection}{\numberline {4.5.2}Configurações de Treinamento}{56}{}%
+\contentsline {section}{\numberline {4.6}Ferramentas e Ambiente de Desenvolvimento}{57}{}%
+\contentsline {chapter}{5 \MakeUppercase []{Resultados}}{59}{}%
+\contentsline {section}{\numberline {5.1}Banco 1 --- UCI Heart Disease Dataset}{59}{}%
+\contentsline {subsection}{\numberline {5.1.1}Acurácia por Configuração de Treinamento}{59}{}%
+\contentsline {subsection}{\numberline {5.1.2}Análise dos Falsos Negativos}{62}{}%
+\contentsline {subsection}{\numberline {5.1.3}Convergência do Erro de Treinamento}{65}{}%
+\contentsline {section}{\numberline {5.2}Banco 2 --- Heart Failure Clinical Records}{67}{}%
+\contentsline {subsection}{\numberline {5.2.1}Acurácia por Configuração de Treinamento}{67}{}%
+\contentsline {subsection}{\numberline {5.2.2}Análise dos Falsos Negativos}{70}{}%
+\contentsline {subsection}{\numberline {5.2.3}Convergência do Erro de Treinamento}{73}{}%
+\contentsline {section}{\numberline {5.3}Síntese Comparativa entre Modelos e Bancos de Dados}{74}{}%
+\contentsline {subsection}{\numberline {5.3.1}Considerações Finais sobre os Resultados}{77}{}%
+\contentsline {section}{\numberline {5.4}Experimento Complementar: Dados Originais sem Binarização}{77}{}%
+\contentsline {subsection}{\numberline {5.4.1}Resultados no Banco 1 com Dados Brutos}{78}{}%
+\contentsline {subsection}{\numberline {5.4.2}Resultados no Banco 2 com Dados Brutos}{78}{}%
+\contentsline {subsection}{\numberline {5.4.3}Comparação: Binarizado versus Bruto}{79}{}%
+\contentsline {chapter}{6 \MakeUppercase []{Discuss\~ao}}{82}{}%
+\contentsline {section}{\numberline {6.1}A Quest\~ao Central Respondida}{82}{}%
+\contentsline {section}{\numberline {6.2}Interpreta\c c\~ao Te\'orica dos Resultados}{82}{}%
+\contentsline {subsection}{\numberline {6.2.1}O ADALINE e a Convexidade da Fun\c c\~ao de Custo}{83}{}%
+\contentsline {subsection}{\numberline {6.2.2}O MLP e o Dilema da Capacidade Subutilizada}{83}{}%
+\contentsline {subsection}{\numberline {6.2.3}SGD com Momento versus Gradiente Descendente em Lote}{85}{}%
+\contentsline {subsection}{\numberline {6.2.4}O Papel da Binariza\c c\~ao: Evid\^encia Emp\'irica do Experimento Complementar}{86}{}%
+\contentsline {section}{\numberline {6.3}Di\'alogo com os Trabalhos Relacionados}{86}{}%
+\contentsline {section}{\numberline {6.4}Implica\c c\~oes Cl\'inicas}{88}{}%
+\contentsline {section}{\numberline {6.5}Sobre a Implementa\c c\~ao Manual e a Verifica\c c\~ao Emp\'irica da Teoria}{89}{}%
+\contentsline {section}{\numberline {6.6}Custo Computacional do Treinamento}{90}{}%
+\contentsline {chapter}{7 \MakeUppercase []{Conclusão}}{93}{}%
+\contentsline {section}{\numberline {7.1}Síntese dos Resultados}{93}{}%
+\contentsline {subsection}{\numberline {7.1.1}Banco 1 --- Triagem Diagnóstica}{93}{}%
+\contentsline {subsection}{\numberline {7.1.2}Banco 2 --- Prognóstico de Mortalidade}{94}{}%
+\contentsline {section}{\numberline {7.2}Por que o ADALINE Mostrou-se Competitivo nos Dados Atuais}{95}{}%
+\contentsline {section}{\numberline {7.3}O Potencial do MLP e a Perspectiva de Continuidade}{96}{}%
+\contentsline {section}{\numberline {7.4}Contribuições do Trabalho}{99}{}%
+\contentsline {section}{\numberline {7.5}Limitações do Estudo}{100}{}%
+\contentsline {section}{\numberline {7.6}Considerações Conclusivas}{102}{}%
+\contentsline {chapter}{REFER\^ENCIAS}{104}{}%

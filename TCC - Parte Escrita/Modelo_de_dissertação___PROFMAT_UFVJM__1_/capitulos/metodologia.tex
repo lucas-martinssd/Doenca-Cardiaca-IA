@@ -124,7 +124,7 @@ Após a aplicação de todas as transformações descritas, os conjuntos de dado
 \textbf{Variável Original} & \textbf{Banco 1 (colunas)} & \textbf{Banco 2 (colunas)} \\
 \hline
 Idade                        & 3 (Jovem, Adulto, Idoso)        & 2 (Meia-Idade, Idoso) \\
-Sexo                         & 2 (Masculino, Feminino)         & 1 (Masculino) \\
+Sexo                         & 2 (Masculino, Feminino)         & 1 (Masculino = 1, Feminino = 0) \\
 Tipo de Dor Torácica         & 4 (TA, ATA, NAP, ASY)           & --- \\
 Pressão Arterial             & 6 (PA Normal a HA Estágio 3)    & --- \\
 Colesterol                   & 2 (Desejável, Elevado)          & --- \\
@@ -332,7 +332,7 @@ previsoes = modelo.predict(XTeste)
 \end{lstlisting}
 \fonte{Elaborado pelo autor.}
 
-Os valores \texttt{max\_iter=3000} e \texttt{eta0=0.0001} exibidos correspondem à configuração C3. Para as configurações C1 ($500$ épocas, $\eta = 0{,}01$) e C2 ($1.000$ épocas, $\eta = 0{,}001$), o modelo foi reinstanciado com os valores correspondentes da Tabela~\ref{tab:configuracoes}.
+Os valores \texttt{max\_iter=3000} e \texttt{eta0=0.0001} exibidos correspondem à configuração C3, definida juntamente com C1 e C2 na Seção~\ref{sec:hiperparametros}. Para as configurações C1 ($500$ épocas, $\eta = 0{,}01$) e C2 ($1.000$ épocas, $\eta = 0{,}001$), o modelo foi reinstanciado com os valores correspondentes da Tabela~\ref{tab:configuracoes}.
 
 \subsection{Perceptron Multicamadas --- Implementação Própria (NumPy)}
 \label{sec:mlp_numpy}
@@ -491,7 +491,7 @@ previsoes = modelo.predict(XTeste)
 \end{lstlisting}
 \fonte{Elaborado pelo autor.}
 
-{\sloppy Os valores \texttt{max\_iter=3000} e \texttt{learning\_rate\_init=0,0001} exibidos correspondem à configuração C3. Para as configurações C1 ($500$ épocas, $\eta = 0{,}01$) e C2 ($1.000$ épocas, $\eta = 0{,}001$), o modelo foi reinstanciado com os valores correspondentes da Tabela~\ref{tab:configuracoes}.\par}
+{\sloppy Os valores \texttt{max\_iter=3000} e \texttt{learning\_rate\_init=0,0001} exibidos correspondem à configuração C3, definida juntamente com C1 e C2 na Seção~\ref{sec:hiperparametros}. Para as configurações C1 ($500$ épocas, $\eta = 0{,}01$) e C2 ($1.000$ épocas, $\eta = 0{,}001$), o modelo foi reinstanciado com os valores correspondentes da Tabela~\ref{tab:configuracoes}.\par}
 
 \subsubsection{O Algoritmo de Otimização: SGD com Momento}
 

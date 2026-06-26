@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.4.12)  26 JUN 2026 09:43
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.4.12)  26 JUN 2026 10:32
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1293,11 +1293,15 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
  [88]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [89])
+ [89]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [90]
 [91]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [92])
+[93]
 \openout2 = `capitulos/conclusao.aux'.
 
  (capitulos/conclusao.tex
@@ -1305,18 +1309,12 @@ Cap\'{\i }tulo 7.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [92
+ [94
 
 
 
 
 ]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [93]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [94]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [95]
@@ -1337,33 +1335,39 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
  [100]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [101])
-[102] (modelo-de-tcc.bbl [103
+ [101]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [102]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [103])
+[104] (modelo-de-tcc.bbl [105
 
 
 
-] [104]) [105]
+] [106]) [107]
 \openout2 = `pos-textual/declaracao-ia.aux'.
 
  (pos-textual/declaracao-ia.tex)
-[106
+[108
 
 
 
 ]
 No file modelo-de-tcc.ind.
-[107
+[109
 
 
 
 
 ]
-<figuras/capa-final-ufvjm.png, id=440, 597.49646pt x 845.00308pt>
+<figuras/capa-final-ufvjm.png, id=447, 597.49646pt x 845.00308pt>
 File: figuras/capa-final-ufvjm.png Graphic file (type png)
 <use figuras/capa-final-ufvjm.png>
 Package pdftex.def Info: figuras/capa-final-ufvjm.png  used on input line 268.
 (pdftex.def)             Requested size: 597.52234pt x 845.0397pt.
- [108
+ [110
 
  <./figuras/capa-final-ufvjm.png>] (modelo-de-tcc.aux
 (pre-textual/agradecimento.aux) (pre-textual/epigrafe.aux)
@@ -1379,10 +1383,10 @@ L3 programming layer <2025-12-24>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 13987 strings out of 467871
- 227184 string characters out of 5418376
+ 13990 strings out of 467871
+ 227245 string characters out of 5418376
  934905 words of memory out of 5000000
- 42097 multiletter control sequences out of 15000+600000
+ 42100 multiletter control sequences out of 15000+600000
  692205 words of font info for 390 fonts, out of 8000000 for 9000
  1150 hyphenation exceptions out of 8191
  68i,14n,90p,3226b,1316s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -1404,9 +1408,9 @@ imes/utmb8a.pfb><C:/Users/Lucas/AppData/Local/Programs/MiKTeX/fonts/type1/urw/t
 imes/utmbi8a.pfb><C:/Users/Lucas/AppData/Local/Programs/MiKTeX/fonts/type1/urw/
 times/utmr8a.pfb><C:/Users/Lucas/AppData/Local/Programs/MiKTeX/fonts/type1/urw/
 times/utmri8a.pfb>
-Output written on modelo-de-tcc.pdf (126 pages, 2666678 bytes).
+Output written on modelo-de-tcc.pdf (128 pages, 2674434 bytes).
 PDF statistics:
- 516 PDF objects out of 1000 (max. 8388607)
+ 523 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  68167 words of extra memory for PDF output out of 74296 (max. 10000000)
 

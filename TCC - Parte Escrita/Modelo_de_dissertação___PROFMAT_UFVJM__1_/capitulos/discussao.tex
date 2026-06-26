@@ -83,3 +83,100 @@ Cabe ressaltar, ainda, que a vari\'avel \texttt{time}, n\'umero de dias de acomp
 A correspond\^encia entre as implementa\c c\~oes manuais (NumPy) e as implementa\c c\~oes com biblioteca (scikit-learn) constitui evid\^encia emp\'irica da corretude das implementa\c c\~oes pr\'oprias: ADALINE NumPy e ADALINE Sklearn produziram acur\'acias id\^enticas em C1 em ambos os bancos (85,87\% no Banco~1 e 68,89\% no Banco~2) e tamb\'em em C2 no Banco~1 (86,23\%), confirmando que a regra delta, o gradiente descendente e a fun\c c\~ao sigmoide foram implementados corretamente. As fun\c c\~oes de custo distintas (MSE no NumPy e entropia cruzada no Sklearn) explicam por que a correspond\^encia de acur\'acia pode n\~ao se estender \`a distribui\c c\~ao completa de VP, VN, FP e FN.
 
 As diferen\c cas entre MLP NumPy e MLP Sklearn decorrem de diferen\c cas leg\'itimas de otimizador (gradiente em lote vs.\ SGD com momento $\beta = 0{,}9$) e inicializa\c c\~ao, n\~ao de erros \cite{pedregosa2011}. A correspond\^encia n\~ao \'e de resultados id\^enticos, mas de comportamentos coerentes: ambos os MLPs melhoram no Banco~1 com configura\c c\~oes moderadas e ambos degradam no Banco~2 com excesso de treinamento, confirmando que as implementa\c c\~oes capturam os mesmos fen\^omenos por caminhos distintos. Esse exerc\'icio de implementa\c c\~ao do zero e verifica\c c\~ao pela correspond\^encia com a biblioteca de refer\^encia preenche uma lacuna que as bibliotecas de alto n\'ivel, por sua natureza abstrata, n\~ao oferecem: o entendimento do funcionamento interno dos modelos, n\~ao apenas de seus resultados finais.
+
+\section{Custo Computacional do Treinamento}
+\label{sec:custo_computacional}
+
+O tempo de ajuste de pesos foi medido em execu\c c\~oes auxiliares com avalia\c c\~ao por
+\'epoca desativada, de forma a isolar o custo estritamente computacional do treinamento,
+sem inclus\~ao das chamadas de avalia\c c\~ao utilizadas para gerar as curvas de aprendizado.
+As Tabelas~\ref{tab:tempo_banco1} e~\ref{tab:tempo_banco2} apresentam os tempos obtidos
+para os quatro modelos nas tr\^es configura\c c\~oes de treinamento.
+
+\begin{table}[H]
+\centering
+\caption{Tempo de ajuste de pesos (segundos), Banco 1 (513 amostras de treino).}
+\label{tab:tempo_banco1}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Modelo} & \textbf{C1 (500 ep.)} & \textbf{C2 (1.000 ep.)} & \textbf{C3 (3.000 ep.)} \\
+\hline
+ADALINE NumPy   & 0,017 s & 0,032 s & 0,096 s \\
+ADALINE Sklearn & 0,025 s & 0,046 s & 0,138 s \\
+MLP NumPy       & 0,051 s & 0,099 s & 0,303 s \\
+MLP Sklearn     & 0,199 s & 0,393 s & 1,171 s \\
+\hline
+\end{tabular}%
+}
+\fonte{Elaborado pelo autor.}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Tempo de ajuste de pesos (segundos), Banco 2 (167 amostras de treino).}
+\label{tab:tempo_banco2}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Modelo} & \textbf{C1 (500 ep.)} & \textbf{C2 (1.000 ep.)} & \textbf{C3 (3.000 ep.)} \\
+\hline
+ADALINE NumPy   & 0,009 s & 0,018 s & 0,053 s \\
+ADALINE Sklearn & 0,006 s & 0,011 s & 0,030 s \\
+MLP NumPy       & 0,023 s & 0,046 s & 0,133 s \\
+MLP Sklearn     & 0,065 s & 0,129 s & 0,389 s \\
+\hline
+\end{tabular}%
+}
+\fonte{Elaborado pelo autor.}
+\end{table}
+
+O primeiro padr\~ao observado \'e o escalonamento aproximadamente linear do tempo
+com o n\'umero de \'epocas: de C1 para C3, que representa um aumento de seis vezes no
+n\'umero de \'epocas (de 500 para 3.000), o tempo de cada modelo cresce em fator entre 5,5 e
+6,5 vezes em todos os casos. Esse comportamento \'e esperado, pois o custo computacional
+por \'epoca \'e constante para uma mesma arquitetura e conjunto de dados, e confirma que os
+algoritmos n\~ao apresentam degrada\c c\~ao de desempenho ao longo das itera\c c\~oes.
+
+O segundo padr\~ao refere-se \`a rela\c c\~ao entre ADALINE e MLP dentro de uma mesma
+estrat\'egia de implementa\c c\~ao. O MLP NumPy \'e aproximadamente 3 vezes mais lento que
+o ADALINE NumPy em ambos os bancos, e o MLP Sklearn \'e cerca de 4 vezes mais
+lento que o ADALINE Sklearn. Essa diferen\c ca \'e estrutural: o MLP realiza dois percursos
+matriciais por \'epoca (propaga\c c\~ao direta e retropropaga\c c\~ao), enquanto o ADALINE realiza
+apenas um (c\'alculo direto do gradiente), exigindo o dobro de opera\c c\~oes de multiplica\c c\~ao
+matricial a cada itera\c c\~ao de treinamento \cite{braga2007}.
+
+O terceiro padr\~ao diz respeito \`a compara\c c\~ao entre as implementa\c c\~oes NumPy e
+scikit-learn para cada arquitetura. Para o ADALINE, os tempos s\~ao compar\'aveis: no
+Banco 1, o ADALINE NumPy \'e levemente mais r\'apido (0,096 s versus 0,138 s em
+C3); no Banco 2, a rela\c c\~ao se inverte e o ADALINE Sklearn apresenta menor tempo
+(0,030 s versus 0,053 s em C3). Essa varia\c c\~ao decorre das estrat\'egias de atualiza\c c\~ao
+de cada implementa\c c\~ao: o ADALINE NumPy utiliza gradiente descendente em lote,
+calculando o gradiente em uma \'unica opera\c c\~ao vetorial sobre todas as 513 amostras
+de treino (Banco 1) ou 167 (Banco 2) a cada \'epoca; o \texttt{SGDClassifier} do scikit-learn
+realiza uma atualiza\c c\~ao de peso por amostra a cada \'epoca (SGD puro, sem mini-lotes),
+percorrendo 513 atualiza\c c\~oes por \'epoca no Banco 1 e 167 no Banco 2, por meio de c\'odigo
+Cython otimizado. Em conjuntos maiores, a opera\c c\~ao vetorial do NumPy se beneficia de
+rotinas BLAS de alto desempenho; em conjuntos menores, o la\c co Cython por amostra
+\'e competitivo com o custo de inicializa\c c\~ao da opera\c c\~ao matricial. Em termos absolutos,
+nenhuma das duas implementa\c c\~oes apresentou custo relevante: mesmo o pior caso do
+ADALINE (Sklearn C3, Banco 1) completou o treinamento em 0,138~s.
+
+Para o MLP, o \texttt{MLPClassifier} do scikit-learn \'e consistentemente mais lento que
+o MLP NumPy nos dois bancos, em fator de aproximadamente 4 vezes. Diferentemente
+do \texttt{SGDClassifier}, que atualiza os pesos amostra por amostra, o \texttt{MLPClassifier} utiliza
+mini-lotes de tamanho $\min(200, n)$: para o Banco 1 (513 amostras), isso resulta em 3
+mini-lotes por \'epoca, cada um exigindo propaga\c c\~ao direta e retropropaga\c c\~ao sobre at\'e 200
+amostras; para o Banco 2 (167 amostras), o mini-lote coincide com o lote completo. A
+diferen\c ca de velocidade entre MLP Sklearn e MLP NumPy n\~ao se explica pelo n\'umero
+de amostras processadas por \'epoca, que \'e equivalente nos dois casos, mas pelo overhead
+interno do \texttt{MLPClassifier} (verifica\c c\~oes de converg\^encia, reconfigura\c c\~ao de estado entre
+chamadas) e pela maior lat\^encia por mini-lote em rela\c c\~ao \`a opera\c c\~ao matricial \'unica do
+NumPy.
+
+Em todos os cen\'arios experimentados, os tempos de treinamento s\~ao inferiores a
+1,2 segundos, o que torna o custo computacional uma dimens\~ao irrelevante para a escolha
+entre modelos no contexto de dados tabulares de pequeno a m\'edio porte. A relev\^ancia
+pr\'atica do custo computacional emergeria apenas em cen\'arios de retreinamento cont\'inuo
+em larga escala ou de implanta\c c\~ao em dispositivos embarcados com recursos restritos
+\cite{dsa2022}.

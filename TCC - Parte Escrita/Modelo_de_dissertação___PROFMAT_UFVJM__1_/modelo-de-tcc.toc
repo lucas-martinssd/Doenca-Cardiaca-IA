@@ -102,13 +102,14 @@
 \contentsline {section}{\numberline {6.3}Di\'alogo com os Trabalhos Relacionados}{87}{}%
 \contentsline {section}{\numberline {6.4}Implica\c c\~oes Cl\'inicas}{89}{}%
 \contentsline {section}{\numberline {6.5}Sobre a Implementa\c c\~ao Manual e a Verifica\c c\~ao Emp\'irica da Teoria}{90}{}%
-\contentsline {chapter}{7 \MakeUppercase []{Conclusão}}{92}{}%
-\contentsline {section}{\numberline {7.1}Síntese dos Resultados}{92}{}%
-\contentsline {subsection}{\numberline {7.1.1}Banco 1 --- Triagem Diagnóstica}{92}{}%
-\contentsline {subsection}{\numberline {7.1.2}Banco 2 --- Prognóstico de Mortalidade}{93}{}%
-\contentsline {section}{\numberline {7.2}Por que o ADALINE Mostrou-se Competitivo nos Dados Atuais}{94}{}%
-\contentsline {section}{\numberline {7.3}O Potencial do MLP e a Perspectiva de Continuidade}{95}{}%
-\contentsline {section}{\numberline {7.4}Contribuições do Trabalho}{98}{}%
-\contentsline {section}{\numberline {7.5}Limitações do Estudo}{99}{}%
-\contentsline {section}{\numberline {7.6}Considerações Conclusivas}{101}{}%
-\contentsline {chapter}{REFER\^ENCIAS}{103}{}%
+\contentsline {section}{\numberline {6.6}Custo Computacional do Treinamento}{91}{}%
+\contentsline {chapter}{7 \MakeUppercase []{Conclusão}}{94}{}%
+\contentsline {section}{\numberline {7.1}Síntese dos Resultados}{94}{}%
+\contentsline {subsection}{\numberline {7.1.1}Banco 1 --- Triagem Diagnóstica}{94}{}%
+\contentsline {subsection}{\numberline {7.1.2}Banco 2 --- Prognóstico de Mortalidade}{95}{}%
+\contentsline {section}{\numberline {7.2}Por que o ADALINE Mostrou-se Competitivo nos Dados Atuais}{96}{}%
+\contentsline {section}{\numberline {7.3}O Potencial do MLP e a Perspectiva de Continuidade}{97}{}%
+\contentsline {section}{\numberline {7.4}Contribuições do Trabalho}{100}{}%
+\contentsline {section}{\numberline {7.5}Limitações do Estudo}{101}{}%
+\contentsline {section}{\numberline {7.6}Considerações Conclusivas}{103}{}%
+\contentsline {chapter}{REFER\^ENCIAS}{105}{}%

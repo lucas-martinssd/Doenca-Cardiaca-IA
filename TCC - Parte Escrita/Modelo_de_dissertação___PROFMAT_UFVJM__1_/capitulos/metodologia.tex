@@ -221,6 +221,8 @@ self.bias = 0.0
 \end{lstlisting}
 \fonte{Elaborado pelo autor.}
 
+Cabe observar que o valor $42$ adotado como semente aleatória, à semelhança dos hiperparâmetros de treinamento (épocas e taxa de aprendizado), foi definido de forma arbitrária, sem processo formal de otimização; alternativas metodologicamente mais rigorosas para a seleção de parâmetros dessa natureza são discutidas na Seção~\ref{sec:potencial_mlp}.
+
 \subsubsection{Propagação Direta (\textit{Forward Pass})}
 
 A cada época, para a matriz de entradas $\mathbf{X} \in \mathbb{R}^{m \times n}$ com $m$ exemplos de treinamento, calcula-se a entrada líquida (combinação linear ponderada de todas as entradas):
